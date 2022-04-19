@@ -4,7 +4,7 @@ const pets = mongoCollections.pets;
 const petTypes = mongoCollections.petTypes;
 const petsQuestionsAnswers = mongoCollections.petsQuestionsAnswers;
 
-
+// Create needs to be fixed. Was copied from the bandAPI lab is my assumption.
 // 1. Create Band
 async function create(firstName, middleName, lastName, email, phoneNumber, password, address, city, state, zip, picture) {
 
