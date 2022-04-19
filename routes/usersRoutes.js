@@ -1,7 +1,8 @@
 const express = require('express');
 const usersRouter = express.Router();
 const xss = require('xss');
-
+const { users } = require('../config/mongoCollections');
+const session = require('express-session');
 
 const data = require('../data');
 const usersData = data.usersData;
@@ -29,5 +30,24 @@ usersRouter
         }
 
     });
+
+usersRouter
+    .route('/logout')
+    .get(async (request, res) => {
+        try {
+            request.session.destroy();
+            res.render('users/logout', {
+                error: false,
+                message: "Successfully logged out."
+            });
+        } catch (e) {
+            res.sendStatus(500).render('users/logout', {
+                error: true,
+                message: "Server error while logging out."
+            });
+        }
+    });
+
+        
 
 module.exports = usersRouter;
