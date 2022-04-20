@@ -88,11 +88,14 @@ async function homePageSearch(city, state, zip, petType) {
 
         // Convert all pet id's to string
         for (i in petsToReturn) petsToReturn[i]._id = petsToReturn[i]._id.toString();
+
+        // Convert all owner id's to string
+        for (i in petsToReturn) petsToReturn[i].ownerId = petsToReturn[i].ownerId.toString();
     }
 
     return petsToReturn;
 }
 
 module.exports = {
-
+    homePageSearch
 }
