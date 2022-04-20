@@ -4,8 +4,8 @@ const pets = mongoCollections.pets;
 const petTypes = mongoCollections.petTypes;
 const petsQuestionsAnswers = mongoCollections.petsQuestionsAnswers;
 
-// Create needs to be fixed. Was copied from the bandAPI lab is my assumption.
-// 1. Create Band
+
+// 1. Create a new user
 async function create(firstName, middleName, lastName, email, phoneNumber, password, address, city, state, zip, picture) {
 
     let newUser = {
@@ -26,7 +26,7 @@ async function create(firstName, middleName, lastName, email, phoneNumber, passw
 
     const insertInfo = await usersCollection.insertOne(newUser);
     if (!insertInfo.acknowledged || !insertInfo.insertedId)
-        throw 'Could not add band';
+        throw 'Could not add user';
 
     const newId = insertInfo.insertedId.toString();
     return newId;
