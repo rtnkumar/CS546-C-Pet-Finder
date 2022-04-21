@@ -1,3 +1,4 @@
+const { ObjectId } = require('mongodb');
 const mongoCollections = require('../config/mongoCollections');
 const users = mongoCollections.users;
 const pets = mongoCollections.pets;
@@ -50,8 +51,11 @@ async function homePageSearch(city, state, zip, petType) {
         if (typeof zip !== 'number') throw 'zip is not a number';
 
         // Valid Integer
-        let isValidZip = commonValidators.isValidInteger(zip, 'zip');
+        let isValidZip = commonValidators.isValidInteger(zip.toString(), 'zip');
         if (!isValidZip[0]) throw isValidZip[1];
+
+        // Valid length
+        if (zip.toString().length > 5) throw 'zip is not of length 5';
     }
 
     // Validate petType
@@ -113,7 +117,7 @@ async function homePageSearch(city, state, zip, petType) {
  * @param {*} state : The state where the pet is located
  * @param {*} description : A description of the pet
  * @param {*} ownerId : The id of the owner of the pet
- * @param {*} picture : A link to a picture of the pet (Subject to change)
+ * @param {*} picture : A name of a picture file of the pet (Subject to change)
  * 
  * @return Returns an object containing all of the fields of the pet, including the id of the pet.
  */
@@ -187,48 +191,128 @@ async function createPet(name, petType, breed, age, size, gender, color, address
         let isValidGender = commonValidators.isValidString(gender, 'gender');
         if (!isValidGender[0]) throw isValidGender[1];
 
-        // Valid Alphabet
-        isValidGender = commonValidators.isValidAlphabet(gender, 'gender');
-        if (!isValidGender[0]) throw isValidGender[1];
-
-        // 
+        if (gender.toUpperCase() !== 'M' || gender.toUpperCase() !== 'F') throw "Gender must be male or female"
     } else throw "gender is required";
 
     if (color) {
+        // Valid String
+        let isValidColor = commonValidators.isValidString(color, 'color');
+        if (!isValidColor[0]) throw isValidColor[1];
 
+        // Valid Alphabet
+        isValidColor = commonValidators.isValidAlphabet(color, 'color');
+        if (!isValidColor[0]) throw isValidColor[1];
     } else throw "color is required";
 
     if (address) {
+        // Valid String
+        let isValidAddress = commonValidators.isValidString(address, 'address');
+        if (!isValidAddress[0]) throw isValidAddress[1];
+
+        // Valid Alphabet
+        isValidAddress = commonValidators.isValidAlphabet(address, 'address');
+        if (!isValidAddress[0]) throw isValidAddress[1];
 
     } else throw "address is required";
 
     if (zip) {
+        // Valid Number
+        if (typeof zip !== 'number') throw 'zip is not a number';
 
+        // Valid Integer
+        let isValidZip = commonValidators.isValidInteger(zip.toString(), 'zip');
+        if (!isValidZip[0]) throw isValidZip[1];
+
+        // Valid length
+        if (zip.toString().length > 5) throw 'zip is not of length 5';
     } else throw "zip is required";
 
     if (city) {
+        // Valid String
+        let isValidCity = commonValidators.isValidString(city, 'city');
+        if (!isValidCity[0]) throw isValidCity[1];
 
+        // Valid Alphanumeric
+        isValidCity = commonValidators.isValidAlphaNumeric(city, 'city');
+        if (!isValidCity[0]) throw isValidCity[1];
     } else throw "city is required";
 
     if (state) {
+        // Valid String
+        let isValidState = commonValidators.isValidString(state, 'state');
+        if (!isValidState[0]) throw isValidState[1];
 
+        // Valid Alphanumeric
+        isValidState = commonValidators.isValidAlphaNumeric(state, 'state');
+        if (!isValidState[0]) throw isValidState[1];
     } else throw "state is required";
 
     if (description) {
-
+        // Valid String
+        let isValidDescription = commonValidators.isValidString(description, 'description');
+        if (!isValidDescription[0]) throw isValidDescription[1];
     } else throw "description is required";
 
+    const ownerCollection = await owners();
     if (ownerId) {
+        // Valid String
+        let isValidOwnerId = commonValidators.isValidString(ownerId, 'ownerId');
+        if (!isValidOwnerId[0]) throw isValidOwnerId[1];
 
+        // Valid ObjectId
+        if (!ObjectId.isValid(ownerId)) throw `${ownerId} is not a valid ObjectId`;
+
+        // Valid Existence in owners collection
+        let isValidExists = await ownerCollection.findOne({ _id: ObjectId(ownerId) });
+        if (!isValidExists) throw `${ownerId} does not belong to any owner`;
     } else throw "ownerId is required";
 
     if (picture) {
+        // Valid String
+        let isValidPicture = commonValidators.isValidString(picture, 'picture');
+        if (!isValidPicture[0]) throw isValidPicture[1];
 
+        // Valid file
+        isValidPicture = commonValidators.isValidFile(picture, 'picture');
+        if (!isValidPicture) throw `${picture} is not a valid file`;
     } else throw "picture is required";
+    
+    const petsCollection = await pets();
+    typeFound = await petTypes().findOne({ type: petType });
+
+    const newPet = {
+        name: name,
+        type: {
+            _id: typeFound._id,
+            type: typeFound.type
+        },
+        breed: breed,
+        age: age,
+        size: size,
+        gender: gender,
+        color: color,
+        address: address,
+        zip: zip,
+        city: city,
+        state: state,
+        description: description,
+        ownerId: ownerId,
+        picture: picture,
+        createdAt: new Date(),
+        updatedAt: new Date(),
+        adoptedBy: null
+    };
+    const insertInfo = await petsCollection.insertOne(newPet);
+    if (insertInfo.insertedCount === 0) throw "Could not add pet";
+    const newId = insertInfo.insertedId.toString();
+    const pet = await petsCollection.findOne({ _id: newId });
+    pet._id = newId;
+    return pet;
 }
 
 
 
 module.exports = {
-    homePageSearch
+    homePageSearch,
+    createPet
 }
