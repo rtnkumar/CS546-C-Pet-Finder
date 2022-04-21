@@ -7,7 +7,7 @@ const validators = require('../validators');
 const commonValidators = validators.commonValidators;
 
 /**
- * Retrieves pets from the database that match the given criteria.
+ * @brief Retrieves pets from the database that match the given criteria.
  * At least one of the given criteria must be specified.
  * 
  * @param {*} city : The city to search fors
@@ -15,10 +15,10 @@ const commonValidators = validators.commonValidators;
  * @param {*} zip : The zip to search for
  * @param {*} petType : The petType to search for
  * 
- * Returns an array of pets that match the given criteria.
- * 
+ * @return Returns an array of pets that match the given criteria.
  */
 async function homePageSearch(city, state, zip, petType) {
+    // Validate the input
     // If none of the given criteria are specified, throw an error.
     if (city === undefined && state === undefined && zip === undefined && petType === undefined) throw 'No search criteria specified';
 
@@ -95,6 +95,139 @@ async function homePageSearch(city, state, zip, petType) {
 
     return petsToReturn;
 }
+
+/**
+ * @brief Creates a new pet in the database using the given data.
+ * All fields must be specified.
+ * 
+ * @param {*} name : The name of the pet
+ * @param {*} petType : The type of the pet
+ * @param {*} breed : The breed of the pet
+ * @param {*} age : The age of the pet
+ * @param {*} size : The size of the pet
+ * @param {*} gender : The gender of the pet
+ * @param {*} color : The color of the pet
+ * @param {*} address : The address where the pet is located
+ * @param {*} zip : The zip where the pet is located
+ * @param {*} city : The city where the pet is located
+ * @param {*} state : The state where the pet is located
+ * @param {*} description : A description of the pet
+ * @param {*} ownerId : The id of the owner of the pet
+ * @param {*} picture : A link to a picture of the pet (Subject to change)
+ * 
+ * @return Returns an object containing all of the fields of the pet, including the id of the pet.
+ */
+async function createPet(name, petType, breed, age, size, gender, color, address, zip, city, state, description, ownerId, picture) {
+    // Validate the input
+    // Validate name
+    if (name) {
+        // Valid String
+        let isValidName = commonValidators.isValidString(name, 'name');
+        if (!isValidName[0]) throw isValidName[1];
+
+        // Valid Alphabet
+        isValidName = commonValidators.isValidAlphabet(name, 'name');
+        if (!isValidName[0]) throw isValidName[1];
+    } else throw "name is required";
+
+    // Validate petType
+    const petTypeCollection = await petTypes();
+    if (petType) {
+        // Valid String
+        let isValidPetType = commonValidators.isValidString(petType, 'petType');
+        if (!isValidPetType[0]) throw isValidPetType[1];
+
+        // Valid Alphabet
+        isValidPetType = commonValidators.isValidAlphabet(petType, 'petType');
+        if (!isValidPetType[0]) throw isValidPetType[1];
+
+        // Valid Existence in petTypes collection
+        let isValidExists = await petTypeCollection.findOne({ type: petType });
+        if (!isValidExists) throw `${petType} is not a valid petType`;
+
+    } else throw "petType is required";
+
+    // Validate breed
+    if (breed) {
+        // Valid String
+        let isValidBreed = commonValidators.isValidString(breed, 'breed');
+        if (!isValidBreed[0]) throw isValidBreed[1];
+
+        // Valid Alphabet
+        isValidBreed = commonValidators.isValidAlphabet(breed, 'breed');
+        if (!isValidBreed[0]) throw isValidBreed[1];
+
+        // Check this in petTypes collection or... ?
+    } else throw "breed is required";
+
+    // Validate age
+    if (age) {
+        // Valid Number
+        if (typeof age !== 'number') throw 'age is not a number';
+
+        // Valid Integer
+        let isValidAge = commonValidators.isValidInteger(age, 'age');
+        if (!isValidAge[0]) throw isValidAge[1];
+    } else throw "age is required";
+
+    // Validate size
+    if (size) {
+        // Valid String
+        let isValidSize = commonValidators.isValidString(size, 'size');
+        if (!isValidSize[0]) throw isValidSize[1];
+
+        // Valid Alphabet
+        isValidSize = commonValidators.isValidAlphabet(size, 'size');
+        if (!isValidSize[0]) throw isValidSize[1];
+    } else throw "size is required";
+
+    // Validate gender
+    if (gender) {
+        // Valid String
+        let isValidGender = commonValidators.isValidString(gender, 'gender');
+        if (!isValidGender[0]) throw isValidGender[1];
+
+        // Valid Alphabet
+        isValidGender = commonValidators.isValidAlphabet(gender, 'gender');
+        if (!isValidGender[0]) throw isValidGender[1];
+
+        // 
+    } else throw "gender is required";
+
+    if (color) {
+
+    } else throw "color is required";
+
+    if (address) {
+
+    } else throw "address is required";
+
+    if (zip) {
+
+    } else throw "zip is required";
+
+    if (city) {
+
+    } else throw "city is required";
+
+    if (state) {
+
+    } else throw "state is required";
+
+    if (description) {
+
+    } else throw "description is required";
+
+    if (ownerId) {
+
+    } else throw "ownerId is required";
+
+    if (picture) {
+
+    } else throw "picture is required";
+}
+
+
 
 module.exports = {
     homePageSearch
