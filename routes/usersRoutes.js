@@ -6,13 +6,18 @@ const formidable = require('formidable');
 const validators = require('../validators');
 const commonValidators = validators.commonValidators;
 const emailValidator = require("email-validator");
+const trimRequest = require('trim-request');
+
 
 
 
 const data = require('../data');
 const usersData = data.usersData;
 
-
+/**
+ * User Sign-up Api
+ * Roushan Kumar
+ */
 usersRouter
   .post('/sign-up', async (request, res) => {
     try {
@@ -47,7 +52,27 @@ usersRouter
             picture: "Only jpg, jpeg or png are required!"
           });
         }
+        // Schema validation
+        const requestKeyList = Object.keys(fields);
+        const postBodyKeys = ["firstName", "middleName", "lastName", "email", "phoneNumber", "password", "address", "city", "state", "zip"];
 
+        for (let requestKey of postBodyKeys) {
+          if (requestKeyList.indexOf(requestKey) === -1) {
+            return res.status(400).json({
+              error: true,
+              message: `${requestKey} key is missing in body`,
+            });
+          }
+        }
+        if (requestKeyList.length !== postBodyKeys.length) {
+          return res.status(400).json({
+            error: true,
+            message: "Json body is invalid",
+          });
+        }
+        Object.keys(fields).forEach(function (key) {
+          fields[key] = (fields[key]).trim();
+        });
         const firstName = xss(fields.firstName);
         const middleName = xss(fields.middleName);
         const lastName = xss(fields.lastName);
@@ -71,7 +96,7 @@ usersRouter
         }
 
         // FirstName alphabet validation
-        isValidFirstName = commonValidators.isValidAlphabet(firstName, 'firstName');
+        isValidFirstName = commonValidators.isValidName(firstName, 'firstName');
         if (!isValidFirstName[0]) {
           return res.status(400).json({
             error: true,
@@ -91,7 +116,7 @@ usersRouter
             });
           }
 
-          isValidMiddleName = commonValidators.isValidAlphabet(middleName, 'middleName');
+          isValidMiddleName = commonValidators.isValidName(middleName, 'middleName');
           if (!isValidMiddleName[0]) {
             return res.status(400).json({
               error: true,
@@ -112,7 +137,7 @@ usersRouter
         }
 
         // LastName alphabet validation
-        isValidLastName = commonValidators.isValidAlphabet(lastName, 'lastName');
+        isValidLastName = commonValidators.isValidName(lastName, 'lastName');
         if (!isValidLastName[0]) {
           return res.status(400).json({
             error: true,
@@ -122,7 +147,7 @@ usersRouter
         }
 
         // Email validation
-        if (!email) {
+        if (!email || email.trim() == "") {
           return res.status(400).json({
             error: true,
             message: "Invalid input",
@@ -134,7 +159,7 @@ usersRouter
           return res.status(400).json({
             error: true,
             message: "Invalid input",
-            email: `${email} is invalid email`
+            email: `${email} is invalid email format`
           })
         }
 
@@ -184,6 +209,15 @@ usersRouter
           });
         }
 
+        isValidAddress = commonValidators.isValidAddress(address, 'address');
+        if (!isValidAddress[0]) {
+          return res.status(400).json({
+            error: true,
+            message: "Invalid input",
+            address: isValidAddress[1]
+          });
+        }
+
         // City string validation
         let isValidCity = commonValidators.isValidString(city, 'city');
         if (!isValidCity[0]) {
@@ -194,8 +228,26 @@ usersRouter
           });
         }
 
+        isValidCity = commonValidators.isValidName(city, 'city');
+        if (!isValidCity[0]) {
+          return res.status(400).json({
+            error: true,
+            message: "Invalid input",
+            city: isValidCity[1]
+          });
+        }
+
         // State string validation
         let isValidState = commonValidators.isValidString(state, 'state');
+        if (!isValidState[0]) {
+          return res.status(400).json({
+            error: true,
+            message: "Invalid input",
+            state: isValidState[1]
+          });
+        }
+
+        isValidState = commonValidators.isValidName(state, 'state');
         if (!isValidState[0]) {
           return res.status(400).json({
             error: true,
@@ -225,11 +277,9 @@ usersRouter
 
         try {
           const result = await usersData.createUser(firstName, middleName, lastName, email, phoneNumber, password, address, city, state, zip, picture);
-         // return res.json({ id: result, firstName: firstName, middleName: middleName, lastName: lastName, email: email, phoneNumber: phoneNumber, password: password, address: address, city: city, state: state, zip: picture });
           return res.json(result);
-        
         } catch (e) {
-          if (e === `This ${email.trim()} is already exist, please use another`) {
+          if (e === `This ${email.trim().toLowerCase()} is already exist, please use another`) {
             return res.status(400).json({
               error: true,
               message: "Invalid input",
@@ -257,35 +307,241 @@ usersRouter
     }
   });
 
+/**
+ * User Login Api
+ * Roushan Kumar
+ */
 usersRouter.
-  post('/upload', async (req, res) => {
-    var form = new formidable.IncomingForm();
-    form.parse(req, async (err, fields, files) => {
-      console.log(fields);
-      field = fields;
-      console.log(files.upload.size);
-      const isValid = isFileValid(files.upload);
-      console.log("isValid+" + isValid);
-      if (err) {
-        console.log("Error parsing the files");
+  post('/login', trimRequest.all, async (req, res) => {
+    // Schema validation
+    const requestKeyList = Object.keys(req.body);
+    const postBodyKeys = ["email", "password"];
+
+    for (let requestKey of postBodyKeys) {
+      if (requestKeyList.indexOf(requestKey) === -1) {
         return res.status(400).json({
-          status: "Fail",
-          message: "There was an error parsing the files",
-          error: err,
+          error: true,
+          message: `${requestKey} key is missing in body`,
         });
       }
-    });
+    }
+    if (requestKeyList.length !== postBodyKeys.length) {
+      return res.status(400).json({
+        error: true,
+        message: "Json body is invalid",
+      });
+    }
 
-    form.on('fileBegin', function (name, file) {
-      file.filepath = 'public/uploads/images/users/' + file.originalFilename;
-    });
+    const email = xss(req.body.email);
+    const password = xss(req.body.password);
 
-    // form.on('file', function (name, file){
-    //     console.log('Uploaded ' + file.originalFilename);
-    // });
 
-    res.sendFile(path.resolve('static/home.html'));
+    // Email validation
+    if (!email || email.trim() == "") {
+      return res.status(400).json({
+        error: true,
+        message: "Invalid input",
+        email: `email is required`
+      })
+    }
 
+    if (!emailValidator.validate(email.trim())) {
+      return res.status(400).json({
+        error: true,
+        message: "Invalid input",
+        email: `${email} is invalid email format`
+      })
+    }
+
+    // Password validation
+    let isValidPassword = commonValidators.isValidString(password, 'password');
+    if (!isValidPassword[0]) {
+      return res.status(400).json({
+        error: true,
+        message: "Invalid input",
+        password: isValidPassword[1]
+      });
+    }
+
+    if (password.length < 6) {
+      return res.status(400).json({
+        error: true,
+        message: "Invalid input",
+        password: 'password should have at least 6 characters'
+      });
+    }
+
+    try {
+      const userData = await usersData.checkUser(email, password);
+      if (userData && userData.authenticated) {
+        req.session.email = email;
+        res.json(userData);
+      } else {
+        return res.status(500).json({
+          error: true,
+          message: "Something went wrong, please try after sometime",
+        });
+      }
+    } catch (error) {
+      if (error === `Either the email or password is invalid`) {
+        return res.status(400).json({
+          error: true,
+          message: "Either the email or password is invalid",
+        });
+      } else {
+        return res.status(500).json({
+          error: true,
+          message: "Something went wrong, please try after sometime",
+        });
+      }
+    }
+
+  });
+
+/**
+ * User email & password updates
+ * Roushan Kumar
+ */
+usersRouter.
+  patch('/updates/email-pass', trimRequest.all, async (req, res) => {
+    const email = xss(req.body.email);
+    const newEmail = xss(req.body.newEmail);
+    const newPassword = xss(req.body.newPassword);
+    const confirmPassword = xss(req.body.confirmPassword);
+    let isEmailUpdate = false;
+
+    // Schema validation
+    const requestKeyList = Object.keys(req.body);
+    let postBodyKeys = null;
+    if (newEmail) {
+      postBodyKeys = ["email", "newEmail"];
+    } else {
+      postBodyKeys = ["email", "newPassword", "confirmPassword"];
+    }
+
+    for (let requestKey of postBodyKeys) {
+      if (requestKeyList.indexOf(requestKey) === -1) {
+        return res.status(400).json({
+          error: true,
+          message: `${requestKey} key is missing in body`,
+        });
+      }
+    }
+    if (requestKeyList.length !== postBodyKeys.length) {
+      return res.status(400).json({
+        error: true,
+        message: "Json body is invalid",
+      });
+    }
+    // Email validation
+    if (!email || email.trim() == "") {
+      return res.status(400).json({
+        error: true,
+        message: "Invalid input",
+        email: `email is required`
+      })
+    }
+
+    if (!emailValidator.validate(email)) {
+      return res.status(400).json({
+        error: true,
+        message: "Invalid input",
+        email: `${email} is invalid email format`
+      })
+    }
+
+    if (newEmail) {
+      isEmailUpdate = true;
+      // NewEmail validation
+      if (email.trim() == "") {
+        return res.status(400).json({
+          error: true,
+          message: "Invalid input",
+          newEmail: `newEmail is required`
+        })
+      }
+
+      if (!emailValidator.validate(newEmail)) {
+        return res.status(400).json({
+          error: true,
+          message: "Invalid input",
+          newEmail: `${newEmail} is invalid email format`
+        })
+      }
+
+    }
+
+    if (!isEmailUpdate) {
+      // newPassword validation
+      let isValidPassword = commonValidators.isValidString(newPassword, 'newPassword');
+      if (!isValidPassword[0]) {
+        return res.status(400).json({
+          error: true,
+          message: "Invalid input",
+          newPassword: isValidPassword[1]
+        });
+      }
+
+      if (newPassword.length < 6) {
+        return res.status(400).json({
+          error: true,
+          message: "Invalid input",
+          newPassword: 'password should have at least 6 characters'
+        });
+      }
+
+      // confirmPassword validation
+      isValidPassword = commonValidators.isValidString(confirmPassword, 'confirmPassword');
+      if (!isValidPassword[0]) {
+        return res.status(400).json({
+          error: true,
+          message: "Invalid input",
+          confirmPassword: isValidPassword[1]
+        });
+      }
+
+      if (confirmPassword.length < 6) {
+        return res.status(400).json({
+          error: true,
+          message: "Invalid input",
+          confirmPassword: 'password should have at least 6 characters'
+        });
+      }
+
+      if (newPassword.trim() !== confirmPassword.trim()) {
+        return res.status(400).json({
+          error: true,
+          message: "Invalid input",
+          confirmPassword: "newPassword doesn't match with confirmPassword"
+        });
+      }
+    }
+
+
+    try {
+      const updatedInfo = await usersData.updateUserEmailPassword(email, newEmail, newPassword, confirmPassword);
+      if (updatedInfo && updatedInfo.isUpdated) {
+        req.session.email = email;
+        res.json(updatedInfo);
+      } else {
+        return res.status(500).json({
+          error: true,
+          message: "Something went wrong, please try after sometime",
+        });
+      }
+    } catch (error) {
+      if (error === `Email doesn't exist`) {
+        return res.status(400).json({
+          error: true,
+          message: "Email doesn't exist",
+        });
+      } else {
+        return res.status(500).json({
+          error: true,
+          message: "Something went wrong, please try after sometime",
+        });
+      }
+    }
   });
 
 module.exports = usersRouter;
