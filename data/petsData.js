@@ -278,26 +278,26 @@ async function createPet(name, petType, breed, age, size, gender, color, address
     } else throw "picture is required";
     
     const petsCollection = await pets();
-    typeFound = await petTypes().findOne({ type: petType });
+    typeFound = await petTypes().findOne({ type: petType.trim() });
 
     const newPet = {
-        name: name,
+        name: name.trim(),
         type: {
             _id: typeFound._id,
             type: typeFound.type
         },
-        breed: breed,
+        breed: breed.trim(),
         age: age,
-        size: size,
-        gender: gender,
-        color: color,
-        address: address,
+        size: size.trim(),
+        gender: gender.trim(),
+        color: color.trim(),
+        address: address.trim(),
         zip: zip,
-        city: city,
-        state: state,
-        description: description,
+        city: city.trim(),
+        state: state.trim(),
+        description: description.trim(),
         ownerId: ownerId,
-        picture: picture,
+        picture: picture.trim(),
         createdAt: new Date(),
         updatedAt: new Date(),
         adoptedBy: null
