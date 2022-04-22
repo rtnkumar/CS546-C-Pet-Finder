@@ -12,50 +12,50 @@ function isValidString(string, key) {
 }
 
 // It checks whether string contains only [ 0-9, a-z, A-Z ] or not 
-function isValidAlphaNumeric(string,key) {
-    string=string.trim();
+function isValidAlphaNumeric(string, key) {
+    string = string.trim();
     const regEx = /^[0-9a-zA-Z]+$/;
     if (string.match(regEx)) {
         return [true];
     }
     else {
-        return [false,`${key} is not alphanumeric`];
+        return [false, `${key} is not alphanumeric`];
     }
 }
 
 // It checks whether string contains [a-z, A-Z] or not
-function isValidAlphabet(string,key) {
-    string=string.trim();
+function isValidAlphabet(string, key) {
+    string = string.trim();
     const regEx = /^[a-zA-Z]+$/;
     if (string.match(regEx)) {
         return [true];
     }
     else {
-        return [false,`Only alphabet is required in ${key}`];
+        return [false, `Only alphabet is required in ${key}`];
     }
 }
 
 // It checks whether phoneNumber is valid or not
-function isValidPhoneNumber(phoneNumber,key) {
-    phoneNumber=phoneNumber.trim();
+function isValidPhoneNumber(phoneNumber, key) {
+    phoneNumber = phoneNumber.trim();
     const regEx = /^\d{3}[-]\d{3}[-]\d{4}$/gm;
     if (phoneNumber.match(regEx)) {
         return [true];
     }
     else {
-        return [false,`${phoneNumber} is invalid ${key}`];
+        return [false, `${phoneNumber} is invalid ${key}`];
     }
 }
 
 // It checks whether integer is valid or not
-function isValidInteger(integer,key) {
-    integer=integer.trim();
+function isValidInteger(integer, key) {
+    integer = integer.trim();
     const regEx = /^[0-9]+$/;
     if (integer.match(regEx)) {
         return [true];
     }
     else {
-        return [false,`${key} is not integer`];
+        return [false, `${key} is not integer`];
     }
 }
 function isValidFile(file) {
@@ -68,11 +68,47 @@ function isValidFile(file) {
     return true;
 };
 
-module.exports={
+function isValidId(id) {
+    if (!isValidString(id)) {
+        return false
+    }
+    id = id.trim();
+    if (!ObjectId.isValid(id)) return false;
+    return true;
+}
+
+// It checks whether name contains [a-z, A-Z and space] or not
+function isValidName(string, key) {
+    string = string.trim();
+    const regEx = /^[a-zA-Z ]+$/;
+    if (string.match(regEx)) {
+        return [true];
+    }
+    else {
+        return [false, `Only alphabet and space are allowed in ${key}`];
+    }
+}
+
+// It checks whether address contains only [ 0-9, a-z, A-Z, space, comma, :, - ] or not 
+function isValidAddress(string, key) {
+    string = string.trim();
+    const regEx = /^[0-9a-zA-Z ,:-]+$/;
+    if (string.match(regEx)) {
+        return [true];
+    }
+    else {
+        return [false, `Only digits, alphabet, space, comma, colon and hyphen are allowed in ${key}`];
+    }
+}
+
+module.exports = {
     isValidString,
     isValidAlphaNumeric,
     isValidAlphabet,
     isValidPhoneNumber,
     isValidInteger,
-    isValidFile
+    isValidFile,
+    isValidId,
+    isValidName,
+    isValidAddress
 }
