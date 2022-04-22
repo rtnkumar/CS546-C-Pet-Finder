@@ -27,6 +27,7 @@
     "handlebars": "^4.7.7",
     "mongodb": "^4.5.0",
     "nodemon": "^2.0.15",
+    "trim-request": "^1.0.6",
     "xss": "^1.0.11"
   }
 }
