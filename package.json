@@ -4,7 +4,9 @@
   "description": "pet finder project",
   "main": "app.js",
   "scripts": {
+    "seed": "node ./tasks/seed.js",
     "start": "nodemon app.js"
+
   },
   "repository": {
     "type": "git",
