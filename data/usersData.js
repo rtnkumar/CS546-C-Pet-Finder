@@ -5,6 +5,12 @@ const users = mongoCollections.users;
 const pets = mongoCollections.pets;
 const petTypes = mongoCollections.petTypes;
 const petsQuestionsAnswers = mongoCollections.petsQuestionsAnswers;
+
+
+
+// 1. Create User
+async function create(firstName, middleName, lastName, email, phoneNumber, password, address, city, state, zip, picture) {
+
 const commonValidators = validators.commonValidators;
 const utils = require('../utils/utils');
 const bcrypt = require('bcrypt');
@@ -149,6 +155,7 @@ async function createUser(firstName, middleName, lastName, email, phoneNumber, p
         throw `This ${email} is already exist, please use another`
     }
 
+
     let newUser = {
         firstName: firstName.trim(),
         middleName: middleName.trim(),
@@ -169,6 +176,8 @@ async function createUser(firstName, middleName, lastName, email, phoneNumber, p
     if (!insertInfo.acknowledged || !insertInfo.insertedId)
         throw 'Could not add user';
 
+
+
     return { userInserted: true };
 }
 
@@ -177,7 +186,7 @@ async function createUser(firstName, middleName, lastName, email, phoneNumber, p
  * Check whether the user is real or fake
  * 
  * @param {email of user} email 
- * @param {passwor of user} password 
+ * @param {password of user} password 
  * @returns 
  */
 async function checkUser(email, password) {
@@ -195,6 +204,7 @@ async function checkUser(email, password) {
     }
     email = email.trim();
     email = email.toLowerCase();
+
 
     // Password validation
     let isValidPassword = commonValidators.isValidString(password, 'password');
@@ -235,7 +245,7 @@ async function checkUser(email, password) {
  * @param {Email of user} email 
  * @param {NewEmail of user} newEmail 
  * @param {NewPassword of user} newPassword 
- * @param {ConfirmPasswor of user} confirmPassword 
+ * @param {ConfirmPassword of user} confirmPassword 
  * @returns 
  */
 async function updateUserEmailPassword(email, newEmail, newPassword, confirmPassword) {
@@ -318,6 +328,15 @@ async function updateUserEmailPassword(email, newEmail, newPassword, confirmPass
     return { isUpdated: true };
 }
 
+
+
+/**
+ * Feneel Doshi
+ * Get email of the user
+ * @param {Email of user} emailId 
+ * @returns 
+ */
+
 async function getUserByEmail(email) {
     // Email validation
     if (!email || email.trim() == "") {
@@ -331,8 +350,220 @@ async function getUserByEmail(email) {
     return await usersCollection.findOne({ email: email });
 }
 
+
+
+/** 
+*Feneel Doshi
+*Retrieve the email id of user
+* @param {email of user} emailId
+* @returns
+*/
+
+async function getEmail(emailId){
+
+    emailId = email.trim()
+    emailId = emailId.toLowerCase()
+
+    //Input Arguments validation
+    if(arguments.length != 1)
+        throw "Error: There should not be more than 1 arguments!"
+    
+    
+    //Email validation
+
+    if(!emailId || emailId.trim() == ""){
+        throw "Error: Email cannot be empty"
+    }
+
+    if(!emailValidator.validate(emailId)){
+            throw `${emailId} is not a valid email!`
+    }
+
+    const usersCollection = await users()
+    const getUserEmail = await usersCollection.findOne({email: emailId});
+
+    if(getUserEmail){
+        return getUserEmail
+    }
+
+    throw {error: "No user with that email found! Please enter a valid email address."}
+    
+}
+
+
+/**
+ * Feneel Doshi
+ * Update user
+ * 
+ * @param {First Name of user} firstName
+ * @param {Middle Name of user} middleName
+ * @param {Last Name of user} lastName
+ * @param {Phone Number of user} phoneNumber
+ * @param {Address of user} address
+ * @param {City of user} city
+ * @param {State of user} state
+ * @param {Zip of user} zip 
+ * @returns
+*/
+
+async function updateUser(firstName, middleName, lastName, phoneNumber, address, city, state, zip){
+
+    //Input arguments validation
+    if(arguments.length != 8){
+        throw "Error: Arguments cannot be greater than 8"
+    }
+
+    //FirstName validation
+
+    let validFNameString = commonValidators.isValidString(firstName, 'First Name')
+    if(!validFNameString[0]){
+        throw validFNameString[1]
+    }
+
+    let validFName = commonValidators.isValidName(firstName, 'First Name')
+    if(!validFName[0]){
+        throw validFName[1]
+    }
+    
+    //MiddleName validation
+    
+    if(middleName){
+        let isValidMNameString = commonValidators.isValidString(middleName, 'Middle Name')
+        if(!isValidMNameString[0]){
+            throw isValidMNameString[1]
+        }
+
+        let isValidMName = commonValidators.isValidName(middleName, 'Middle Name')
+        if(!isValidMName[0]){
+            throw isValidMName[1]
+        }
+
+
+    }
+    //LastName validation
+    let isValidLNameString = commonValidators.isValidString(lastName, 'Last Name')
+    if(!isValidLNameString[0]){
+        throw isValidLNameString[1]
+    }
+
+    let isValidLName = commonValidators.isValidName(lastName, 'Last Name')
+    if(!isValidLName[0]){
+        throw isValidLName[1]
+    }
+    
+    //PhoneNumber validation
+    if(!phoneNumber){
+        throw "Error: Phone Number is required"
+    }
+
+    let isValidNumber = commonValidators.isValidPhoneNumber(phoneNumber, 'Phone Number')
+    if(!isValidNumber[0]){
+        throw isValidNumber[1]
+    }
+
+    //Address validation
+    let isValidAddressString = commonValidators.isValidString(address, 'Address')
+    if(!isValidAddressString[0]){
+        throw isValidAddressString[1]
+    }
+    
+    let isValidAddress = commonValidators.isValidAddress(address, "Address")
+    if(isValidAddress[0]){
+        throw isValidAddress[1]
+    }
+
+    //City validation
+    let isValidCityString = commonValidators.isValidString(city, 'City')
+    if(!isValidCityString[0]){
+        throw isValidCityString[1]
+    }
+
+    let isValidCityName = commonValidators.isValidString(city, 'City')
+    if(!isValidCityName[0]){
+        throw isValidCityName[1]
+    }
+
+    //State validation
+    let isValidStateString = commonValidators.isValidString(state, 'State')
+    if(!isValidStateString[0]){
+        throw isValidStateString[1]
+    }
+
+    let isValidState = commonValidators.isValidName(state, 'State')
+    if(!isValidState[0]){
+        throw isValidState[1]
+    }
+
+    //Zip validation
+    let isValidZipString = commonValidators.isValidString(zip, 'Zip')
+    if(!isValidZipString[0]){
+        throw isValidZipString[1]
+    }
+
+    let isValidZip = commonValidators.isValidInteger(zip, 'Zip')
+    if(!isValidZip[0]){
+        throw isValidZip[1]
+    }
+
+    
+    const usersCollection = await users();
+
+    const updatedUserInfo = {
+        firstName: firstName,
+        middleName: middleName,
+        lastName: lastName,
+        phoneNumber: phoneNumber,
+        address: address,
+        city: city,
+        state: state,
+        zip: zip
+    }
+
+    const updatedInfo = await usersCollection.updateOne(
+        {email: email},
+        { $set: updatedUserInfo}
+    )
+
+    if(updatedInfo.modifiedCount == 0){
+        throw "No update made to the user profile"
+    }
+
+    let getInfo = await this.getEmail(email)
+    return getInfo
+}
+
+
+/**
+ * Feneel Doshi
+ * Remove account of the user
+ * @param {Email of the user} emailId 
+ * @returns 
+ */
+
+async function remove(emailId){
+    emailValidator.validate(emailId)
+    const usersCollection = await users()
+    const getUser = await usersCollection.findOne({email: emailId})
+
+    const removeUser = await usersCollection.deleteOne({email: emailId})
+
+    if(removeUser.deletedCount !== 1){
+        throw new Error(`No user exist with that email!`)
+
+    }
+    return {deleted: true}
+}
+
+
 module.exports = {
+
+    create,
+    getEmail,
+    updateUser, 
+    remove,
     createUser,
     checkUser,
     updateUserEmailPassword
+
+}
 }
