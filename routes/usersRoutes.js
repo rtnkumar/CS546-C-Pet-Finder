@@ -1,6 +1,8 @@
 const express = require('express');
 const usersRouter = express.Router();
 const xss = require('xss');
+
+const usersData = require('../data/usersData')
 const path = require('path');
 const formidable = require('formidable');
 const validators = require('../validators');
@@ -10,8 +12,9 @@ const trimRequest = require('trim-request');
 
 
 
-
 const data = require('../data');
+const { petsData } = require('../data');
+const { type } = require('express/lib/response');
 const usersData = data.usersData;
 
 /**
@@ -543,5 +546,128 @@ usersRouter.
       }
     }
   });
+
+//route for getting user details
+
+usersRouter
+    .route('users/user-details')
+    .post(async(req, res)=>{
+        
+        let userInfo = req.body
+
+
+        try{
+            const {email} = userInfo
+            if(!userInfo){
+                throw "Error: Email cannoit be empty"
+            }
+            const getUserEmail = await usersData.getEmail(email)
+            res.status(200).json(getUserEmail)
+        }
+        catch(error){
+
+            res.status(404).json({error: 'User not found', })
+        }
+
+
+
+    });
+
+
+
+//route for updating user details
+
+usersRouter
+    .route('users/updateDetails')
+    .get(async(req, res)=>{
+
+        if(req.session.user){
+            try{
+                const userInfo = await usersData.getEmail(email)
+                return res.render("updateUser",{
+                    title: "Update Profile",
+                    user: userInfo,
+                    nameOfUser: userInfo.firstName+ " " +userInfo.lastName
+                })
+            }
+            catch(e){
+                if(typeof e == "string"){
+                    e = new Error(e)
+                    e.code = 400
+                }
+            }
+            return res
+        }
+        else{
+            return res.redirect("/login")
+        }
+
+        
+    })
+
+    usersRouter
+        .route("/users/update")
+        .post(async(req, res)=>{
+            const userData = req.body
+
+            try{
+                const firstName = userData.firstName;
+                const lastName = userData.lastName;
+                const phoneNumber = userData.phoneNumber;
+                const address = userData.address;
+                const city = userData.city;
+                const state = userData.state;
+                const zip = userData.zip;
+               
+
+                const updateUser = await usersData.updateUser(
+                    id,
+                    firstName,
+                    lastName,
+                    phoneNumber,
+                    address,
+                    city,
+                    state,
+                    zip
+                )
+                req.session.user = updateUser
+                res.redirect("/")
+            }
+            catch(e){
+                return res.render("updateUser", {
+                    title: "Update Profile",
+                    nameOfUser: req.session.user.firstName + " " + req.session.user.lastName,
+                    user: req.session.user,
+                    error: e
+                })
+            }
+        })
+
+
+
+
+
+usersRouter
+    .route('/users/delete')
+    .delete(async(req, res)=>{
+        const email = req.params.email
+
+        try{
+            emailValidator.validate(email)
+
+            const deleteUser = await usersData.remove(email)
+            res.json("Your account has been deleted")
+        }
+        catch(e){
+            if(typeof e == "string"){
+            e = new Error(e)
+            e.code = 400
+        }
+        return res.status(500).json(ErrorMessage(e.message))
+    }
+        
+    })
+
+
 
 module.exports = usersRouter;
