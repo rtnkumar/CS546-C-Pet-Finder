@@ -1,0 +1,20 @@
+header{
+    background-color: blue;
+    height: 80px;
+    width: auto;
+}
+
+footer{
+    background-color: red;
+    height: 100px;
+    width: auto;
+    margin-top: 200px;
+}
+
+small {
+    color: skyblue;
+  }
+
+table {
+    height: 10px;
+  }

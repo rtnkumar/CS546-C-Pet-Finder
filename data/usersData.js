@@ -8,6 +8,8 @@ const petsQuestionsAnswers = mongoCollections.petsQuestionsAnswers;
 const commonValidators = validators.commonValidators;
 const utils = require('../utils/utils');
 const bcrypt = require('bcrypt');
+const { ObjectId } = require('mongodb');
+
 
 
 
@@ -331,8 +333,31 @@ async function getUserByEmail(email) {
     return await usersCollection.findOne({ email: email });
 }
 
+async function getUserById(id){
+
+    if(arguments.length!=1){
+        throw 'Only 1 argument are required';
+    }
+
+    if(!commonValidators.isValidId(id)){
+        throw 'Invalid id'
+    }
+
+    id=id.trim();
+    const usersCollection = await users();
+    let user=await usersCollection.findOne({ _id:ObjectId(id)});
+
+    if (user === null) {
+        throw `No user with id=${id}`;
+    }
+    user._id = user._id.toString();
+
+    return user;
+}
+
 module.exports = {
     createUser,
     checkUser,
-    updateUserEmailPassword
+    updateUserEmailPassword,
+    getUserById
 }

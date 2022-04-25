@@ -1,4 +1,13 @@
-// It checks whether string is valid or not
+const { ObjectId } = require('mongodb');
+
+/** 
+ * Roushan Kumar
+ * It checks whether string is valid or not
+ * 
+ * @param {input string} string 
+ * @param {name of input} key 
+ * @returns 
+ */
 function isValidString(string, key) {
     if (!string) return [false, `Input not supplied or NaN or undefined or null in ${key}`];
     if (!(typeof string === 'string')) {
@@ -11,7 +20,14 @@ function isValidString(string, key) {
     return [true];
 }
 
-// It checks whether string contains only [ 0-9, a-z, A-Z ] or not 
+/**
+ * Roushan Kumar
+ * It checks whether string contains only [ 0-9, a-z, A-Z ] or not 
+ * 
+ * @param {input string} string 
+ * @param {name of input} key 
+ * @returns 
+ */
 function isValidAlphaNumeric(string, key) {
     string = string.trim();
     const regEx = /^[0-9a-zA-Z]+$/;
@@ -23,7 +39,14 @@ function isValidAlphaNumeric(string, key) {
     }
 }
 
-// It checks whether string contains [a-z, A-Z] or not
+/**
+ * Roushan Kumar
+ * It checks whether string contains [a-z, A-Z] or not
+ *
+ * @param {input} string 
+ * @param {name of input} key 
+ * @returns 
+ */
 function isValidAlphabet(string, key) {
     string = string.trim();
     const regEx = /^[a-zA-Z]+$/;
@@ -35,7 +58,13 @@ function isValidAlphabet(string, key) {
     }
 }
 
-// It checks whether phoneNumber is valid or not
+/**
+ * Roushan Kumar
+ * It checks whether phoneNumber is valid or not
+ * @param {input parameter} phoneNumber 
+ * @param {name of input} key 
+ * @returns 
+ */
 function isValidPhoneNumber(phoneNumber, key) {
     phoneNumber = phoneNumber.trim();
     const regEx = /^\d{3}[-]\d{3}[-]\d{4}$/gm;
@@ -47,7 +76,15 @@ function isValidPhoneNumber(phoneNumber, key) {
     }
 }
 
-// It checks whether integer is valid or not
+
+/**
+ * Roushan Kumar
+ * It checks whether integer is valid or not
+ * 
+ * @param {input integer} integer 
+ * @param {name of parameter} key 
+ * @returns 
+ */
 function isValidInteger(integer, key) {
     integer = integer.trim();
     const regEx = /^[0-9]+$/;
@@ -58,6 +95,14 @@ function isValidInteger(integer, key) {
         return [false, `${key} is not integer`];
     }
 }
+
+/**
+ * Roushan Kumar
+ * Validate whether file is jpg, jpeg, png
+ * 
+ * @param {input file} file 
+ * @returns 
+ */
 function isValidFile(file) {
     let type = file.filepath.split("/").pop();
     type = type.split(".").pop();
@@ -68,8 +113,17 @@ function isValidFile(file) {
     return true;
 };
 
+
+/**
+ * Roushan Kumar
+ * Check whether id is valid or not
+ * 
+ * @param {id of mongodb} id 
+ * @returns 
+ */
 function isValidId(id) {
-    if (!isValidString(id)) {
+    let isValidStringId=isValidString(id,'id');
+    if (!isValidStringId[0]) {
         return false
     }
     id = id.trim();
@@ -77,7 +131,15 @@ function isValidId(id) {
     return true;
 }
 
-// It checks whether name contains [a-z, A-Z and space] or not
+
+/**
+ * Roushan Kumar
+ * It checks whether name contains [a-z, A-Z and space] or not
+ * 
+ * @param {name parameter} string 
+ * @param {name of parameter} key 
+ * @returns 
+ */
 function isValidName(string, key) {
     string = string.trim();
     const regEx = /^[a-zA-Z ]+$/;
@@ -89,7 +151,14 @@ function isValidName(string, key) {
     }
 }
 
-// It checks whether address contains only [ 0-9, a-z, A-Z, space, comma, :, - ] or not 
+/**
+ * Roushan Kumar
+ * It checks whether address contains only [ 0-9, a-z, A-Z, space, comma, :, - ] or not 
+ *
+ * @param {address parameter} string 
+ * @param {name of parameter} key 
+ * @returns 
+ */
 function isValidAddress(string, key) {
     string = string.trim();
     const regEx = /^[0-9a-zA-Z ,:-]+$/;
