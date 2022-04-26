@@ -27,9 +27,8 @@ usersRouter
       form.parse(request, async (err, fields, files) => {
         if (err) {
           return res.status(400).json({
-            status: "Fail",
+            error: true,
             message: "There was an error parsing the files",
-            error: err,
           });
         }
         else if (!files || Object.keys(files).length == 0 || !files.picture) {

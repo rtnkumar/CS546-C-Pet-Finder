@@ -1,12 +1,12 @@
 const express = require('express');
 const petsRouter = express.Router();
-const xss = require('xss');
 const validators = require('../validators');
 const commonValidators = validators.commonValidators;
+const xss = require('xss');
 const trimRequest = require('trim-request');
-
 const data = require('../data');
 const petsData = data.petsData;
+const petTypesData=data.petTypesData;
 
 // Routes
 petsRouter
@@ -457,5 +457,44 @@ function pictureTests(picture) {
     } else throw "picture is required";
 }
 
+
+petsRouter.
+get('/pet-types',async(req,res)=>{
+ try {
+     let petList= await petTypesData.getAllPetTypes();
+     res.json(petList);
+ } catch (error) {
+     res.status(500).json({
+         error:true,
+         message:"Something went wrong, please try after sometime"
+     })
+ }
+});
+
+petsRouter.
+get('/:id',trimRequest.all,async(req,res)=>{
+
+    let id=xss(req.params.id);
+    try {
+     if(!commonValidators.isValidId(id)){
+        return res.status(400).json({error:true,message:"invalid parameter",id:"Invalid id"});
+    }
+     let petList= await petsData.getPetDetailsByPetId(id);
+     res.json(petList);
+ } catch (error) {
+     if(`No pet with id=${id.trim()}`===error){
+        res.status(404).json({
+            error:true,
+            message:error
+        });
+     }else{
+        res.status(500).json({
+            error:true,
+            message:"Something went wrong, please try after sometime"
+        })
+     }
+
+ }
+});
 
 module.exports = petsRouter;

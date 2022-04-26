@@ -1,0 +1,118 @@
+<form id="sign-up" style="border:1px solid #ccc">
+    <div class="container">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th class="text-center" colspan="5">Sign Up</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="text-start">
+                        <label for="first-name"><b>First Name</b></label>
+
+                        <div><input type="text" placeholder="Enter First Name" name="firstName" id="first-name"
+                                pattern="[a-zA-Z ]+$" title="Only space and alphabet are allowed" required></div>
+                        <small>Format: Only space and alphabet are allowed.</small>
+                    </td>
+                    <td class="text-start">
+                        <label for="middle-name"><b>Middle Name</b></label>
+
+                        <div>
+                            <input type="text" placeholder="Enter Middle Name" name="middleName" id="middle-name"
+                                pattern="[a-zA-Z ]+$" title="Only space and alphabet are allowed" required>
+                        </div>
+                        <small>Format: Only space and alphabet are allowed.</small>
+
+                    </td>
+                    <td class="text-start">
+                        <label for="last-name"><b>Last Name</b></label>
+
+                        <div>
+                            <input type="text" placeholder="Enter Last Name" name="lastName" id="last-name"
+                                pattern="[a-zA-Z ]+$" title="Only space and alphabet are allowed" required>
+                        </div>
+                        <div><small>Format: Only space and alphabet are allowed.</small></div>
+
+                    </td>
+                    <td class="text-start">
+                        <label for="email"><b>Email</b></label>
+                        <div>
+                            <input type="email" placeholder="Enter Email" name="email" id="email"
+                                pattern="^[-!#$%&'*+\/0-9=?A-Z^_a-z`{|}~](\.?[-!#$%&'*+\/0-9=?A-Z^_a-z`{|}~])*@[a-zA-Z0-9](-*\.?[a-zA-Z0-9])*\.[a-zA-Z](-?[a-zA-Z0-9])+$"
+                                title="Invlaid email format" required>
+                        </div>
+                        <small>Format: local-part@domain.</small>
+                    </td>
+
+                </tr>
+                <tr>
+                    <td class="text-start">
+                        <label for="phone-number"><b>Phone Number</b></label>
+                        <div>
+                            <input type="text" placeholder="Enter Phone Number" name="phoneNumber" id="phone-number"
+                                pattern="^\d{3}[-]\d{3}[-]\d{4}$" title="Invalid phone number format" required>
+                        </div>
+                        <small>Format: xxx-xxx-xxxx</small>
+                    </td>
+                    <td class="text-start">
+                        <label for="password"><b>Password</b></label>
+                        <div>
+                            <input type="password" placeholder="Enter Password" name="password" id="password"
+                                minlength="6" title="At least 6 characters are required" required>
+                        </div>
+                        <small>Format: At least 6 characters is required</small>
+                    </td>
+                    <td class="text-start">
+                        <label for="address"><b>Address</b></label>
+                        <div>
+                            <input type="text" placeholder="Enter Address" name="address" id="address"
+                                pattern="^[0-9a-zA-Z ,:-]+$"
+                                title="Only digits, alphabet, space, comma, colon and hyphen are allowed" required>
+                        </div>
+                        <small>Format: Only digits, alphabet, space, comma, colon and hyphen are allowed</small>
+                    </td>
+                    <td class="text-start">
+                        <label for="city"><b>City</b></label>
+                        <div>
+                            <input type="text" placeholder="Enter City" name="city" id="city"
+                                title="Only space and alphabet are allowed" pattern="[a-zA-Z ]+$" required>
+                        </div>
+                        <small>Format: Only space and alphabet are allowed.</small>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="text-start">
+                        <label for="state"><b>State</b></label>
+                        <div> <input type="text" placeholder="Enter State" name="state" id="state"
+                                title="Only space and alphabet are allowed" pattern="[a-zA-Z ]+$" required>
+                        </div>
+                        <small>Format: Only space and alphabet are allowed.</small>
+
+                    </td>
+                    <td class="text-start">
+                        <label for="zip"><b>Zip</b></label>
+                        <div>
+                            <input type="text" placeholder="Enter Zip" name="zip" id="zip"
+                                title="Only integer is allowed" pattern="^[0-9]+$" required>
+                        </div>
+                        <small>Format: Only integer is allowed.</small>
+                    </td>
+                    <td class="text-start">
+                        <label for="picture"><b>Picture</b></label>
+                        <div>
+                            <input type="file" placeholder="Upload Picture" name="picture" id="picture"
+                                accept="image/jpg, image/jpeg, image/png" required>
+                        </div>
+                        <small>Format: jpg, jpeg and png are allowed.</small>
+
+                    </td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td colspan="5" class="text-center"> <button type="submit">submit</button></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</form>
