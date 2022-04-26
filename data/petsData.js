@@ -21,7 +21,7 @@ const commonValidators = validators.commonValidators;
 async function homePageSearch(city, state, zip, petType) {
     // Validate the input
     // If none of the given criteria are specified, throw an error.
-    if (city === undefined && state === undefined && zip === undefined && petType === undefined) throw 'No search criteria specified';
+    if (!(city || state || zip || petType)) throw 'No search criteria specified';
 
     // Validate city
     if (city) {
@@ -30,7 +30,7 @@ async function homePageSearch(city, state, zip, petType) {
         if (!isValidCity[0]) throw isValidCity[1];
 
         // Valid Alphanumeric
-        isValidCity = commonValidators.isValidAlphaNumeric(city, 'city');
+        isValidCity = commonValidators.isValidName(city, 'city');
         if (!isValidCity[0]) throw isValidCity[1];
     }
 
@@ -41,17 +41,18 @@ async function homePageSearch(city, state, zip, petType) {
         if (!isValidState[0]) throw isValidState[1];
 
         // Valid Alphanumeric
-        isValidState = commonValidators.isValidAlphaNumeric(state, 'state');
+        isValidState = commonValidators.isValidName(state, 'state');
         if (!isValidState[0]) throw isValidState[1];
     }
 
     // Validate zip
     if (zip) {
-        // Valid Number
-        if (typeof zip !== 'number') throw 'zip is not a number';
+        // Valid String
+        let isValidZip = commonValidators.isValidString(zip, 'zip');
+        if (!isValidZip[0]) throw isValidZip[1];
 
         // Valid Integer
-        let isValidZip = commonValidators.isValidInteger(zip.toString(), 'zip');
+        isValidZip = commonValidators.isValidInteger(zip.toString(), 'zip');
         if (!isValidZip[0]) throw isValidZip[1];
 
         // Valid length
@@ -81,10 +82,10 @@ async function homePageSearch(city, state, zip, petType) {
     // Include pets that match any of the criteria
     if (city || state || zip || petType) {
         let query = {};
-        if (city) query.city = city;
-        if (state) query.state = state;
-        if (zip) query.zip = zip;
-        if (petType) query.petType = petType;
+        if (city) query.city = city.trim();
+        if (state) query.state = state.trim();
+        if (zip) query.zip = zip.trim();
+        if (petType) query.petType = petType.trim();
 
         // Retrieve all pets that match criteria
         petsToReturn = await petCollection.find(query).toArray();
@@ -166,11 +167,12 @@ async function createPet(name, petType, breed, age, size, gender, color, address
 
     // Validate age
     if (age) {
-        // Valid Number
-        if (typeof age !== 'number') throw 'age is not a number';
+        // Valid String
+        let isValidAge = commonValidators.isValidString(age, 'age');
+        if (!isValidAge[0]) throw isValidAge[1];
 
         // Valid Integer
-        let isValidAge = commonValidators.isValidInteger(age, 'age');
+        isValidAge = commonValidators.isValidInteger(age, 'age');
         if (!isValidAge[0]) throw isValidAge[1];
     } else throw "age is required";
 
@@ -210,17 +212,18 @@ async function createPet(name, petType, breed, age, size, gender, color, address
         if (!isValidAddress[0]) throw isValidAddress[1];
 
         // Valid Alphabet
-        isValidAddress = commonValidators.isValidAlphabet(address, 'address');
+        isValidAddress = commonValidators.isValidAddress(address, 'address');
         if (!isValidAddress[0]) throw isValidAddress[1];
 
     } else throw "address is required";
 
     if (zip) {
-        // Valid Number
-        if (typeof zip !== 'number') throw 'zip is not a number';
+        // Valid String
+        let isValidZip = commonValidators.isValidString(zip, 'zip');
+        if (!isValidZip[0]) throw isValidZip[1];
 
         // Valid Integer
-        let isValidZip = commonValidators.isValidInteger(zip.toString(), 'zip');
+        isValidZip = commonValidators.isValidInteger(zip.toString(), 'zip');
         if (!isValidZip[0]) throw isValidZip[1];
 
         // Valid length
@@ -232,8 +235,8 @@ async function createPet(name, petType, breed, age, size, gender, color, address
         let isValidCity = commonValidators.isValidString(city, 'city');
         if (!isValidCity[0]) throw isValidCity[1];
 
-        // Valid Alphanumeric
-        isValidCity = commonValidators.isValidAlphaNumeric(city, 'city');
+        // Valid Nam
+        isValidCity = commonValidators.isValidName(city, 'city');
         if (!isValidCity[0]) throw isValidCity[1];
     } else throw "city is required";
 
@@ -243,7 +246,7 @@ async function createPet(name, petType, breed, age, size, gender, color, address
         if (!isValidState[0]) throw isValidState[1];
 
         // Valid Alphanumeric
-        isValidState = commonValidators.isValidAlphaNumeric(state, 'state');
+        isValidState = commonValidators.isValidName(state, 'state');
         if (!isValidState[0]) throw isValidState[1];
     } else throw "state is required";
 
@@ -255,12 +258,9 @@ async function createPet(name, petType, breed, age, size, gender, color, address
 
     const ownerCollection = await owners();
     if (ownerId) {
-        // Valid String
-        let isValidOwnerId = commonValidators.isValidString(ownerId, 'ownerId');
-        if (!isValidOwnerId[0]) throw isValidOwnerId[1];
-
-        // Valid ObjectId
-        if (!ObjectId.isValid(ownerId)) throw `${ownerId} is not a valid ObjectId`;
+        // Valid ID
+        let isValidOwnerId = commonValidators.isValidId(ownerId);
+        if (!isValidOwnerId) throw `${ownerId} is not a valid id`;
 
         // Valid Existence in owners collection
         let isValidExists = await ownerCollection.findOne({ _id: ObjectId(ownerId) });
