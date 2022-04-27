@@ -14,6 +14,19 @@ const trimRequest = require('trim-request');
 const data = require('../data');
 const usersData = data.usersData;
 
+
+usersRouter
+  .get('/login', (req, res) => {
+    res.render('usersViews/login', { title: "Pets Finder", footer: "foooter" });
+  });
+
+
+  usersRouter
+  .get('/sign-up', (req, res) => {
+    res.render('usersViews/signUp', { title: "Pets Finder", footer: "foooter" });
+  });
+
+
 /**
  * User Sign-up Api
  * Roushan Kumar
@@ -278,11 +291,11 @@ usersRouter
           const result = await usersData.createUser(firstName, middleName, lastName, email, phoneNumber, password, address, city, state, zip, picture);
           return res.json(result);
         } catch (e) {
-          if (e === `This ${email.trim().toLowerCase()} is already exist, please use another`) {
+          if (e === `${email.trim().toLowerCase()} is already exist, please use another`) {
             return res.status(400).json({
               error: true,
               message: "Invalid input",
-              email: `This ${email.trim()} is already exist, please use another`
+              email: `${email.trim()} is already exist, please use another`
             });
           } else {
             return res.status(500).json({
