@@ -7,6 +7,9 @@ const main = async () => {
   const db = await dbConnection.connectToDb();
   await db.dropDatabase();
 
+  // Call populatePetTypeCollection() to populate pet collection
+  
+
   const roushan = await usersData.createUser("roushan", "", "kumar", "r@gmail.com", "782-923-0922", "password", "207 columbia", "jersey city", "new jersey", "07307", "picture.jpg");
   
 };

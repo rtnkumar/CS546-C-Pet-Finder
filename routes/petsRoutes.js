@@ -6,7 +6,8 @@ const xss = require('xss');
 const trimRequest = require('trim-request');
 const data = require('../data');
 const petsData = data.petsData;
-const petTypesData=data.petTypesData;
+const petTypesData = data.petTypesData;
+const usersData = data.usersData;
 
 // Routes
 petsRouter
@@ -88,7 +89,7 @@ petsRouter
 
 petsRouter
 
-    post('/upload', trimRequest.all, async (req, res) => {
+    .post('/upload', trimRequest.all, async (req, res) => {
         // Validation
         let name = xss(req.body.name);
         let type = xss(req.body.type);
@@ -316,7 +317,7 @@ function zipTests(zip) {
 
 function petTypeTests(petType) {
     // Validate petType
-    const petTypeCollection = await petTypes();
+    const petTypeCollection = petTypesData.getAllPetTypes();
     if (petType) {
         // Valid String
         let isValidPetType = commonValidators.isValidString(petType, 'petType');
@@ -327,7 +328,7 @@ function petTypeTests(petType) {
         if (!isValidPetType[0]) throw isValidPetType[1];
 
         // Valid Existence in petTypes collection
-        let isValidExists = await petTypeCollection.findOne({ type: petType });
+        let isValidExists = petTypeCollection.includes(petType);
         if (!isValidExists) throw `${petType} is not a valid petType`;
     } else throw "petType is required";
 }
@@ -429,8 +430,7 @@ function descriptionTests(description) {
     } else throw "description is required";
 }
 
-function ownerIdTests(ownerId) {
-    const ownerCollection = await owners();
+async function ownerIdTests(ownerId) {
     if (ownerId) {
         // Valid String
         let isValidOwnerId = commonValidators.isValidString(ownerId, 'ownerId');
@@ -440,7 +440,7 @@ function ownerIdTests(ownerId) {
         if (!ObjectId.isValid(ownerId)) throw `${ownerId} is not a valid ObjectId`;
 
         // Valid Existence in owners collection
-        let isValidExists = await ownerCollection.findOne({ _id: ObjectId(ownerId) });
+        let isValidExists = await usersData.getUserById(ownerId);
         if (!isValidExists) throw `${ownerId} does not belong to any owner`;
     } else throw "ownerId is required";
 }

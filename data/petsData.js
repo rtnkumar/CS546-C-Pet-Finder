@@ -5,6 +5,7 @@ const petsQuestionsAnswers = mongoCollections.petsQuestionsAnswers;
 const validators = require('../validators');
 const commonValidators = validators.commonValidators;
 const usersData=require('./usersData');
+const petTypesData = require('./petTypesData');
 
 /**
  * @brief Retrieves pets from the database that match the given criteria.
@@ -135,7 +136,7 @@ async function createPet(name, petType, breed, age, size, gender, color, address
     } else throw "name is required";
 
     // Validate petType
-    const petTypeCollection = await petTypes();
+    const petTypeCollection = petTypesData.getAllPetTypes();
     if (petType) {
         // Valid String
         let isValidPetType = commonValidators.isValidString(petType, 'petType');
@@ -146,8 +147,8 @@ async function createPet(name, petType, breed, age, size, gender, color, address
         if (!isValidPetType[0]) throw isValidPetType[1];
 
         // Valid Existence in petTypes collection
-        let isValidExists = await petTypeCollection.findOne({ type: petType });
-        if (!isValidExists) throw `${petType} is not a valid petType`;
+        isValidPetType = petTypeCollection.includes(petType);
+        if (!isValidPetType) throw `${petType} is not a valid petType`;
 
     } else throw "petType is required";
 

@@ -6,7 +6,6 @@
   "scripts": {
     "seed": "node ./tasks/seed.js",
     "start": "nodemon app.js"
-
   },
   "repository": {
     "type": "git",
@@ -20,13 +19,11 @@
   "homepage": "https://github.com/rtnkumar/CS546-C-Pet-Finder#readme",
   "dependencies": {
     "bcrypt": "^5.0.1",
-    "cookie-parser": "^1.4.6",
     "email-validator": "^2.0.4",
     "express": "^4.17.3",
     "express-handlebars": "^6.0.4",
     "express-session": "^1.17.2",
     "formidable": "^2.0.1",
-    "handlebars": "^4.7.7",
     "mongodb": "^4.5.0",
     "nodemon": "^2.0.15",
     "trim-request": "^1.0.6",
