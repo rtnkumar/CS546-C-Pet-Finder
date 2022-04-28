@@ -1,18 +1,41 @@
-<div class="container">
-    <div class="row pet-list">
-        {{!-- <div     class="col bg-dark text-white">
-            <div>
-                <img src="/public/assets/www/media/logo.png">
-            </div>
-            <div>Roushan Kumar</div>
-        </div>
+<div style='float: right;'>
+    <label for="age">Age:</label>
+    <select id="age">
+    </select>
 
-        <div class="col bg-dark text-white">25%</div>
-        <div class="col bg-dark text-white">25%</div>
-        <div class="col bg-dark text-white">25%</div> --}}
-    </div>
+    <label for="size">Size:</label>
+    <select id="size">
+        <option value="all">All</option>
+        <option value="small">Small</option>
+        <option value="medium">Medium</option>
+        <option value="large">Large</option>
+        <option value="extra-large">Extra Large</option>
+    </select>
+
+    <label for="gender">Gender:</label>
+    <select id="gender">
+        <option value="all">All</option>
+        <option value="male">Male</option>
+        <option value="female">Female</option>
+    </select>
+
+    <label for="sort">Sort:</label>
+    <select id="sort">
+        <option value="all">All</option>
+        <option value="-1">Latest</option>
+        <option value="1">Oldest</option>
+    </select>
+    
+
+</div>
+<div class="container" id="pet-list-container">
+
+</div>
+<div style='float: right;'>
+    <button id="back">Back</button>
+    <button id="next">Next</button>
 </div>
 
 <script src="https://code.jquery.com/jquery-2.2.4.min.js"
     integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44=" crossorigin="anonymous"></script>
-<script src="/public/js/petsDetails.js"></script>
+<script src="/public/js/petList.js"></script>
