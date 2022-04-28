@@ -1,5 +1,7 @@
 const mongoCollections = require('../config/mongoCollections');
 const petTypes = mongoCollections.petTypes;
+const { ObjectId } = require('mongodb');
+
 
 /**
  * Fills the petTypes collection with data.
@@ -58,6 +60,8 @@ async function populatePetTypeCollection() {
 
     petList.push(dog, cat, horse, rabbit);
     await petsCollection.insertMany(petList);
+
+    return { populate : true };
 }
 
 // Get all types of pet
