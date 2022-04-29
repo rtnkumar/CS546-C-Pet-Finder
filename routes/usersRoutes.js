@@ -552,7 +552,7 @@ usersRouter.
       }
     } catch (error) {
       if (error === `Email doesn't exist`) {
-        return res.status(400).json({
+        return res.status(404).json({
           error: true,
           message: "Email doesn't exist",
         });

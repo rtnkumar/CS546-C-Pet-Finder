@@ -163,7 +163,8 @@ async function createUser(firstName, middleName, lastName, email, phoneNumber, p
         state: state.trim(),
         zip: zip.trim(),
         picture: picture.trim(),
-        favoriteList:[]
+        favoriteList:[],
+        adoptedList:[]
     };
     const usersCollection = await users();
 
