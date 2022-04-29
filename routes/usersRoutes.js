@@ -554,7 +554,7 @@ usersRouter.route("/user-details").get(async (req, res) => {
   try {
     const { email } = userInfo;
     if (!userInfo.email) {
-      res.status(400).json({error : "Email cannot be empty"});
+      res.status(400).json({ error: "Email cannot be empty" });
     }
     const getUserEmail = await usersData.getEmail(email);
     //console.log(getUserEmail)
@@ -579,24 +579,24 @@ usersRouter.route("/updateDetails").get(async (req, res) => {
         nameOfUser: userInfo.firstName + " " + userInfo.lastName,
       });
     }
-  
-    catch(e){
+
+    catch (e) {
       console.log(e)
     }
   }
-//     } catch (e) {
-//       if (typeof e == "string") {
-//         e = new Error(e);
-//         e.code = 400;
-//       }
-    
-//     return res;
-  
-//    else {
-//     return res.redirect("/login");
-//   }
-// }
-  });
+  //     } catch (e) {
+  //       if (typeof e == "string") {
+  //         e = new Error(e);
+  //         e.code = 400;
+  //       }
+
+  //     return res;
+
+  //    else {
+  //     return res.redirect("/login");
+  //   }
+  // }
+});
 
 usersRouter.route("/update").post(async (req, res) => {
   const userData = req.body;
@@ -611,7 +611,7 @@ usersRouter.route("/update").post(async (req, res) => {
     const zip = userData.zip;
 
     const updateUser = await usersData.updateUser(
-    
+
       firstName,
       lastName,
       phoneNumber,
@@ -640,26 +640,23 @@ usersRouter.route("/update").post(async (req, res) => {
  * Feneel Doshi
  */
 usersRouter.route("/delete").delete(async (req, res) => {
-  
-  const userEmail = req.body
- 
-  
 
+  const emailId=req.session.email;  
   try {
-    const {email} = userEmail
-    if(!userEmail.email){
-      return res.status(400).json({error: "Email cannot be empty"})
-    }
-    emailValidator.validate(userEmail);
-
-    const deleteUser = await usersData.remove(email);
-    res.json("Your account has been deleted");
+    const deleteUser = await usersData.remove(emailId);
+    res.json(deleteUser);
   } catch (e) {
-    if (typeof e == "string") {
-      e = new Error(e);
-      e.code = 400;
+    if (e == `No user with email=${emailId}`) {
+      return res.status(404).json({
+        error: true,
+        message: e,
+      });
+    } else {
+      return res.status(500).json({
+        error: true,
+        message: "Something went wrong, please try after sometime",
+      });
     }
-    return res.status(500).json(ErrorMessage(e.message));
   }
 });
 

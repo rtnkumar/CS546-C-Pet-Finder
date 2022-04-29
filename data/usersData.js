@@ -576,21 +576,36 @@ async function updateUser(firstName, middleName, lastName, phoneNumber, address,
  */
 
 async function remove(emailId){
-    if(!emailId || emailId.trim() == "")
-        throw "Error! Must provide an email id to delete the account!"
     
-    emailValidator.validate(emailId)
-
-
-    const usersCollection = await users()
-    const getUser = await usersCollection.findOne({email: emailId})
-
-    const removeUser = await usersCollection.deleteOne({email: emailId})
-
-    if(removeUser.deletedCount !== 1){
-        throw new Error(`No user exist with that email!`)
-
+    if(arguments.length!=1){
+        throw 'Only 1 argument are required';
     }
+
+     // Email validation
+    if (!emailId || emailId.trim() == "") {
+        throw `email is required`;
+    }
+
+    if (!emailValidator.validate(emailId)) {
+        throw `${emailId} is invalid email format`;
+    }
+
+    emailId=emailId.trim();
+    emailId=emailId.toLowerCase();
+    const usersCollection = await users()
+    const user = await usersCollection.findOne({email: emailId})
+
+    if (user === null) {
+        throw `No user with email=${emailId}`;
+    }
+
+
+    const deletionInfo = await usersCollection.deleteOne({email: emailId})
+
+    if (deletionInfo.deletedCount === 0) {
+        throw `Could not delete user with email of ${emailId}`;
+    }
+
     return {deleted: true}
 }
 
