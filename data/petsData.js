@@ -61,7 +61,6 @@ async function getPetDetailsByPetId(id){
 
 }
 
-
 /**
  * Feneel Doshi
  * Assigns the pet to the user
@@ -69,28 +68,50 @@ async function getPetDetailsByPetId(id){
  * @returns 
  */
 
- async function assignPet(petId){
-   
-    if(arguments.length!=1){
-        throw 'Only 1 argument are required';
+ async function assignPet(userId, petId) {
+
+    if (arguments.length != 2) {
+        throw 'Only 2 argument are required';
     }
 
-    if(!commonValidators.isValidId(id)){
-        throw 'Invalid id'
+    if (!commonValidators.isValidId(userId)) {
+        throw 'Invalid userId'
     }
-   
-    const petCollections = await pets()
-
-    const petInfo = {
-        _id: new ObjectId(),
-      
+    if (!commonValidators.isValidId(petId)) {
+        throw 'Invalid petId'
     }
 
-    const assignPet = await petCollections.updateOne({_id: ObjectId(petId)})
+    userId = userId.trim();
+    petId = petId.trim();
 
-    const getadoptionInfo = await petCollections.find({_id: ObjectId(petId)})
-    return getadoptionInfo[0]
-}   
+    const petsCollection = await pets();
+    let petDetails = await petsCollection.findOne({ _id: ObjectId(petId)});
+
+    if (petDetails === null) {
+        throw `No pet with id=${petId}`;
+
+    }
+
+    const usersCollection = await users();
+    const user = await usersCollection.findOne({ _id: ObjectId(userId) });
+    if (user === null) {
+        throw `No user with id=${userId}`
+    }
+
+    if (user.adoptedList.includes(petId)) {
+        throw `${petId} is already in adopted list`;
+    }
+
+    const updatedInfo = await usersCollection.updateOne(
+        { _id: ObjectId(userId) },
+        { $push: { adoptedList: petId } }
+    );
+    if (updatedInfo.modifiedCount === 0) {
+        throw 'could not update adopted list successfully';
+    }
+
+    return { adoptedPetInserted: true };
+}
 
 
 module.exports = {
