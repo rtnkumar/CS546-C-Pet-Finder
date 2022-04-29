@@ -548,20 +548,40 @@ usersRouter.
  * Route for getting user details
  * Feneel Doshi
 */
-usersRouter.route("/user-details").get(async (req, res) => {
-  let userInfo = req.body;
-
+usersRouter.get("/user-details",trimRequest.all,async (req, res) => {
+  
+  const email = xss(req.body.email);
   try {
-    const { email } = userInfo;
-    if (!userInfo.email) {
-      res.status(400).json({ error: "Email cannot be empty" });
+    // Email validation
+    if (!email || email.trim() == "") {
+      return res.status(400).json({
+        error: true,
+        message: "Invalid input",
+        email: `email is required`
+      })
     }
-    const getUserEmail = await usersData.getEmail(email);
-    //console.log(getUserEmail)
-    res.status(200).json(getUserEmail);
+
+    if (!emailValidator.validate(email)) {
+      return res.status(400).json({
+        error: true,
+        message: "Invalid input",
+        email: `${email} is invalid email format`
+      })
+    }
+    const userDetails = await usersData.getUserDetailsByEmail(email);
+    res.json(userDetails);
   } catch (error) {
-    console.log(error)
-    res.status(404).json({ error: "User not found" });
+    if (error === `Email doesn't exist`) {
+      return res.status(404).json({
+        error: true,
+        message: "Email doesn't exist",
+      });
+    } else {
+      return res.status(500).json({
+        error: true,
+        message: "Something went wrong, please try after sometime",
+      });
+    }
   }
 });
 
