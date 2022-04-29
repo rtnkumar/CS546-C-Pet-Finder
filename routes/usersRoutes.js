@@ -588,6 +588,12 @@ usersRouter.get("/user-details",trimRequest.all,async (req, res) => {
 usersRouter.post("/profile/update",async (request, res) => {
   
   try {
+    if(!request.session || !request.session.email){
+      return res.status(401).json({
+        error: true,
+        message: "authentication is required",
+      });
+    }
     let form = new formidable.IncomingForm();
     form.parse(request, async (err, fields, files) => {
       if (err) {
@@ -844,6 +850,12 @@ usersRouter.post("/profile/update",async (request, res) => {
  */
 usersRouter.route("/delete").delete(async (req, res) => {
 
+  if(!req.session || !req.session.email){
+    return res.status(401).json({
+      error: true,
+      message: "authentication is required",
+    });
+  }
   const emailId=req.session.email;  
   try {
     const deleteUser = await usersData.remove(emailId);
