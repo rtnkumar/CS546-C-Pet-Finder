@@ -15,13 +15,21 @@ const data = require('../data');
 const usersData = data.usersData;
 
 
+/**
+ * Roushan Kumar
+ * Login page API
+ */
 usersRouter
   .get('/login', (req, res) => {
     res.render('usersViews/login', { title: "Pets Finder", footer: "foooter" });
   });
 
 
-  usersRouter
+/**
+ * Roushan Kumar
+ * Sign-up page API
+ */
+usersRouter
   .get('/sign-up', (req, res) => {
     res.render('usersViews/signUp', { title: "Pets Finder", footer: "foooter" });
   });
@@ -344,7 +352,7 @@ usersRouter.
       });
     }
 
-    const email = xss(req.body.email);
+    let email = xss(req.body.email);
     const password = xss(req.body.password);
 
 
@@ -386,6 +394,7 @@ usersRouter.
     try {
       const userData = await usersData.checkUser(email, password);
       if (userData && userData.authenticated) {
+        email=email.trim().toLowerCase();
         req.session.email = email;
         res.json(userData);
       } else {
