@@ -543,4 +543,124 @@ usersRouter.
     }
   });
 
+
+/**
+ * Route for getting user details
+ * Feneel Doshi
+*/
+usersRouter.route("/user-details").get(async (req, res) => {
+  let userInfo = req.body;
+
+  try {
+    const { email } = userInfo;
+    if (!userInfo.email) {
+      res.status(400).json({error : "Email cannot be empty"});
+    }
+    const getUserEmail = await usersData.getEmail(email);
+    //console.log(getUserEmail)
+    res.status(200).json(getUserEmail);
+  } catch (error) {
+    console.log(error)
+    res.status(404).json({ error: "User not found" });
+  }
+});
+
+/**
+ * Route for updating user details
+ * Feneel Doshi
+*/
+usersRouter.route("/updateDetails").get(async (req, res) => {
+  if (req.session.user) {
+    try {
+      const userInfo = await usersData.getEmail(email);
+      return res.render("updateUser", {
+        title: "Update Profile",
+        user: userInfo,
+        nameOfUser: userInfo.firstName + " " + userInfo.lastName,
+      });
+    }
+  
+    catch(e){
+      console.log(e)
+    }
+  }
+//     } catch (e) {
+//       if (typeof e == "string") {
+//         e = new Error(e);
+//         e.code = 400;
+//       }
+    
+//     return res;
+  
+//    else {
+//     return res.redirect("/login");
+//   }
+// }
+  });
+
+usersRouter.route("/update").post(async (req, res) => {
+  const userData = req.body;
+
+  try {
+    const firstName = userData.firstName;
+    const lastName = userData.lastName;
+    const phoneNumber = userData.phoneNumber;
+    const address = userData.address;
+    const city = userData.city;
+    const state = userData.state;
+    const zip = userData.zip;
+
+    const updateUser = await usersData.updateUser(
+    
+      firstName,
+      lastName,
+      phoneNumber,
+      address,
+      city,
+      state,
+      zip
+    );
+
+    return res.json(updateUser)
+    req.session.user = updateUser;
+    res.redirect("/");
+  } catch (e) {
+    return res.render("updateUser", {
+      title: "Update Profile",
+      nameOfUser: req.session.user.firstName + " " + req.session.user.lastName,
+      user: req.session.user,
+      error: e,
+    });
+  }
+});
+
+
+/**
+ * Route for deleting a user
+ * Feneel Doshi
+ */
+usersRouter.route("/delete").delete(async (req, res) => {
+  
+  const userEmail = req.body
+ 
+  
+
+  try {
+    const {email} = userEmail
+    if(!userEmail.email){
+      return res.status(400).json({error: "Email cannot be empty"})
+    }
+    emailValidator.validate(userEmail);
+
+    const deleteUser = await usersData.remove(email);
+    res.json("Your account has been deleted");
+  } catch (e) {
+    if (typeof e == "string") {
+      e = new Error(e);
+      e.code = 400;
+    }
+    return res.status(500).json(ErrorMessage(e.message));
+  }
+});
+
 module.exports = usersRouter;

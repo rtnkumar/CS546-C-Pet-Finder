@@ -61,6 +61,33 @@ async function getPetDetailsByPetId(id){
 
 }
 
+
+/**
+ * Feneel Doshi
+ * Assigns the pet to the user
+ * @param {Id of the pet} petId 
+ * @returns 
+ */
+
+ async function assignPet(petId){
+   
+   
+   
+    const petCollections = await pets()
+
+    const petInfo = {
+        _id: new ObjectId(),
+      
+    }
+
+    const assignPet = await petCollections.updateOne({_id: ObjectId(petId)})
+
+    const getadoptionInfo = await petCollections.find({_id: ObjectId(petId)})
+    return getadoptionInfo[0]
+}   
+
+
 module.exports = {
- getPetDetailsByPetId
+ getPetDetailsByPetId,
+ assignPet
 }
