@@ -10,6 +10,7 @@
 -->
 
 <!-- The body for the homepage -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 <div class="container">
     <div class="row">
         <div class="col-12">
@@ -35,11 +36,11 @@
             <form method="GET" action="/pets/search-home">
                 <div class="form-group">
                     <label for="city">City</label>
-                    <input type="text" class="form-control" id="city" name="city" placeholder="City">
+                    <input type="text" class="form-control" id="city" pattern="[a-zA-Z ]+$" name="city" placeholder="City" required>
                 </div>
                 <div class="form-group">
                     <label for="state">State</label>
-                    <select class="form-control" id="state" name="state">
+                    <select class="form-control" id="state" name="state" required>
                         <option selected>Choose...</option>
                         <option>Alabama</option>
                         <option>Alaska</option>
@@ -95,11 +96,11 @@
                 </div>
                 <div class="form-group">
                     <label for="zip">Zip</label>
-                    <input type="text" class="form-control" id="zip" name="zip" placeholder="Zip">
+                    <input type="text" class="form-control" id="zip" name="zip" placeholder="Zip" pattern="^[0-9]+$" required>
                 </div>
                 <div class="form-group">
                     <label for="type">Pet Type</label>
-                    <select class="form-control" id="type" name="type">
+                    <select class="form-control" id="type" name="type" required>
                         <option selected>Choose...</option>
                         <option>Dog</option>
                         <option>Cat</option>
@@ -112,3 +113,4 @@
         </div>
     </div>
 </div>
+<script src="/public/js/home.js"></script>
