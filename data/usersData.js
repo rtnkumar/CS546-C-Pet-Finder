@@ -445,130 +445,142 @@ async function getUserDetailsByEmail(emailId) {
  * @returns
 */
 
-async function updateUser(firstName, middleName, lastName, phoneNumber, address, city, state, zip) {
-
-    //Input arguments validation
-    if (arguments.length != 8) {
-        throw "Error: Arguments cannot be greater than 8"
+async function updateUserProfile(firstName, middleName, lastName, email, phoneNumber, address, city, state, zip, picture) {
+    // FirstName string validation
+    let isValidFirstName = commonValidators.isValidString(firstName, 'firstName');
+    if (!isValidFirstName[0]) {
+        throw isValidFirstName[1];
     }
 
-    //FirstName validation
-
-    let validFNameString = commonValidators.isValidString(firstName, 'First Name')
-    if (!validFNameString[0]) {
-        throw validFNameString[1]
+    // FirstName alphabet validation
+    isValidFirstName = commonValidators.isValidName(firstName, 'firstName');
+    if (!isValidFirstName[0]) {
+        throw isValidFirstName[1];
     }
 
-    let validFName = commonValidators.isValidName(firstName, 'First Name')
-    if (!validFName[0]) {
-        throw validFName[1]
-    }
-
-    //MiddleName validation
-
+    // MiddleName validation
     if (middleName) {
-        let isValidMNameString = commonValidators.isValidString(middleName, 'Middle Name')
-        if (!isValidMNameString[0]) {
-            throw isValidMNameString[1]
+        let isValidMiddleName = commonValidators.isValidString(middleName, 'middleName');
+        if (!isValidMiddleName[0]) {
+            throw isValidMiddleName[1];
         }
 
-        let isValidMName = commonValidators.isValidName(middleName, 'Middle Name')
-        if (!isValidMName[0]) {
-            throw isValidMName[1]
+        isValidMiddleName = commonValidators.isValidName(middleName, 'middleName');
+        if (!isValidMiddleName[0]) {
+            throw isValidMiddleName[1];
         }
-
-
-    }
-    //LastName validation
-    let isValidLNameString = commonValidators.isValidString(lastName, 'Last Name')
-    if (!isValidLNameString[0]) {
-        throw isValidLNameString[1]
     }
 
-    let isValidLName = commonValidators.isValidName(lastName, 'Last Name')
-    if (!isValidLName[0]) {
-        throw isValidLName[1]
+    // LastName string validation
+    let isValidLastName = commonValidators.isValidString(lastName, 'lastName');
+    if (!isValidLastName[0]) {
+        throw isValidLastName[1];
     }
 
-    //PhoneNumber validation
+    // LastName alphabet validation
+    isValidLastName = commonValidators.isValidName(lastName, 'lastName');
+    if (!isValidLastName[0]) {
+        throw isValidLastName[1];
+    }
+
+    // Email validation
+    if (!email || email.trim() == "") {
+        throw `email is required`;
+    }
+    if (!emailValidator.validate(email)) {
+        throw `${email} is invalid email format`;
+    }
+
+    // PhoneNumber validation
     if (!phoneNumber) {
-        throw "Error: Phone Number is required"
+        throw 'phoneNumber is required';
+    }
+    let isValidPhoneNumber = commonValidators.isValidPhoneNumber(phoneNumber, 'phoneNumber');
+    if (!isValidPhoneNumber[0]) {
+        throw isValidPhoneNumber[1];
     }
 
-    let isValidNumber = commonValidators.isValidPhoneNumber(phoneNumber, 'Phone Number')
-    if (!isValidNumber[0]) {
-        throw isValidNumber[1]
+    // Address string validation
+    let isValidAddress = commonValidators.isValidString(address, 'address');
+    if (!isValidAddress[0]) {
+        throw isValidAddress[1];
     }
 
-    //Address validation
-    let isValidAddressString = commonValidators.isValidString(address, 'Address')
-    if (!isValidAddressString[0]) {
-        throw isValidAddressString[1]
+    isValidAddress = commonValidators.isValidAddress(address, 'address');
+    if (!isValidAddress[0]) {
+        throw isValidAddress[1];
     }
 
-    let isValidAddress = commonValidators.isValidAddress(address, "Address")
-    if (isValidAddress[0]) {
-        throw isValidAddress[1]
+    // City string validation
+    let isValidCity = commonValidators.isValidString(city, 'city');
+    if (!isValidCity[0]) {
+        throw isValidCity[1];
     }
 
-    //City validation
-    let isValidCityString = commonValidators.isValidString(city, 'City')
-    if (!isValidCityString[0]) {
-        throw isValidCityString[1]
+    isValidCity = commonValidators.isValidName(city, 'city');
+    if (!isValidCity[0]) {
+        throw isValidCity[1];
     }
 
-    let isValidCityName = commonValidators.isValidString(city, 'City')
-    if (!isValidCityName[0]) {
-        throw isValidCityName[1]
-    }
 
-    //State validation
-    let isValidStateString = commonValidators.isValidString(state, 'State')
-    if (!isValidStateString[0]) {
-        throw isValidStateString[1]
-    }
-
-    let isValidState = commonValidators.isValidName(state, 'State')
+    // State string validation
+    let isValidState = commonValidators.isValidString(state, 'state');
     if (!isValidState[0]) {
-        throw isValidState[1]
+        throw isValidState[1];
     }
 
-    //Zip validation
-    let isValidZipString = commonValidators.isValidString(zip, 'Zip')
-    if (!isValidZipString[0]) {
-        throw isValidZipString[1]
+    isValidState = commonValidators.isValidName(state, 'state');
+    if (!isValidState[0]) {
+        throw isValidState[1];
     }
 
-    let isValidZip = commonValidators.isValidInteger(zip, 'Zip')
+    // Zip string validation
+    let isValidZip = commonValidators.isValidString(zip, 'zip');
     if (!isValidZip[0]) {
-        throw isValidZip[1]
+        throw isValidZip[1];
     }
 
+    isValidZip = commonValidators.isValidInteger(zip, 'zip');
+    if (!isValidZip[0]) {
+        throw isValidZip[1];
+    }
+
+
+    email = email.trim();
+    email = email.toLowerCase();
+
+    let user = await getUserByEmail(email);
+    if (!user) {
+        throw `user doesn't exist`
+    }
+
+    let updateUserInfo = {
+        firstName: firstName.trim(),
+        middleName: middleName.trim(),
+        lastName: lastName.trim(),
+        phoneNumber: phoneNumber.trim(),
+        address: address.trim(),
+        city: city.trim(),
+        state: state.trim(),
+        zip: zip.trim(),
+        picture: picture.trim()
+    };
 
     const usersCollection = await users();
 
-    const updatedUserInfo = {
-        firstName: firstName,
-        middleName: middleName,
-        lastName: lastName,
-        phoneNumber: phoneNumber,
-        address: address,
-        city: city,
-        state: state,
-        zip: zip
-    }
-
     const updatedInfo = await usersCollection.updateOne(
         { email: email },
-        { $set: updatedUserInfo }
+        { $set: updateUserInfo }
     )
 
     if (updatedInfo.modifiedCount == 0) {
         throw "No update made to the user profile"
     }
 
-    let getInfo = await this.getEmail(email)
-    return getInfo
+    let updatedUserInfo = await getUserByEmail(email)
+    delete updatedUserInfo.email;
+    delete updatedUserInfo.password;
+    return updatedUserInfo;
 }
 
 
@@ -617,7 +629,7 @@ async function remove(emailId) {
 module.exports = {
     createUser,
     getUserDetailsByEmail,
-    updateUser,
+    updateUserProfile,
     remove,
     createUser,
     checkUser,

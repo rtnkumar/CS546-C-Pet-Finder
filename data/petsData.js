@@ -6,7 +6,6 @@ const commonValidators = validators.commonValidators;
 const { ObjectId } = require('mongodb');
 const usersData = require('./usersData');
 const { users } = require('../config/mongoCollections');
-const { use } = require('../routes/petsRoutes');
 
 
 

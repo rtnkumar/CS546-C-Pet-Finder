@@ -585,73 +585,256 @@ usersRouter.get("/user-details",trimRequest.all,async (req, res) => {
   }
 });
 
-/**
- * Route for updating user details
- * Feneel Doshi
-*/
-usersRouter.route("/updateDetails").get(async (req, res) => {
-  if (req.session.user) {
-    try {
-      const userInfo = await usersData.getEmail(email);
-      return res.render("updateUser", {
-        title: "Update Profile",
-        user: userInfo,
-        nameOfUser: userInfo.firstName + " " + userInfo.lastName,
-      });
-    }
-
-    catch (e) {
-      console.log(e)
-    }
-  }
-  //     } catch (e) {
-  //       if (typeof e == "string") {
-  //         e = new Error(e);
-  //         e.code = 400;
-  //       }
-
-  //     return res;
-
-  //    else {
-  //     return res.redirect("/login");
-  //   }
-  // }
-});
-
-usersRouter.route("/update").post(async (req, res) => {
-  const userData = req.body;
-
+usersRouter.post("/profile/update",async (request, res) => {
+  
   try {
-    const firstName = userData.firstName;
-    const lastName = userData.lastName;
-    const phoneNumber = userData.phoneNumber;
-    const address = userData.address;
-    const city = userData.city;
-    const state = userData.state;
-    const zip = userData.zip;
+    let form = new formidable.IncomingForm();
+    form.parse(request, async (err, fields, files) => {
+      if (err) {
+        return res.status(400).json({
+          error: true,
+          message: "There was an error parsing the files",
+        });
+      }
+      else if (!files || Object.keys(files).length == 0 || !files.picture) {
+        return res.status(400).json({
+          error: true,
+          message: "Invalid input",
+          picture: "picture is required"
+        });
+      }
+      else if (files.picture.size <= 0) {
+        return res.status(400).json({
+          error: true,
+          message: "Invalid input",
+          picture: "picture size is zero"
+        });
+      }
+      const isValid = commonValidators.isValidFile(files.picture);
+      if (!isValid) {
+        return res.status(400).json({
+          error: true,
+          message: "Invalid input",
+          picture: "Only jpg, jpeg or png are required!"
+        });
+      }
+      // Schema validation
+      const requestKeyList = Object.keys(fields);
+      const postBodyKeys = ["firstName", "middleName", "lastName", "phoneNumber", "address", "city", "state", "zip"];
 
-    const updateUser = await usersData.updateUser(
+      for (let requestKey of postBodyKeys) {
+        if (requestKeyList.indexOf(requestKey) === -1) {
+          return res.status(400).json({
+            error: true,
+            message: `${requestKey} key is missing in body`,
+          });
+        }
+      }
+      if (requestKeyList.length !== postBodyKeys.length) {
+        return res.status(400).json({
+          error: true,
+          message: "Json body is invalid",
+        });
+      }
+      Object.keys(fields).forEach(function (key) {
+        fields[key] = (fields[key]).trim();
+      });
+      const firstName = xss(fields.firstName);
+      const middleName = xss(fields.middleName);
+      const lastName = xss(fields.lastName);
+      const phoneNumber = xss(fields.phoneNumber);
+      const address = xss(fields.address);
+      const city = xss(fields.city);
+      const state = xss(fields.state);
+      const zip = xss(fields.zip);
+      const picture = xss(files.picture.originalFilename);
+      
+      // FirstName string validation
+      let isValidFirstName = commonValidators.isValidString(firstName, 'firstName');
+      if (!isValidFirstName[0]) {
+        return res.status(400).json({
+          error: true,
+          message: "Invalid input",
+          firstName: isValidFirstName[1]
+        });
+      }
 
-      firstName,
-      lastName,
-      phoneNumber,
-      address,
-      city,
-      state,
-      zip
-    );
+      // FirstName alphabet validation
+      isValidFirstName = commonValidators.isValidName(firstName, 'firstName');
+      if (!isValidFirstName[0]) {
+        return res.status(400).json({
+          error: true,
+          message: "Invalid input",
+          firstName: isValidFirstName[1]
+        });
+      }
 
-    return res.json(updateUser)
-    req.session.user = updateUser;
-    res.redirect("/");
+      // MiddleName validation
+      if (middleName) {
+        let isValidMiddleName = commonValidators.isValidString(middleName, 'middleName');
+        if (!isValidMiddleName[0]) {
+          return res.status(400).json({
+            error: true,
+            message: "Invalid input",
+            middleName: isValidMiddleName[1]
+          });
+        }
+
+        isValidMiddleName = commonValidators.isValidName(middleName, 'middleName');
+        if (!isValidMiddleName[0]) {
+          return res.status(400).json({
+            error: true,
+            message: "Invalid input",
+            middleName: isValidMiddleName[1]
+          });
+        }
+      }
+
+      // LastName string validation
+      let isValidLastName = commonValidators.isValidString(lastName, 'lastName');
+      if (!isValidLastName[0]) {
+        return res.status(400).json({
+          error: true,
+          message: "Invalid input",
+          lastName: isValidLastName[1]
+        });
+      }
+
+      // LastName alphabet validation
+      isValidLastName = commonValidators.isValidName(lastName, 'lastName');
+      if (!isValidLastName[0]) {
+        return res.status(400).json({
+          error: true,
+          message: "Invalid input",
+          lastName: isValidLastName[1]
+        });
+      }
+
+      // PhoneNumber validation
+      if (!phoneNumber) {
+        return res.status(400).json({
+          error: true,
+          message: "Invalid input",
+          phoneNumber: "phoneNumber is required"
+        })
+      }
+
+      let isValidPhoneNumber = commonValidators.isValidPhoneNumber(phoneNumber, 'phoneNumber');
+      if (!isValidPhoneNumber[0]) {
+        return res.status(400).json({
+          error: true,
+          message: "Invalid input",
+          phoneNumber: isValidPhoneNumber[1]
+        })
+      }
+
+      // Address string validation
+      let isValidAddress = commonValidators.isValidString(address, 'address');
+      if (!isValidAddress[0]) {
+        return res.status(400).json({
+          error: true,
+          message: "Invalid input",
+          address: isValidAddress[1]
+        });
+      }
+
+      isValidAddress = commonValidators.isValidAddress(address, 'address');
+      if (!isValidAddress[0]) {
+        return res.status(400).json({
+          error: true,
+          message: "Invalid input",
+          address: isValidAddress[1]
+        });
+      }
+
+      // City string validation
+      let isValidCity = commonValidators.isValidString(city, 'city');
+      if (!isValidCity[0]) {
+        return res.status(400).json({
+          error: true,
+          message: "Invalid input",
+          city: isValidCity[1]
+        });
+      }
+
+      isValidCity = commonValidators.isValidName(city, 'city');
+      if (!isValidCity[0]) {
+        return res.status(400).json({
+          error: true,
+          message: "Invalid input",
+          city: isValidCity[1]
+        });
+      }
+
+      // State string validation
+      let isValidState = commonValidators.isValidString(state, 'state');
+      if (!isValidState[0]) {
+        return res.status(400).json({
+          error: true,
+          message: "Invalid input",
+          state: isValidState[1]
+        });
+      }
+
+      isValidState = commonValidators.isValidName(state, 'state');
+      if (!isValidState[0]) {
+        return res.status(400).json({
+          error: true,
+          message: "Invalid input",
+          state: isValidState[1]
+        });
+      }
+
+      // Zip string validation
+      let isValidZip = commonValidators.isValidString(zip, 'zip');
+      if (!isValidZip[0]) {
+        return res.status(400).json({
+          error: true,
+          message: "Invalid input",
+          zip: isValidZip[1]
+        });
+      }
+
+      isValidZip = commonValidators.isValidInteger(zip, 'zip');
+      if (!isValidZip[0]) {
+        return res.status(400).json({
+          error: true,
+          message: "Invalid input",
+          zip: isValidZip[1]
+        });
+      }
+
+      try {
+        const result = await usersData.updateUserProfile(firstName, middleName, lastName, request.session.email, phoneNumber, address, city, state, zip, picture);
+        return res.json(result);
+      } catch (e) {
+        if (e === `user doesn't exist`) {
+          return res.status(400).json({
+            error: true,
+            message: "Invalid input",
+            email: `user doesn't exist`
+          });
+        } else {
+          return res.status(500).json({
+            error: true,
+            message: e,
+          });
+        }
+      }
+
+    });
+
+    form.on('fileBegin', function (name, file) {
+      file.filepath = 'public/uploads/images/users/' + file.originalFilename;
+    });
+
   } catch (e) {
-    return res.render("updateUser", {
-      title: "Update Profile",
-      nameOfUser: req.session.user.firstName + " " + req.session.user.lastName,
-      user: req.session.user,
-      error: e,
+    return res.status(500).json({
+      error: true,
+      message: e,
     });
   }
+
 });
 
 
