@@ -148,7 +148,7 @@ async function createUser(firstName, middleName, lastName, email, phoneNumber, p
 
     let user = await getUserByEmail(email);
     if (user) {
-        throw `This ${email} is already exist, please use another`
+        throw `${email} is already exist, please use another`
     }
 
     let newUser = {
