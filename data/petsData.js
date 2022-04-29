@@ -5,6 +5,8 @@ const validators = require('../validators');
 const commonValidators = validators.commonValidators;
 const { ObjectId } = require('mongodb');
 const usersData=require('./usersData');
+const { users } = require('../config/mongoCollections');
+const emailValidator = require("email-validator");
 
 
 
@@ -61,6 +63,58 @@ async function getPetDetailsByPetId(id){
 
 }
 
+/**
+ * Roushan Kumar
+ * Adding pet id to user favorite list
+ * 
+ * @param {id of pet} id 
+ * @returns 
+ */
+async function addPetUserFavorite(id,email){
+
+    if(arguments.length!=2){
+        throw 'Only 2 argument are required';
+    }
+
+    if(!commonValidators.isValidId(id)){
+        throw 'Invalid id'
+    }
+
+     // Email validation
+     if (!email || email.trim() == "") {
+        throw `email is required`;
+    }
+    if (!emailValidator.validate(email)) {
+        throw `${email} is invalid email format`;
+    }
+
+    id=id.trim();
+    email=email.trim().toLowerCase();
+    const petsCollection = await pets();
+    let petDetails=await petsCollection.findOne({ _id:ObjectId(id)});
+
+    if (petDetails === null) {
+        throw `No pet with id=${id}`;
+    }
+
+    const usersCollection= await users();
+    const user=await usersCollection.findOne({email:email});
+    if(user.favoriteList.includes(id)){
+         throw `${id} is already in favorite list`;
+    }
+    const updatedInfo = await usersCollection.updateOne(
+        { email: email },
+        { $push: {favoriteList:id} }
+    );
+    if (updatedInfo.modifiedCount === 0) {
+        throw 'could not update favorite list successfully';
+    }
+
+    return { favoritePetInserted: true };
+
+}
+
 module.exports = {
- getPetDetailsByPetId
+ getPetDetailsByPetId,
+ addPetUserFavorite
 }
