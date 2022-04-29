@@ -62,7 +62,7 @@ get('/:id',trimRequest.all,async(req,res)=>{
        return res.status(400).json({ error: true, message: "invalid parameter", id: "Invalid id" });
      }
      
-     let favoritePetInfo = await petsData.addPetUserFavorite(id,"d@gMail.COM");
+     let favoritePetInfo = await petsData.addPetUserFavorite(id,req.session.email);
      res.json(favoritePetInfo);
    } catch (error) {
      if (`No pet with id=${id.trim()}` === error || `${id.trim()} is already in favorite list`) {
