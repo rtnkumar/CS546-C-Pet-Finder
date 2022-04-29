@@ -71,7 +71,13 @@ async function getPetDetailsByPetId(id){
 
  async function assignPet(petId){
    
-   
+    if(arguments.length!=1){
+        throw 'Only 1 argument are required';
+    }
+
+    if(!commonValidators.isValidId(id)){
+        throw 'Invalid id'
+    }
    
     const petCollections = await pets()
 

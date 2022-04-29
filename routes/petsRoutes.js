@@ -61,6 +61,9 @@ get('/:id',trimRequest.all,async(req,res)=>{
      let assignedPetInfo = req.body
      
      try{
+        if(!commonValidators.isValidId(id)){
+            return res.status(400).json({error:true,message:"invalid parameter",id:"Invalid id"});
+        }
          const {petId} = assignedPetInfo
          const addPet = await petsData.assignPet(assignedPetInfo)
          res.json(addPet)
