@@ -112,4 +112,36 @@ get('/:id',trimRequest.all,async(req,res)=>{
      }
  })
 
+/**
+ * Adding pet in favorite list
+ * Roushan Kumar
+ */
+ petsRouter.
+ post('/favorites/pets/:id', trimRequest.all, async (req, res) => {
+   let id = xss(req.params.id);
+   try {
+     if (!commonValidators.isValidId(id)) {
+       return res.status(400).json({ error: true, message: "invalid parameter", id: "Invalid id" });
+     }
+     
+     let favoritePetInfo = await petsData.addPetUserFavorite(id,req.session.email);
+     res.json(favoritePetInfo);
+   } catch (error) {
+     if (`No pet with id=${id.trim()}` === error || `${id.trim()} is already in favorite list`) {
+       res.status(404).json({
+         error: true,
+         message: error
+       });
+     } else {
+       res.status(500).json({
+         error: true,
+         message: "Something went wrong, please try after sometime"
+       })
+     }
+
+   }
+
+ })
+// Schema validation
+
 module.exports = petsRouter;

@@ -148,7 +148,7 @@ async function createUser(firstName, middleName, lastName, email, phoneNumber, p
 
     let user = await getUserByEmail(email);
     if (user) {
-        throw `This ${email} is already exist, please use another`
+        throw `${email} is already exist, please use another`
     }
 
     let newUser = {
@@ -162,8 +162,9 @@ async function createUser(firstName, middleName, lastName, email, phoneNumber, p
         city: city.trim(),
         state: state.trim(),
         zip: zip.trim(),
-        picture: picture.trim()
-
+        picture: picture.trim(),
+        favoriteList:[],
+        adoptedList:[]
     };
     const usersCollection = await users();
 
