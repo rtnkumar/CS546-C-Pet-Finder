@@ -343,7 +343,6 @@ async function getUserById(id){
 }
 
 
-
 /**
  * Feneel Doshi
  * Get email of the user
@@ -373,56 +372,60 @@ async function getUserById(id){
 * @returns
 */
 
-async function getEmail(emailId){
+async function getUserDetailsByEmail(emailId) {
 
-   
-    
     //Input Arguments validation
-    if(arguments.length != 1)
+    if (arguments.length != 1)
         throw "Error: There should not be more than 1 arguments!"
-    
-    
-    //Email validation
 
-    if(!emailId || emailId.trim() == ""){
+
+    //Email validation
+    if (!emailId || emailId.trim() == "") {
         throw "Error: Email cannot be empty"
     }
 
-    if(!emailValidator.validate(emailId)){
-            throw `${emailId} is not a valid email!`
+    if (!emailValidator.validate(emailId)) {
+        throw `${emailId} is not a valid email!`
     }
 
-    const usersCollection = await users()
-    const petCollection = await pets()
 
+    emailId = emailId.trim();
+    emailId = emailId.toLowerCase();
 
-    const getUserEmail = await usersCollection.findOne({email: emailId});
-    const getPetList = await petCollection.find({_id:{$in: getUserEmail.favoriteList}}).toArray()
-    let favorite_list = getUserEmail.favoriteList
-    for (var i in favorite_list){
-        //console.log(i)
-        favorite_list[i] = String(favorite_list[i])
-    }
-    //console.log("In Code")
-    for(var i of getPetList){
-        //console.log(String(i._id))
-        if (favorite_list.includes(String(i._id))){
-            //console.log("in if")
-            favorite_list[favorite_list.indexOf(String(i._id))] = i
-        }
-    }
-    ////console.log(favorite_list)
-    getUserEmail.favoriteList = favorite_list
-   // console.log(getUserEmail)
-    // console.log(getPetList)
-
-
-    if(getUserEmail){
-        return [getUserEmail, getPetList]
+    const usersCollection = await users();
+    const user = await usersCollection.findOne({ email: emailId });
+    if (user === null) {
+        throw "Email doesn't exist";
     }
 
-    throw {error: "No user with that email found! Please enter a valid email address."}
-    
+    // favorite pet list
+    let favoriteIdList = user.favoriteList;
+    let favoriteListObjectIdList = [];
+    for (id of favoriteIdList) {
+        favoriteListObjectIdList.push(ObjectId(id));
+    }
+    const petCollection = await pets();
+    const favoritePetsList = await petCollection.find({ _id: { $in: favoriteListObjectIdList } }).toArray();
+    for (let pet of favoritePetsList) {
+        pet._id = pet._id.toString();
+    }
+
+    // adopted pet list
+    let adoptedIdList = user.adoptedList;
+    let adoptedListObjectIdList = [];
+    for (id of adoptedIdList) {
+        adoptedListObjectIdList.push(ObjectId(id));
+    }
+    const adoptedPetsList = await petCollection.find({ _id: { $in: adoptedListObjectIdList } }).toArray();
+    for (let pet of adoptedPetsList) {
+        pet._id = pet._id.toString();
+    }
+
+    user.favoriteList = favoritePetsList;
+    user.adoptedList = adoptedPetsList;
+    delete user.password;
+    return user;
+
 }
 
 
@@ -441,130 +444,142 @@ async function getEmail(emailId){
  * @returns
 */
 
-async function updateUser(firstName, middleName, lastName, phoneNumber, address, city, state, zip){
-
-    //Input arguments validation
-    if(arguments.length != 8){
-        throw "Error: Arguments cannot be greater than 8"
+async function updateUserProfile(firstName, middleName, lastName, email, phoneNumber, address, city, state, zip, picture) {
+    // FirstName string validation
+    let isValidFirstName = commonValidators.isValidString(firstName, 'firstName');
+    if (!isValidFirstName[0]) {
+        throw isValidFirstName[1];
     }
 
-    //FirstName validation
-
-    let validFNameString = commonValidators.isValidString(firstName, 'First Name')
-    if(!validFNameString[0]){
-        throw validFNameString[1]
+    // FirstName alphabet validation
+    isValidFirstName = commonValidators.isValidName(firstName, 'firstName');
+    if (!isValidFirstName[0]) {
+        throw isValidFirstName[1];
     }
 
-    let validFName = commonValidators.isValidName(firstName, 'First Name')
-    if(!validFName[0]){
-        throw validFName[1]
-    }
-    
-    //MiddleName validation
-    
-    if(middleName){
-        let isValidMNameString = commonValidators.isValidString(middleName, 'Middle Name')
-        if(!isValidMNameString[0]){
-            throw isValidMNameString[1]
+    // MiddleName validation
+    if (middleName) {
+        let isValidMiddleName = commonValidators.isValidString(middleName, 'middleName');
+        if (!isValidMiddleName[0]) {
+            throw isValidMiddleName[1];
         }
 
-        let isValidMName = commonValidators.isValidName(middleName, 'Middle Name')
-        if(!isValidMName[0]){
-            throw isValidMName[1]
+        isValidMiddleName = commonValidators.isValidName(middleName, 'middleName');
+        if (!isValidMiddleName[0]) {
+            throw isValidMiddleName[1];
         }
-
-
-    }
-    //LastName validation
-    let isValidLNameString = commonValidators.isValidString(lastName, 'Last Name')
-    if(!isValidLNameString[0]){
-        throw isValidLNameString[1]
     }
 
-    let isValidLName = commonValidators.isValidName(lastName, 'Last Name')
-    if(!isValidLName[0]){
-        throw isValidLName[1]
-    }
-    
-    //PhoneNumber validation
-    if(!phoneNumber){
-        throw "Error: Phone Number is required"
+    // LastName string validation
+    let isValidLastName = commonValidators.isValidString(lastName, 'lastName');
+    if (!isValidLastName[0]) {
+        throw isValidLastName[1];
     }
 
-    let isValidNumber = commonValidators.isValidPhoneNumber(phoneNumber, 'Phone Number')
-    if(!isValidNumber[0]){
-        throw isValidNumber[1]
+    // LastName alphabet validation
+    isValidLastName = commonValidators.isValidName(lastName, 'lastName');
+    if (!isValidLastName[0]) {
+        throw isValidLastName[1];
     }
 
-    //Address validation
-    let isValidAddressString = commonValidators.isValidString(address, 'Address')
-    if(!isValidAddressString[0]){
-        throw isValidAddressString[1]
+    // Email validation
+    if (!email || email.trim() == "") {
+        throw `email is required`;
     }
-    
-    let isValidAddress = commonValidators.isValidAddress(address, "Address")
-    if(isValidAddress[0]){
-        throw isValidAddress[1]
+    if (!emailValidator.validate(email)) {
+        throw `${email} is invalid email format`;
     }
 
-    //City validation
-    let isValidCityString = commonValidators.isValidString(city, 'City')
-    if(!isValidCityString[0]){
-        throw isValidCityString[1]
+    // PhoneNumber validation
+    if (!phoneNumber) {
+        throw 'phoneNumber is required';
+    }
+    let isValidPhoneNumber = commonValidators.isValidPhoneNumber(phoneNumber, 'phoneNumber');
+    if (!isValidPhoneNumber[0]) {
+        throw isValidPhoneNumber[1];
     }
 
-    let isValidCityName = commonValidators.isValidString(city, 'City')
-    if(!isValidCityName[0]){
-        throw isValidCityName[1]
+    // Address string validation
+    let isValidAddress = commonValidators.isValidString(address, 'address');
+    if (!isValidAddress[0]) {
+        throw isValidAddress[1];
     }
 
-    //State validation
-    let isValidStateString = commonValidators.isValidString(state, 'State')
-    if(!isValidStateString[0]){
-        throw isValidStateString[1]
+    isValidAddress = commonValidators.isValidAddress(address, 'address');
+    if (!isValidAddress[0]) {
+        throw isValidAddress[1];
     }
 
-    let isValidState = commonValidators.isValidName(state, 'State')
-    if(!isValidState[0]){
-        throw isValidState[1]
+    // City string validation
+    let isValidCity = commonValidators.isValidString(city, 'city');
+    if (!isValidCity[0]) {
+        throw isValidCity[1];
     }
 
-    //Zip validation
-    let isValidZipString = commonValidators.isValidString(zip, 'Zip')
-    if(!isValidZipString[0]){
-        throw isValidZipString[1]
+    isValidCity = commonValidators.isValidName(city, 'city');
+    if (!isValidCity[0]) {
+        throw isValidCity[1];
     }
 
-    let isValidZip = commonValidators.isValidInteger(zip, 'Zip')
-    if(!isValidZip[0]){
-        throw isValidZip[1]
+
+    // State string validation
+    let isValidState = commonValidators.isValidString(state, 'state');
+    if (!isValidState[0]) {
+        throw isValidState[1];
     }
 
-    
+    isValidState = commonValidators.isValidName(state, 'state');
+    if (!isValidState[0]) {
+        throw isValidState[1];
+    }
+
+    // Zip string validation
+    let isValidZip = commonValidators.isValidString(zip, 'zip');
+    if (!isValidZip[0]) {
+        throw isValidZip[1];
+    }
+
+    isValidZip = commonValidators.isValidInteger(zip, 'zip');
+    if (!isValidZip[0]) {
+        throw isValidZip[1];
+    }
+
+
+    email = email.trim();
+    email = email.toLowerCase();
+
+    let user = await getUserByEmail(email);
+    if (!user) {
+        throw `user doesn't exist`
+    }
+
+    let updateUserInfo = {
+        firstName: firstName.trim(),
+        middleName: middleName.trim(),
+        lastName: lastName.trim(),
+        phoneNumber: phoneNumber.trim(),
+        address: address.trim(),
+        city: city.trim(),
+        state: state.trim(),
+        zip: zip.trim(),
+        picture: picture.trim()
+    };
+
     const usersCollection = await users();
 
-    const updatedUserInfo = {
-        firstName: firstName,
-        middleName: middleName,
-        lastName: lastName,
-        phoneNumber: phoneNumber,
-        address: address,
-        city: city,
-        state: state,
-        zip: zip
-    }
-
     const updatedInfo = await usersCollection.updateOne(
-        {email: email},
-        { $set: updatedUserInfo}
+        { email: email },
+        { $set: updateUserInfo }
     )
 
-    if(updatedInfo.modifiedCount == 0){
+    if (updatedInfo.modifiedCount == 0) {
         throw "No update made to the user profile"
     }
 
-    let getInfo = await this.getEmail(email)
-    return getInfo
+    let updatedUserInfo = await getUserByEmail(email)
+    delete updatedUserInfo.email;
+    delete updatedUserInfo.password;
+    return updatedUserInfo;
 }
 
 
@@ -575,30 +590,44 @@ async function updateUser(firstName, middleName, lastName, phoneNumber, address,
  * @returns 
  */
 
-async function remove(emailId){
-    if(!emailId || emailId.trim() == "")
-        throw "Error! Must provide an email id to delete the account!"
-    
-    emailValidator.validate(emailId)
+async function remove(emailId) {
 
-
-    const usersCollection = await users()
-    const getUser = await usersCollection.findOne({email: emailId})
-
-    const removeUser = await usersCollection.deleteOne({email: emailId})
-
-    if(removeUser.deletedCount !== 1){
-        throw new Error(`No user exist with that email!`)
-
+    if (arguments.length != 1) {
+        throw 'Only 1 argument are required';
     }
-    return {deleted: true}
-}
 
+    // Email validation
+    if (!emailId || emailId.trim() == "") {
+        throw `email is required`;
+    }
+
+    if (!emailValidator.validate(emailId)) {
+        throw `${emailId} is invalid email format`;
+    }
+
+    emailId = emailId.trim();
+    emailId = emailId.toLowerCase();
+    const usersCollection = await users()
+    const user = await usersCollection.findOne({ email: emailId })
+
+    if (user === null) {
+        throw `No user with email=${emailId}`;
+    }
+
+
+    const deletionInfo = await usersCollection.deleteOne({ email: emailId })
+
+    if (deletionInfo.deletedCount === 0) {
+        throw `Could not delete user with email of ${emailId}`;
+    }
+
+    return { deleted: true }
+}
 
 module.exports = { 
     createUser,
-    getEmail,
-    updateUser, 
+    getUserDetailsByEmail,
+    updateUserProfile, 
     remove,
     createUser,
     checkUser,
