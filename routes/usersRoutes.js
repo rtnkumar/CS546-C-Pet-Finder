@@ -11,6 +11,27 @@ const trimRequest = require("trim-request");
 const data = require("../data");
 const usersData = data.usersData;
 
+
+/**
+ * Roushan Kumar
+ * Login page API
+ */
+usersRouter
+  .get('/login', (req, res) => {
+    res.render('usersViews/login', { title: "Pets Finder", footer: "foooter" });
+  });
+
+
+/**
+ * Roushan Kumar
+ * Sign-up page API
+ */
+usersRouter
+  .get('/sign-up', (req, res) => {
+    res.render('usersViews/signUp', { title: "Pets Finder", footer: "foooter" });
+  });
+
+
 /**
  * User Sign-up Api
  * Roushan Kumar
@@ -344,6 +365,7 @@ usersRouter.post("/sign-up", async (request, res) => {
   }
 });
 
+
 /**
  * User Login Api
  * Roushan Kumar
@@ -352,6 +374,23 @@ usersRouter.post("/login", trimRequest.all, async (req, res) => {
   // Schema validation
   const requestKeyList = Object.keys(req.body);
   const postBodyKeys = ["email", "password"];
+        try {
+          const result = await usersData.createUser(firstName, middleName, lastName, email, phoneNumber, password, address, city, state, zip, picture);
+          return res.json(result);
+        } catch (e) {
+          if (e === `${email.trim().toLowerCase()} is already exist, please use another`) {
+            return res.status(400).json({
+              error: true,
+              message: "Invalid input",
+              email: `${email.trim()} is already exist, please use another`
+            });
+          } else {
+            return res.status(500).json({
+              error: true,
+              message: e,
+            });
+          }
+        }
 
   for (let requestKey of postBodyKeys) {
     if (requestKeyList.indexOf(requestKey) === -1) {
@@ -495,6 +534,12 @@ usersRouter.patch("/updates/email-pass", trimRequest.all, async (req, res) => {
     }
 
     if (!emailValidator.validate(newEmail)) {
+    let email = xss(req.body.email);
+    const password = xss(req.body.password);
+
+
+    // Email validation
+    if (!email || email.trim() == "") {
       return res.status(400).json({
         error: true,
         message: "Invalid input",
@@ -545,13 +590,37 @@ usersRouter.patch("/updates/email-pass", trimRequest.all, async (req, res) => {
         confirmPassword: "password should have at least 6 characters",
       });
     }
-
     if (newPassword.trim() !== confirmPassword.trim()) {
       return res.status(400).json({
         error: true,
         message: "Invalid input",
         confirmPassword: "newPassword doesn't match with confirmPassword",
       });
+
+    try {
+      const userData = await usersData.checkUser(email, password);
+      if (userData && userData.authenticated) {
+        email=email.trim().toLowerCase();
+        req.session.email = email;
+        res.json(userData);
+      } else {
+        return res.status(500).json({
+          error: true,
+          message: "Something went wrong, please try after sometime",
+        });
+      }
+    } catch (error) {
+      if (error === `Either the email or password is invalid`) {
+        return res.status(400).json({
+          error: true,
+          message: "Either the email or password is invalid",
+        });
+      } else {
+        return res.status(500).json({
+          error: true,
+          message: "Something went wrong, please try after sometime",
+        });
+      }
     }
   }
 
@@ -824,9 +893,15 @@ usersRouter.post("/profile/update",async (request, res) => {
         });
       }
 
+
       isValidState = commonValidators.isValidName(state, 'state');
       if (!isValidState[0]) {
         return res.status(400).json({
+
+    } catch (error) {
+      if (error === `Email doesn't exist`) {
+        return res.status(404).json({
+
           error: true,
           message: "Invalid input",
           state: isValidState[1]
