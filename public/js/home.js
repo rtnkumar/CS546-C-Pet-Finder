@@ -23,6 +23,10 @@ async function homeSearch(event) {
     let zip = document.getElementById("zip").value;
     let type = document.getElementById("type").value;
     let body = { city: city, state: state, zip: zip, type: type }
+    if (!(city && state && zip)) {
+        error.style.display = 'block';
+        return;
+    }
 
     await fetch('/', {
         method: "GET",
@@ -56,7 +60,8 @@ async function homeSearch(event) {
                 typeError.style.color = "#FF0000";
             }
         })
-        .catch((error) => {
-            console.error('Error:', error);
-        });
+        .catch((e) => {
+            console.error('Error:', e);
+            error.innerHTML = "Something went wrong., please try again.";
+        }); 
 }

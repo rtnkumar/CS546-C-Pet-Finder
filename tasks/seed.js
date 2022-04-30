@@ -64,42 +64,42 @@ async function populateDummyPets(db) {
     };
   };
 
-  let pet1 = makePet("Spot", "Labrador", "Puppy", "Medium", "M", "Black", "123 Main St", "10001", "Manhattan", "NY", "A dog who is a Labrador.", "spot.jpg");
+  let pet1 = makePet("Spot", "Labrador", "Puppy", "Medium", "M", "Black", "123 Main St", "10001", "Manhattan", "New York", "A dog who is a Labrador.", "spot.jpg");
   pet1.type.type = "Dog";
   let petType = await db.collection('petTypes').findOne({ type: "Dog" });
   pet1.type._id = petType._id;
   let user = await db.collection('users').findOne({ firstName: "John" });
   pet1.ownerId = user._id;
 
-  let pet2 = makePet("Stella", "Retriever", "Young", "Medium", "F", "golden", "123 Main St", "10001", "Manhattan", "NY", "Loves to play in the mud.", "stella.jpg");
+  let pet2 = makePet("Stella", "Retriever", "Young", "Medium", "F", "golden", "123 Main St", "10001", "Manhattan", "New York", "Loves to play in the mud.", "stella.jpg");
   pet2.type.type = "Dog";
   petType = await db.collection('petTypes').findOne({ type: "Dog" });
   pet2.type._id = petType._id;
   user = await db.collection('users').findOne({ firstName: "John" });
   pet2.ownerId = user._id;
 
-  let pet3 = makePet("BooBear", "Siamese", "Adult", "Small", "M", "White", "100 Washington St", "07030", "Hoboken", "NJ", "The BooBear doesn't fall far from the Brandon.", "boobear.jpg");
+  let pet3 = makePet("BooBear", "Siamese", "Adult", "Small", "M", "White", "100 Washington St", "07030", "Hoboken", "New Jersey", "The BooBear doesn't fall far from the Brandon.", "boobear.jpg");
   pet3.type.type = "Cat";
   petType = await db.collection('petTypes').findOne({ type: "Cat" });
   pet3.type._id = petType._id;
   user = await db.collection('users').findOne({ firstName: "Martha" });
   pet3.ownerId = user._id;
 
-  let pet4 = makePet("Shadow", "Siamese", "Young", "Small", "M", "Black", "100 Washington St", "07030", "Hoboken", "NJ", "Shadow hops in my sink all the time.", "shadow.jpg");
+  let pet4 = makePet("Shadow", "Siamese", "Young", "Small", "M", "Black", "100 Washington St", "07030", "Hoboken", "New Jersey", "Shadow hops in my sink all the time.", "shadow.jpg");
   pet4.type.type = "Cat";
   petType = await db.collection('petTypes').findOne({ type: "Cat" });
   pet4.type._id = petType._id;
   user = await db.collection('users').findOne({ firstName: "Martha" });
   pet4.ownerId = user._id;
 
-  let pet5 = makePet("Thumper", "Domestic", "Young", "Medium", "M", "Grey", "300 Concord Road", "90002", "RealTown", "CA", "They call him thumper!", "thumper.jpg");
+  let pet5 = makePet("Thumper", "Domestic", "Young", "Medium", "M", "Grey", "300 Concord Road", "90002", "RealTown", "California", "They call him thumper!", "thumper.jpg");
   pet5.type.type = "Rabbit";
   petType = await db.collection('petTypes').findOne({ type: "Rabbit" });
   pet5.type._id = petType._id;
   user = await db.collection('users').findOne({ firstName: "Sam" });
   pet5.ownerId = user._id;
 
-  let pet6 = makePet("Epona", "Mustang", "Adult", "Large", "F", "Brown", "300 Concord Road", "90002", "RealTown", "CA", "Epona likes the sound of pretty music.", "epona.jpg");
+  let pet6 = makePet("Epona", "Mustang", "Adult", "Large", "F", "Brown", "300 Concord Road", "90002", "RealTown", "California", "Epona likes the sound of pretty music.", "epona.jpg");
   pet6.type.type = "Horse";
   petType = await db.collection('petTypes').findOne({ type: "Horse" });
   pet6.type._id = petType._id;
