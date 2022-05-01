@@ -1,6 +1,7 @@
 const { ObjectId } = require('mongodb');
 const mongoCollections = require('../config/mongoCollections');
 const pets = mongoCollections.pets;
+const petTypes = mongoCollections.petTypes;
 const petsQuestionsAnswers = mongoCollections.petsQuestionsAnswers;
 const validators = require('../validators');
 const commonValidators = validators.commonValidators;
@@ -21,8 +22,9 @@ const petTypesData = require('./petTypesData');
 async function homePageSearch(city, state, zip, petType) {
     // Validate the input
     // If none of the given criteria are specified, throw an error.
-    if (!(city || state || zip || petType)) throw 'No search criteria specified';
-
+    if (!(city || state || zip)) throw 'Must supply city, state or zip';
+    if (!petType) throw 'Must supply petType';
+    
     // Validate city
     if (city) {
         // Valid String
@@ -52,11 +54,11 @@ async function homePageSearch(city, state, zip, petType) {
         if (!isValidZip[0]) throw isValidZip[1];
 
         // Valid Integer
-        isValidZip = commonValidators.isValidInteger(zip.toString(), 'zip');
+        isValidZip = commonValidators.isValidInteger(zip, 'zip');
         if (!isValidZip[0]) throw isValidZip[1];
 
         // Valid length
-        if (zip.toString().length > 5) throw 'zip is not of length 5';
+        if (zip.length > 5) throw 'zip is not of length 5';
     }
 
     // Validate petType
@@ -81,13 +83,18 @@ async function homePageSearch(city, state, zip, petType) {
     // Search through collection for pets that match criteria
     // Include pets that match any of the criteria
     if (city || state || zip || petType) {
+        let petTypeObject = await petTypeCollection.findOne({ type: petType });
+
         let query = {};
         if (city) query.city = city.trim();
         if (state) query.state = state.trim();
         if (zip) query.zip = zip.trim();
-        if (petType) query.petType = petType.trim();
+        if (petTypeObject) query.type = {
+            _id: petTypeObject._id,
+            type: petTypeObject.type
+        };
 
-        // Retrieve all pets that match criteria
+     // Retrieve all pets that match criteria
         petsToReturn = await petCollection.find(query).toArray();
         if (petsToReturn.length === 0) throw 'No pets found';
 
@@ -223,11 +230,11 @@ async function createPet(name, petType, breed, age, size, gender, color, address
         if (!isValidZip[0]) throw isValidZip[1];
 
         // Valid Integer
-        isValidZip = commonValidators.isValidInteger(zip.toString(), 'zip');
+        isValidZip = commonValidators.isValidInteger(zip, 'zip');
         if (!isValidZip[0]) throw isValidZip[1];
 
         // Valid length
-        if (zip.toString().length > 5) throw 'zip is not of length 5';
+        if (zip.length > 5) throw 'zip is not of length 5';
     } else throw "zip is required";
 
     if (city) {

@@ -8,6 +8,9 @@ const data = require('../data');
 const petsData = data.petsData;
 const petTypesData = data.petTypesData;
 const usersData = data.usersData;
+const mongoCollections = require('../config/mongoCollections');
+const petTypes = mongoCollections.petTypes;
+
 
 // Routes
 petsRouter
@@ -21,10 +24,16 @@ petsRouter
         let type = xss(req.query.type);
 
         // If no query params, return an error
-        if (!city && !state && !zip && !type) {
+        if ((!city) && (!state) && (!zip)) {
             return res.status(400).json({
                 error: true,
-                message: 'No query params given'
+                message: 'Must supply city, state, or zip'
+            });
+        }
+        if (!type) {
+            return res.status(400).json({
+                error: true,
+                message: 'Must supply pet type'
             });
         }
 
@@ -64,6 +73,10 @@ petsRouter
         // Validate petType
         try {
             if (type) petTypeTests(type);
+            else return res.status(400).json({
+                error: true,
+                message: 'No petType given'
+            });
         } catch (e) {
             return res.status(400).json({
                 error: true,
@@ -80,197 +93,326 @@ petsRouter
                 pets: pets
             });
         } catch (e) {
-            res.status(500).json({
-                error: true,
-                message: e
+            if (e === 'No pets found') {
+                return res.status(404).json({
+                    error: true,
+                    message: e
+                });
+            } else {
+                return res.status(500).json({
+                    error: true,
+                    message: e
             });
+
         }
-    });
+    }
+});
 
 petsRouter
 
     .post('/upload', trimRequest.all, async (req, res) => {
-        // Validation
-        let name = xss(req.body.name);
-        let type = xss(req.body.type);
-        let breed = xss(req.body.breed);
-        let age = xss(req.body.age);
-        let size = xss(req.body.size);
-        let gender = xss(req.body.gender);
-        let color = xss(req.body.color);
-        let address = xss(req.body.address);
-        let zip = xss(req.body.zip);
-        let city = xss(req.body.city);
-        let state = xss(req.body.state);
-        let description = xss(req.body.description);
-        let ownerId = xss(req.body.ownerId);
-        let picture = xss(req.body.picture);
-
-        // Validate name
         try {
-            nameTests(name);
-        } catch (e) {
-            return res.status(400).json({
-                error: true,
-                message: e,
-                name: name
-            });
-        }
+            let form = new formidable.IncomingForm();
+            form.parse(request, async (err, fields, files) => {
+              if (err) {
+                return res.status(400).json({
+                  error: true,
+                  message: "There was an error parsing the files",
+                });
+              }
+              else if (!files || Object.keys(files).length == 0 || !files.picture) {
+                return res.status(400).json({
+                  error: true,
+                  message: "Invalid input",
+                  picture: "picture is required"
+                });
+              }
+              else if (files.picture.size <= 0) {
+                return res.status(400).json({
+                  error: true,
+                  message: "Invalid input",
+                  picture: "picture size is zero"
+                });
+              }
+              const isValid = commonValidators.isValidFile(files.picture);
+              if (!isValid) {
+                return res.status(400).json({
+                  error: true,
+                  message: "Invalid input",
+                  picture: "Only jpg, jpeg or png are required!"
+                });
+              }
+              // Schema validation
+              const requestKeyList = Object.keys(fields);
+              const postBodyKeys = ["name", "type", "breed", "age", "size", "gender", "color", "address", "zip", "city", "state", "description", "ownerId", "picture"];
 
-        // Validate type
-        try {
-            typeTests(type);
-        } catch (e) {
-            return res.status(400).json({
-                error: true,
-                message: e,
-                type: type
-            });
-        }
+              for (let requestKey of postBodyKeys) {
+                if (requestKeyList.indexOf(requestKey) === -1) {
+                  return res.status(400).json({
+                    error: true,
+                    message: `${requestKey} key is missing in body`,
+                  });
+                }
+              }
+              if (requestKeyList.length !== postBodyKeys.length) {
+                return res.status(400).json({
+                  error: true,
+                  message: "Json body is invalid",
+                });
+              }
+              Object.keys(fields).forEach(function (key) {
+                fields[key] = (fields[key]).trim();
+              });
+                const name = xss(fields.name);
+                const type = xss(fields.type);
+                const breed = xss(fields.breed);
+                const age = xss(fields.age);
+                const size = xss(fields.size);
+                const gender = xss(fields.gender);
+                const color = xss(fields.color);
+                const address = xss(fields.address);
+                const zip = xss(fields.zip);
+                const city = xss(fields.city);
+                const state = xss(fields.state);
+                const description = xss(fields.description);
+                const ownerId = xss(fields.ownerId);
+                const picture = xss(files.picture.originalFilename);
+      
+              // Name string validation
+              let isValidName = commonValidators.isValidString(name, 'name');
+              if (!isValidName[0]) {
+                return res.status(400).json({
+                  error: true,
+                  message: "Invalid input",
+                  name: isValidName[1]
+                });
+              }
+      
+              // Name alphabet validation
+              isValidName = commonValidators.isValidName(name, 'name');
+              if (!isValidame[0]) {
+                return res.status(400).json({
+                  error: true,
+                  message: "Invalid input",
+                  name: isValidName[1]
+                });
+              }   
 
-        // Validate breed
-        try {
-            breedTests(breed);
-        } catch (e) {
-            return res.status(400).json({
-                error: true,
-                message: e,
-                breed: breed
-            });
-        }
+                // Validate petType
+                try {
+                    if (type) petTypeTests(type);
+                    else return res.status(400).json({
+                        error: true,
+                        message: 'No petType given'
+                    });
+                } catch (e) {
+                    return res.status(400).json({
+                        error: true,
+                        message: e,
+                        type: type
+                    });
+                }
 
-        // Validate age
-        try {
-            ageTests(age);
-        } catch (e) {
-            return res.status(400).json({
-                error: true,
-                message: e,
-                age: age
-            });
-        }
 
-        // Validate size
-        try {
-            sizeTests(size);
-        } catch (e) {
-            return res.status(400).json({
-                error: true,
-                message: e,
-                size: size
-            });
-        }
+                // Breed
+                try {
+                    if (breed) breedTests(breed);
+                    else return res.status(400).json({
+                        error: true,
+                        message: 'No breed given'
+                    });
+                } catch (e) {
+                    return res.status(400).json({
+                        error: true,
+                        message: e,
+                        breed: breed
+                    });
+                }
 
-        // Validate gender
-        try {
-            genderTests(gender);
-        } catch (e) {
-            return res.status(400).json({
-                error: true,
-                message: e,
-                size: size
-            });
-        }
 
-        // Validate color
-        try {
-            colorTests(color);
-        } catch (e) {
-            return res.status(400).json({
-                error: true,
-                message: e,
-                color: color
-            });
-        }
+                // Age
+                try {
+                    if (age) ageTests(age);
+                    else return res.status(400).json({
+                        error: true,
+                        message: 'No age given'
+                    });
+                } catch (e) {
+                    return res.status(400).json({
+                        error: true,
+                        message: e,
+                        age: age
+                    });
+                }
 
-        // Validate address
-        try {
-            addressTests(address);
-        } catch (e) {
-            return res.status(400).json({
-                error: true,
-                message: e,
-                address: address
-            });
-        }
+                // Size
+                try {
+                    if (size) sizeTests(size);
+                    else return res.status(400).json({
+                        error: true,
+                        message: 'No size given'
+                    });
+                } catch (e) {
+                    return res.status(400).json({
+                        error: true,
+                        message: e,
+                        size: size
+                    });
+                }
 
-        // Validate zip
-        try {
-            zipTests(zip);
-        } catch (e) {
-            return res.status(400).json({
-                error: true,
-                message: e,
-                zip: zip
-            });
-        }
+                // Gender
+                try {
+                    if (gender) genderTests(gender);
+                    else return res.status(400).json({
+                        error: true,
+                        message: 'No gender given'
+                    });
+                } catch (e) {
+                    return res.status(400).json({
+                        error: true,
+                        message: e,
+                        gender: gender
+                    });
+                }
 
-        // Validate city
-        try {
-            cityTests(city);
-        } catch (e) {
-            return res.status(400).json({
-                error: true,
-                message: e,
-                city: city
-            });
-        }
+                // Color
+                try {
+                    if (color) colorTests(color);
+                    else return res.status(400).json({
+                        error: true,
+                        message: 'No color given'
+                    });
+                } catch (e) {
+                    return res.status(400).json({
+                        error: true,
+                        message: e,
+                        color: color
+                    });
+                }
 
-        // Validate state
-        try {
-            stateTests(state);
-        } catch (e) {
-            return res.status(400).json({
-                error: true,
-                message: e,
-                state: state
-            });
-        }
+      
+              // Address string validation
+              let isValidAddress = commonValidators.isValidString(address, 'address');
+              if (!isValidAddress[0]) {
+                return res.status(400).json({
+                  error: true,
+                  message: "Invalid input",
+                  address: isValidAddress[1]
+                });
+              }
+      
+              isValidAddress = commonValidators.isValidAddress(address, 'address');
+              if (!isValidAddress[0]) {
+                return res.status(400).json({
+                  error: true,
+                  message: "Invalid input",
+                  address: isValidAddress[1]
+                });
+              }
+      
+              // City string validation
+              let isValidCity = commonValidators.isValidString(city, 'city');
+              if (!isValidCity[0]) {
+                return res.status(400).json({
+                  error: true,
+                  message: "Invalid input",
+                  city: isValidCity[1]
+                });
+              }
+      
+              isValidCity = commonValidators.isValidName(city, 'city');
+              if (!isValidCity[0]) {
+                return res.status(400).json({
+                  error: true,
+                  message: "Invalid input",
+                  city: isValidCity[1]
+                });
+              }
+      
+              // State string validation
+              let isValidState = commonValidators.isValidString(state, 'state');
+              if (!isValidState[0]) {
+                return res.status(400).json({
+                  error: true,
+                  message: "Invalid input",
+                  state: isValidState[1]
+                });
+              }
+      
+              isValidState = commonValidators.isValidName(state, 'state');
+              if (!isValidState[0]) {
+                return res.status(400).json({
+                  error: true,
+                  message: "Invalid input",
+                  state: isValidState[1]
+                });
+              }
+      
+              // Zip string validation
+              let isValidZip = commonValidators.isValidString(zip, 'zip');
+              if (!isValidZip[0]) {
+                return res.status(400).json({
+                  error: true,
+                  message: "Invalid input",
+                  zip: isValidZip[1]
+                });
+              }
+      
+              isValidZip = commonValidators.isValidInteger(zip, 'zip');
+              if (!isValidZip[0]) {
+                return res.status(400).json({
+                  error: true,
+                  message: "Invalid input",
+                  zip: isValidZip[1]
+                });
+              }
 
-        // Validate description
-        try {
-            descriptionTests(description);
-        } catch (e) {
-            return res.status(400).json({
-                error: true,
-                message: e,
-                description: description
-            });
-        }
+                // Description
+                let isValidDescription = commonValidators.isValidString(description, 'description');
+                if (!isValidDescription[0]) {
+                    return res.status(400).json({
+                        error: true,
+                        message: "Invalid input",
+                        description: isValidDescription[1]
+                    });
+                }
 
-        // Validate ownerId
-        try {
-            ownerIdTests(ownerId);
-        } catch (e) {
-            return res.status(400).json({
-                error: true,
-                message: e,
-                ownerId: ownerId
-            });
-        }
 
-        // Validate picture
-        try {
-            pictureTests(picture);
-        } catch (e) {
-            return res.status(400).json({
-                error: true,
-                message: e,
-                picture: picture
-            });
-        }
+                // OwnerId
+                let isValidOwnerId = commonValidators.isValidId(ownerId);
+                if (!isValidOwnerId) {
+                    return res.status(400).json({
+                        error: true,
+                        message: "Invalid input",
+                        ownerId: "Invalid ownerId"
+                    });
+                }
 
-        // Response
-        try {
-            const pet = await petsData.createPet(name, type, breed, age, size, gender, color, address, zip, city, state, description, ownerId, picture);
-            pet.error = false;
-            res.status(200).json(pet);
-        } catch (e) {
-            res.status(500).json({
-                error: true,
-                message: e
+
+      
+              try {
+                const pet = await petsData.createPet(name, type, breed, age, size, gender, color, address, zip, city, state, description, ownerId, picture);
+                pet.error = false;
+                res.status(200).json(pet);
+              } catch (e) {
+                  res.status(500).json({
+                      error: true,
+                      message: e
+                  });
+              }
+      
             });
-        }
+      
+            form.on('fileBegin', function (name, file) {
+              file.filepath = 'public/' + file.originalFilename;
+            });
+      
+          } catch (e) {
+            return res.status(500).json({
+              error: true,
+              message: e,
+            });
+          }
     });
 
 
@@ -283,41 +425,38 @@ function stateTests(state) {
         if (!isValidState[0]) throw isValidState[1];
 
         // Valid Alphanumeric
-        isValidState = commonValidators.isValidAlphaNumeric(state, 'state');
+        isValidState = commonValidators.isValidName(state, 'state');
         if (!isValidState[0]) throw isValidState[1];
-    } else throw "state is required";
+    }
 }
 
 function cityTests(city) {
     // Validate city
     if (city) {
         // Valid String
-        let isValidCity = commonValidators.isValidString(city);
+        let isValidCity = commonValidators.isValidString(city, 'city');
         if (!isValidCity[0]) throw isValidCity[1];
 
         // Valid Alphanumeric
-        isValidCity = commonValidators.isValidAlphaNumeric(city);
+        isValidCity = commonValidators.isValidName(city, 'city');
         if (!isValidCity[0]) throw isValidCity[1];
-    } else throw "city is required";
+    }
 }
 
 function zipTests(zip) {
     if (zip) {
-        // Valid Number
-        if (typeof zip !== 'number') throw 'zip is not a number';
-
         // Valid Integer
-        let isValidZip = commonValidators.isValidInteger(zip.toString(), 'zip');
+        let isValidZip = commonValidators.isValidInteger(zip, 'zip');
         if (!isValidZip[0]) throw isValidZip[1];
 
         // Valid length
-        if (zip.toString().length > 5) throw 'zip is not of length 5';
-    } else throw "zip is required";
+        if (zip.length > 5) throw 'zip is not of length 5';
+    }
 }
 
-function petTypeTests(petType) {
+async function petTypeTests(petType) {
     // Validate petType
-    const petTypeCollection = petTypesData.getAllPetTypes();
+    const petTypeCollection = await petTypes();
     if (petType) {
         // Valid String
         let isValidPetType = commonValidators.isValidString(petType, 'petType');
@@ -328,9 +467,25 @@ function petTypeTests(petType) {
         if (!isValidPetType[0]) throw isValidPetType[1];
 
         // Valid Existence in petTypes collection
-        let isValidExists = petTypeCollection.includes(petType);
-        if (!isValidExists) throw `${petType} is not a valid petType`;
-    } else throw "petType is required";
+        isValidPetType = await petTypeCollection.findOne({
+            name: petType
+        });
+        if (!isValidPetType) throw `${petType} is not a valid petType`;
+    }
+}
+
+async function existInPetTypeCollection(petType, breed, age, color, size) {
+    // Validate they exist together
+    // { $and: [{ breed: { $in: [ breed ] } }, {type: petType}, { age: { $in: [ age ] } }, { size: { $in: [ size ] } },  { color: { $in: [ color ] } }  ] }
+    const petTypeCollection = await petTypes();
+    let isValidPet = await petTypeCollection.findOne({
+        $and: [{ breed: { $in: [ breed ] } },
+               { type: petType},
+               { age: { $in: [ age ] } },
+               { size: { $in: [ size ] } },
+               { color: { $in: [ color ] } }]
+    });
+    if (!isValidPet) throw "Mismatch in petType, breed, color, size";
 }
 
 function nameTests(name) {
@@ -343,10 +498,10 @@ function nameTests(name) {
         // Valid Alphabet
         isValidName = commonValidators.isValidAlphabet(name, 'name');
         if (!isValidName[0]) throw isValidName[1];
-    } else throw "name is required";
+    }
 }
 
-function breedTests(breed) {
+async function breedTests(breed, petType) {
     // Validate breed
     if (breed) {
         // Valid String
@@ -357,11 +512,16 @@ function breedTests(breed) {
         isValidBreed = commonValidators.isValidAlphabet(breed, 'breed');
         if (!isValidBreed[0]) throw isValidBreed[1];
 
-        // Check this in petTypes collection or... ?
-    } else throw "breed is required";
+        // Check breed in petTypes collection
+        const petTypeCollection = await petTypes();
+        let isValidPet = await petTypeCollection.findOne({
+            $and: [{ name: petType }, { breed: breed }]
+        });
+        if (!isValidPet) throw `${breed} is not a valid breed for ${petType}`;
+    }
 }
 
-function ageTests(age) {
+async function ageTests(age, petType) {
     // Validate age
     if (age) {
         // Valid Number
@@ -370,10 +530,17 @@ function ageTests(age) {
         // Valid Integer
         let isValidAge = commonValidators.isValidInteger(age, 'age');
         if (!isValidAge[0]) throw isValidAge[1];
-    } else throw "age is required";
+
+        // Check age in petTypes collection
+        const petTypeCollection = await petTypes();
+        let isValidPet = await petTypeCollection.findOne({
+            $and: [{ name: petType }, { age: age }]
+        });
+        if (!isValidPet) throw `${age} is not a valid age for ${petType}`;
+    }
 }
 
-function sizeTests(size) {
+async function sizeTests(size, petType) {
     // Validate size
     if (size) {
         // Valid String
@@ -383,7 +550,14 @@ function sizeTests(size) {
         // Valid Alphabet
         isValidSize = commonValidators.isValidAlphabet(size, 'size');
         if (!isValidSize[0]) throw isValidSize[1];
-    } else throw "size is required";
+
+        // Check size in petTypes collection
+        const petTypeCollection = await petTypes();
+        let isValidPet = await petTypeCollection.findOne({
+            $and: [{ name: petType }, { size: size }]
+        });
+        if (!isValidPet) throw `${size} is not a valid size for ${petType}`;
+    }
 }
 
 function genderTests(gender) {
@@ -394,10 +568,10 @@ function genderTests(gender) {
         if (!isValidGender[0]) throw isValidGender[1];
 
         if (gender.toUpperCase() !== 'M' || gender.toUpperCase() !== 'F') throw "Gender must be male or female"
-    } else throw "gender is required";
+    }
 }
 
-function colorTests(color) {
+async function colorTests(color, petType) {
     if (color) {
         // Valid String
         let isValidColor = commonValidators.isValidString(color, 'color');
@@ -406,7 +580,14 @@ function colorTests(color) {
         // Valid Alphabet
         isValidColor = commonValidators.isValidAlphabet(color, 'color');
         if (!isValidColor[0]) throw isValidColor[1];
-    } else throw "color is required";
+
+        // Check color in petTypes collection
+        const petTypeCollection = await petTypes();
+        let isValidPet = await petTypeCollection.findOne({
+            $and: [{ name: petType }, { color: color }]
+        });
+        if (!isValidPet) throw `${color} is not a valid color for ${petType}`;
+    }
 }
 
 function addressTests(address) {
@@ -419,7 +600,7 @@ function addressTests(address) {
         isValidAddress = commonValidators.isValidAlphabet(address, 'address');
         if (!isValidAddress[0]) throw isValidAddress[1];
 
-    } else throw "address is required";
+    }
 }
 
 function descriptionTests(description) {
@@ -442,7 +623,7 @@ async function ownerIdTests(ownerId) {
         // Valid Existence in owners collection
         let isValidExists = await usersData.getUserById(ownerId);
         if (!isValidExists) throw `${ownerId} does not belong to any owner`;
-    } else throw "ownerId is required";
+    }
 }
 
 function pictureTests(picture) {
@@ -454,7 +635,7 @@ function pictureTests(picture) {
         // Valid file
         isValidPicture = commonValidators.isValidFile(picture, 'picture');
         if (!isValidPicture) throw `${picture} is not a valid file`;
-    } else throw "picture is required";
+    }
 }
 
 
