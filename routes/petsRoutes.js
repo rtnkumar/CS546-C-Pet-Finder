@@ -439,7 +439,7 @@ function stateTests(state) {
         let isValidState = commonValidators.isValidString(state, 'state');
         if (!isValidState[0]) throw isValidState[1];
 
-        // Valid Alphanumeric
+        // Valid Name
         isValidState = commonValidators.isValidName(state, 'state');
         if (!isValidState[0]) throw isValidState[1];
     }
@@ -452,7 +452,7 @@ function cityTests(city) {
         let isValidCity = commonValidators.isValidString(city, 'city');
         if (!isValidCity[0]) throw isValidCity[1];
 
-        // Valid Alphanumeric
+        // Valid Name
         isValidCity = commonValidators.isValidName(city, 'city');
         if (!isValidCity[0]) throw isValidCity[1];
     }
@@ -460,8 +460,12 @@ function cityTests(city) {
 
 function zipTests(zip) {
     if (zip) {
+        // Valid String
+        let isValidZip = commonValidators.isValidString(zip, 'zip');
+        if (!isValidZip[0]) throw isValidZip[1];
+
         // Valid Integer
-        let isValidZip = commonValidators.isValidInteger(zip, 'zip');
+        isValidZip = commonValidators.isValidInteger(zip, 'zip');
         if (!isValidZip[0]) throw isValidZip[1];
 
         // Valid length
