@@ -106,10 +106,11 @@
                 <div class="form-group">
                     <label for="type">Pet Type</label>
                     <select class="form-control" id="type" name="type" required>
-                        <option selected>Dog</option>
-                        <option>Cat</option>
-                        <option>Bird</option>
-                        <option>Other</option>
+                    <!-- Render each pet in the petList -->
+                    {{#each petList}}
+                        <option>{{this.type}}</option>
+                    {{/each}}
+
                     </select>
                 </div>
                 <div class="type-error">

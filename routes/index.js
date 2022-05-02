@@ -1,11 +1,13 @@
 const petsRouter = require('./petsRoutes.js');
 const usersRouter = require('./usersRoutes.js');
+const petTypesData = require('../data/petTypesData.js');
 
 const constructorMethod = (app) => {
     app.use('/pets', petsRouter);
     app.use('/users', usersRouter);
-    app.use('/', (req, res) => {
-        res.render('home', { title: 'Home' });
+    app.use('/', async (req, res) => {
+        let petList = await petTypesData.getAllPetTypes();
+        res.render('home', { title: 'Home', petList: petList });
     });
     app.use('*', (req, res) => {
         res.status(404).json({ error: 'Not found' });
