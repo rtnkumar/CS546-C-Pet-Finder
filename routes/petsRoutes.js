@@ -445,8 +445,12 @@ function cityTests(city) {
 
 function zipTests(zip) {
     if (zip) {
+        // Valid String
+        let isValidZip = commonValidators.isValidString(zip, 'zip');
+        if (!isValidZip[0]) throw isValidZip[1];
+
         // Valid Integer
-        let isValidZip = commonValidators.isValidInteger(zip, 'zip');
+        isValidZip = commonValidators.isValidInteger(zip, 'zip');
         if (!isValidZip[0]) throw isValidZip[1];
 
         // Valid length
