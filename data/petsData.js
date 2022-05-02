@@ -422,10 +422,77 @@ async function addPetUserFavorite(id,email){
 
 }
 
+async function addQNA(question,petId,ownerId,askedBy){
+    if(arguments.length!=4){
+        throw 'Only 4 argument are required';
+    }
+
+    // Question validation
+    let isQuestion = commonValidators.isValidString(question, 'question');
+    if (!isQuestion[0]) {
+        throw isQuestion[1];
+    }
+
+    // Validation of petId
+    if(!commonValidators.isValidId(petId)){
+        throw 'Invalid petId'
+    }
+
+    // Validation of ownerId
+    if(!commonValidators.isValidId(ownerId)){
+        throw 'Invalid ownerId'
+    }
+
+    // Email validation
+    if (!askedBy || askedBy.trim() == "") {
+        throw `email is required`;
+    }
+    if (!emailValidator.validate(askedBy)) {
+        throw `${askedBy} is invalid email format`;
+    }
+
+    question=question.trim();
+    petId=petId.trim();
+    ownerId=ownerId.trim();
+
+    const petsCollection = await pets();
+    let petDetails=await petsCollection.findOne({ _id:ObjectId(petId)});
+
+    if (petDetails === null) {
+        throw `No pet with petId=${petId}`;
+    }
+
+    const usersCollection= await users();
+    const owner=await usersCollection.findOne({_id:ObjectId(ownerId)});
+    if(owner===null){
+        throw `No user with ownerId=${ownerId}`;
+    }
+
+    const askedByUser=await usersCollection.findOne({email:askedBy});
+    let newQuestion = {
+        question:question,
+        answer:null,
+        petId:petId,
+        askedBy:askedByUser._id.toString(),
+        ownerId:ownerId,
+        createdAt:Date(),
+        updatedAt:Date()
+    };
+
+    const petQuestionAnswersCollection = await petsQuestionsAnswers();
+    const insertInfo = await petQuestionAnswersCollection.insertOne(newQuestion);
+    if (!insertInfo.acknowledged || !insertInfo.insertedId)
+        throw 'Could not add question';
+
+    return { question: question.trim() };
+
+}
+
 module.exports = {
     homePageSearch,
     createPet,
     getPetDetailsByPetId,
-    getPetDetailsByPetId,
-    addPetUserFavorite
+    addPetUserFavorite,
+    addPetUserFavorite,
+    addQNA
 }
