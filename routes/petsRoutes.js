@@ -468,7 +468,7 @@ async function petTypeTests(petType) {
 
         // Valid Existence in petTypes collection
         isValidPetType = await petTypeCollection.findOne({
-            name: petType
+            type: petType
         });
         if (!isValidPetType) throw `${petType} is not a valid petType`;
     }
