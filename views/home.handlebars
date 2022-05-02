@@ -1,15 +1,4 @@
-<!--
-    The homepage partial for the website.
-    This partial is used for the homepage.
-    Features of this partial:
-        - Search for pets. Should have four input boxes: city, state, zip, and pet-type. Should be a dropdown menu for the state.
-          Search will be a get request to "/pets/search-home"
-          // Example route with query params: pets/search-home/?city=${city}&state=${state}&zip=${zip}&type=${type} 
-        - Link to signup/Login pages.
-        - Logo of the website "public/assets/www/media/logo.png"
--->
 
-<!-- The body for the homepage -->
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 <div class="container">
     <div class="row">
@@ -115,7 +104,6 @@
                     {{else}}
                         <option>No pets found</option>
                     {{/if}}
-
                     </select>
                 </div>
                 <div class="type-error">
