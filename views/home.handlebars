@@ -42,8 +42,8 @@
                 </div>
                 <div class="form-group">
                     <label for="state">State</label>
-                    <select class="form-control" id="state" name="state" >
-                        <option selected>Alabama</option>
+                    <select class="form-control" id="state" name="state">
+                        <option>Alabama</option>
                         <option>Alaska</option>
                         <option>Arizona</option>
                         <option>Arkansas</option>
@@ -107,9 +107,10 @@
                     <label for="type">Pet Type</label>
                     <select class="form-control" id="type" name="type" required>
                     <!-- Render each pet in the petList -->
+                    <option value="">Select a Pet Type</option>
                     {{#if petList}}
                     {{#each petList}}
-                        <option value={{this.type}}>{{this.type}}</option>
+                        <option>{{this.type}}</option>
                     {{/each}}
                     {{else}}
                         <option>No pets found</option>
