@@ -107,9 +107,13 @@
                     <label for="type">Pet Type</label>
                     <select class="form-control" id="type" name="type" required>
                     <!-- Render each pet in the petList -->
+                    {{#if petList}}
                     {{#each petList}}
-                        <option>{{this.type}}</option>
+                        <option value="">{{this.type}}</option>
                     {{/each}}
+                    {{else}}
+                        <option>No pets found</option>
+                    {{/if}}
 
                     </select>
                 </div>
