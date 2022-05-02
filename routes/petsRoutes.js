@@ -72,7 +72,7 @@ petsRouter
 
         // Validate petType
         try {
-            if (type) petTypeTests(type);
+            if (type) await petTypeTests(type);
             else return res.status(400).json({
                 error: true,
                 message: 'No petType given'
@@ -200,7 +200,7 @@ petsRouter
 
                 // Validate petType
                 try {
-                    if (type) petTypeTests(type);
+                    if (type) await petTypeTests(type);
                     else return res.status(400).json({
                         error: true,
                         message: 'No petType given'
