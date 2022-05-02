@@ -109,7 +109,7 @@
                     <!-- Render each pet in the petList -->
                     {{#if petList}}
                     {{#each petList}}
-                        <option value="">{{this.type}}</option>
+                        <option value={{this.type}}>{{this.type}}</option>
                     {{/each}}
                     {{else}}
                         <option>No pets found</option>
