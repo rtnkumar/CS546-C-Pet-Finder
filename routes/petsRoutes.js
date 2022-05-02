@@ -10,6 +10,8 @@ const petTypesData = data.petTypesData;
 const usersData = data.usersData;
 const mongoCollections = require('../config/mongoCollections');
 const petTypes = mongoCollections.petTypes;
+const formidable = require('formidable');
+
 
 
 // Routes
@@ -72,7 +74,7 @@ petsRouter
 
         // Validate petType
         try {
-            if (type) petTypeTests(type);
+            if (type) await petTypeTests(type);
             else return res.status(400).json({
                 error: true,
                 message: 'No petType given'
@@ -109,8 +111,7 @@ petsRouter
 });
 
 petsRouter
-
-    .post('/upload', trimRequest.all, async (req, res) => {
+    .post('/upload', trimRequest.all, async (request, res) => {
         try {
             let form = new formidable.IncomingForm();
             form.parse(request, async (err, fields, files) => {
@@ -144,7 +145,7 @@ petsRouter
               }
               // Schema validation
               const requestKeyList = Object.keys(fields);
-              const postBodyKeys = ["name", "type", "breed", "age", "size", "gender", "color", "address", "zip", "city", "state", "description", "ownerId", "picture"];
+              const postBodyKeys = ["name", "type", "breed", "age", "size", "gender", "color", "address", "zip", "city", "state", "description", "ownerId"];
 
               for (let requestKey of postBodyKeys) {
                 if (requestKeyList.indexOf(requestKey) === -1) {
@@ -190,7 +191,7 @@ petsRouter
       
               // Name alphabet validation
               isValidName = commonValidators.isValidName(name, 'name');
-              if (!isValidame[0]) {
+              if (!isValidName[0]) {
                 return res.status(400).json({
                   error: true,
                   message: "Invalid input",
@@ -200,10 +201,10 @@ petsRouter
 
                 // Validate petType
                 try {
-                    if (type) petTypeTests(type);
+                    if (type) await petTypeTests(type);
                     else return res.status(400).json({
                         error: true,
-                        message: 'No petType given'
+                        message: 'No petType given',
                     });
                 } catch (e) {
                     return res.status(400).json({
@@ -216,7 +217,7 @@ petsRouter
 
                 // Breed
                 try {
-                    if (breed) breedTests(breed);
+                    if (breed) await breedTests(breed,type);
                     else return res.status(400).json({
                         error: true,
                         message: 'No breed given'
@@ -224,15 +225,15 @@ petsRouter
                 } catch (e) {
                     return res.status(400).json({
                         error: true,
-                        message: e,
-                        breed: breed
+                        message: "Invalid input",
+                        breed: e
                     });
                 }
 
 
                 // Age
                 try {
-                    if (age) ageTests(age);
+                    if (age)await ageTests(age,type);
                     else return res.status(400).json({
                         error: true,
                         message: 'No age given'
@@ -240,14 +241,14 @@ petsRouter
                 } catch (e) {
                     return res.status(400).json({
                         error: true,
-                        message: e,
-                        age: age
+                        message: "Invalid input",
+                        age: e
                     });
                 }
 
                 // Size
                 try {
-                    if (size) sizeTests(size);
+                    if (size) await sizeTests(size,type);
                     else return res.status(400).json({
                         error: true,
                         message: 'No size given'
@@ -255,8 +256,8 @@ petsRouter
                 } catch (e) {
                     return res.status(400).json({
                         error: true,
-                        message: e,
-                        size: size
+                        message: "Invalid input",
+                        size: e
                     });
                 }
 
@@ -270,14 +271,14 @@ petsRouter
                 } catch (e) {
                     return res.status(400).json({
                         error: true,
-                        message: e,
-                        gender: gender
+                        message: "Invalid input",
+                        gender: e
                     });
                 }
 
                 // Color
                 try {
-                    if (color) colorTests(color);
+                    if (color) await colorTests(color,type);
                     else return res.status(400).json({
                         error: true,
                         message: 'No color given'
@@ -285,8 +286,8 @@ petsRouter
                 } catch (e) {
                     return res.status(400).json({
                         error: true,
-                        message: e,
-                        color: color
+                        message: "Invalid input",
+                        color: e
                     });
                 }
 
@@ -395,16 +396,30 @@ petsRouter
                 pet.error = false;
                 res.status(200).json(pet);
               } catch (e) {
-                  res.status(500).json({
+                if (e === `${type} is not a valid petType`||
+                e===`${breed} is not a valid breed for ${type}`||
+                e===`${age} is not a valid age for ${type}`||
+                e===`${size} is not a valid size for ${type}`||
+                e===`${color} is not a valid color for ${type}`||
+                e===`${ownerId} does not belong to any owner`
+                ) {
+                    return res.status(404).json({
                       error: true,
-                      message: e
-                  });
-              }
+                      message: e,
+                    });
+                  } else {
+                    return res.status(500).json({
+                      error: true,
+                      message: "Something went wrong, please try after sometime",
+                    });
+                  }
+                }
+              
       
             });
       
             form.on('fileBegin', function (name, file) {
-              file.filepath = 'public/' + file.originalFilename;
+              file.filepath = 'public/uploads/images/pets/' + file.originalFilename;
             });
       
           } catch (e) {
@@ -515,7 +530,7 @@ async function breedTests(breed, petType) {
         // Check breed in petTypes collection
         const petTypeCollection = await petTypes();
         let isValidPet = await petTypeCollection.findOne({
-            $and: [{ name: petType }, { breed: breed }]
+            $and: [{ type: petType }, { breed: breed }]
         });
         if (!isValidPet) throw `${breed} is not a valid breed for ${petType}`;
     }
@@ -524,17 +539,11 @@ async function breedTests(breed, petType) {
 async function ageTests(age, petType) {
     // Validate age
     if (age) {
-        // Valid Number
-        if (typeof age !== 'number') throw 'age is not a number';
-
-        // Valid Integer
-        let isValidAge = commonValidators.isValidInteger(age, 'age');
-        if (!isValidAge[0]) throw isValidAge[1];
-
+        
         // Check age in petTypes collection
         const petTypeCollection = await petTypes();
         let isValidPet = await petTypeCollection.findOne({
-            $and: [{ name: petType }, { age: age }]
+            $and: [{ type: petType }, { age: age }]
         });
         if (!isValidPet) throw `${age} is not a valid age for ${petType}`;
     }
@@ -554,20 +563,20 @@ async function sizeTests(size, petType) {
         // Check size in petTypes collection
         const petTypeCollection = await petTypes();
         let isValidPet = await petTypeCollection.findOne({
-            $and: [{ name: petType }, { size: size }]
+            $and: [{ type: petType }, { size: size }]
         });
         if (!isValidPet) throw `${size} is not a valid size for ${petType}`;
     }
 }
 
 function genderTests(gender) {
-    // Validate gender
+    // Validate gender 
     if (gender) {
         // Valid String
         let isValidGender = commonValidators.isValidString(gender, 'gender');
         if (!isValidGender[0]) throw isValidGender[1];
 
-        if (gender.toUpperCase() !== 'M' || gender.toUpperCase() !== 'F') throw "Gender must be male or female"
+        if (gender.toUpperCase() !== 'M' && gender.toUpperCase() !== 'F') throw "Gender must be male or female"
     }
 }
 
@@ -584,7 +593,7 @@ async function colorTests(color, petType) {
         // Check color in petTypes collection
         const petTypeCollection = await petTypes();
         let isValidPet = await petTypeCollection.findOne({
-            $and: [{ name: petType }, { color: color }]
+            $and: [{ type: petType }, { color: color }]
         });
         if (!isValidPet) throw `${color} is not a valid color for ${petType}`;
     }

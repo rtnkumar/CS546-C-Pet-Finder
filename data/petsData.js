@@ -132,6 +132,7 @@ async function homePageSearch(city, state, zip, petType) {
  * @return Returns an object containing all of the fields of the pet, including the id of the pet.
  */
 async function createPet(name, petType, breed, age, size, gender, color, address, zip, city, state, description, ownerId, picture) {
+    
     // Validate the input
     // Validate name
     if (name) {
@@ -145,7 +146,8 @@ async function createPet(name, petType, breed, age, size, gender, color, address
     } else throw "name is required";
 
     // Validate petType
-    const petTypeCollection = petTypesData.getAllPetTypes();
+    const petTypeCollection = await petTypesData.getAllPetTypes();
+    let petTypeDocument=null;
     if (petType) {
         // Valid String
         let isValidPetType = commonValidators.isValidString(petType, 'petType');
@@ -156,8 +158,8 @@ async function createPet(name, petType, breed, age, size, gender, color, address
         if (!isValidPetType[0]) throw isValidPetType[1];
 
         // Valid Existence in petTypes collection
-        isValidPetType = petTypeCollection.includes(petType);
-        if (!isValidPetType) throw `${petType} is not a valid petType`;
+        petTypeDocument = getPetTypeDocumentByPetType(petTypeCollection,petType);
+        if (!petTypeDocument) throw `${petType} is not a valid petType`;
 
     } else throw "petType is required";
 
@@ -171,6 +173,11 @@ async function createPet(name, petType, breed, age, size, gender, color, address
         isValidBreed = commonValidators.isValidAlphabet(breed, 'breed');
         if (!isValidBreed[0]) throw isValidBreed[1];
 
+         // Valid Existence in petTypes collection
+         if(!petTypeDocument.breed || !petTypeDocument.breed.includes(breed))
+          throw `${breed} is not a valid breed for ${petType}`;
+ 
+
         // Check this in petTypes collection or... ?
     } else throw "breed is required";
 
@@ -180,9 +187,10 @@ async function createPet(name, petType, breed, age, size, gender, color, address
         let isValidAge = commonValidators.isValidString(age, 'age');
         if (!isValidAge[0]) throw isValidAge[1];
 
-        // Valid Integer
-        isValidAge = commonValidators.isValidInteger(age, 'age');
-        if (!isValidAge[0]) throw isValidAge[1];
+    
+        // Valid Existence in petTypes collection
+        if(!petTypeDocument.age || !petTypeDocument.age.includes(age))
+        throw `${age} is not a valid age for ${petType}`;
     } else throw "age is required";
 
     // Validate size
@@ -194,6 +202,10 @@ async function createPet(name, petType, breed, age, size, gender, color, address
         // Valid Alphabet
         isValidSize = commonValidators.isValidAlphabet(size, 'size');
         if (!isValidSize[0]) throw isValidSize[1];
+
+        // Valid Existence in petTypes collection
+        if(!petTypeDocument.size || !petTypeDocument.size.includes(size))
+        throw `${size} is not a valid size for ${petType}`;
     } else throw "size is required";
 
     // Validate gender
@@ -202,7 +214,7 @@ async function createPet(name, petType, breed, age, size, gender, color, address
         let isValidGender = commonValidators.isValidString(gender, 'gender');
         if (!isValidGender[0]) throw isValidGender[1];
 
-        if (gender.toUpperCase() !== 'M' || gender.toUpperCase() !== 'F') throw "Gender must be male or female"
+        if (gender.toUpperCase() !== 'M' && gender.toUpperCase() !== 'F') throw "Gender must be male or female"
     } else throw "gender is required";
 
     if (color) {
@@ -213,6 +225,10 @@ async function createPet(name, petType, breed, age, size, gender, color, address
         // Valid Alphabet
         isValidColor = commonValidators.isValidAlphabet(color, 'color');
         if (!isValidColor[0]) throw isValidColor[1];
+
+        // Valid Existence in petTypes collection
+        if(!petTypeDocument.color || !petTypeDocument.color.includes(color))
+        throw `${color} is not a valid color for ${petType}`;
     } else throw "color is required";
 
     if (address) {
@@ -258,14 +274,14 @@ async function createPet(name, petType, breed, age, size, gender, color, address
         isValidState = commonValidators.isValidName(state, 'state');
         if (!isValidState[0]) throw isValidState[1];
     } else throw "state is required";
-
+    
     if (description) {
         // Valid String
         let isValidDescription = commonValidators.isValidString(description, 'description');
         if (!isValidDescription[0]) throw isValidDescription[1];
     } else throw "description is required";
 
-    const ownerCollection = await owners();
+    const ownerCollection = await users();
     if (ownerId) {
         // Valid ID
         let isValidOwnerId = commonValidators.isValidId(ownerId);
@@ -280,28 +296,20 @@ async function createPet(name, petType, breed, age, size, gender, color, address
         // Valid String
         let isValidPicture = commonValidators.isValidString(picture, 'picture');
         if (!isValidPicture[0]) throw isValidPicture[1];
-
-        // Valid file
-        isValidPicture = commonValidators.isValidFile(picture, 'picture');
-        if (!isValidPicture) throw `${picture} is not a valid file`;
     } else throw "picture is required";
-    
-    const petsCollection = await pets();
-    typeFound = await petTypes().findOne({ type: petType.trim() });
 
+    const petsCollection = await pets();
+    petTypeDocument._id=petTypeDocument._id.toString();
     const newPet = {
         name: name.trim(),
-        type: {
-            _id: typeFound._id,
-            type: typeFound.type
-        },
+        type:petTypeDocument,
         breed: breed.trim(),
-        age: age,
+        age: age.trim(),
         size: size.trim(),
         gender: gender.trim(),
         color: color.trim(),
         address: address.trim(),
-        zip: zip,
+        zip: zip.trim(),
         city: city.trim(),
         state: state.trim(),
         description: description.trim(),
@@ -312,10 +320,9 @@ async function createPet(name, petType, breed, age, size, gender, color, address
         adoptedBy: null
     };
     const insertInfo = await petsCollection.insertOne(newPet);
-    if (insertInfo.insertedCount === 0) throw "Could not add pet";
-    const newId = insertInfo.insertedId.toString();
-    const pet = await petsCollection.findOne({ _id: newId });
-    pet._id = newId;
+    if (insertInfo.insertedCount === 0) throw "Could not add pet";console.log()
+    const pet = await petsCollection.findOne({ _id: ObjectId(insertInfo.insertedId.toString()) });
+    pet._id = pet._id.toString();
     return pet;
 }
 
@@ -485,6 +492,17 @@ async function addQNA(question,petId,ownerId,askedBy){
         throw 'Could not add question';
 
     return { question: question.trim() };
+
+}
+
+function getPetTypeDocumentByPetType(petTypeCollection,petType){
+
+    for(let petDocument of petTypeCollection){
+        if(petDocument.type===petType){
+            return petDocument;
+        }
+    }
+    return null;
 
 }
 
