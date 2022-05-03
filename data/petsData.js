@@ -299,10 +299,13 @@ async function createPet(name, petType, breed, age, size, gender, color, address
     } else throw "picture is required";
 
     const petsCollection = await pets();
-    petTypeDocument._id=petTypeDocument._id.toString();
+    // petTypeDocument._id=petTypeDocument._id.toString();
     const newPet = {
         name: name.trim(),
-        type:petTypeDocument,
+        type: {
+            _id: ObjectId(petTypeDocument._id),
+            type: petTypeDocument.type
+        },
         breed: breed.trim(),
         age: age.trim(),
         size: size.trim(),
@@ -313,7 +316,7 @@ async function createPet(name, petType, breed, age, size, gender, color, address
         city: city.trim(),
         state: state.trim(),
         description: description.trim(),
-        ownerId: ownerId,
+        ownerId: ObjectId(ownerId),
         picture: picture.trim(),
         createdAt: new Date(),
         updatedAt: new Date(),
