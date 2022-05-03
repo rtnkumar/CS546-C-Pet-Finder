@@ -1,2 +1,120 @@
-<div>i am home</div>
-<div>i am home</div>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<div class="container">
+    <div class="row">
+        <div class="col-12">
+            <h1 class="text-center">Welcome to Pet Finder!</h1>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-12">
+            <p class="text-center">
+                This website is for pet owners to find other pet owners who are also looking for pets.
+            </p>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-12">
+            <p class="text-center">
+                Please search for pets by city/state/zip and pet type.
+            </p>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-12">
+            <form method="GET" action="/pets/search-home">
+                <div class="form-group">
+                    <label for="city">City</label>
+                    <input type="text" class="form-control" id="city" pattern="[a-zA-Z ]+$" name="city" placeholder="City">
+                </div>
+                    <small>Format: Only space and alphabet are allowed.</small>
+                <div class="city-error">
+                </div>
+                <div class="form-group">
+                    <label for="state">State</label>
+                    <select class="form-control" id="state" name="state">
+                        <option>Alabama</option>
+                        <option>Alaska</option>
+                        <option>Arizona</option>
+                        <option>Arkansas</option>
+                        <option>California</option>
+                        <option>Colorado</option>
+                        <option>Connecticut</option>
+                        <option>Delaware</option>
+                        <option>Florida</option>
+                        <option>Georgia</option>
+                        <option>Hawaii</option>
+                        <option>Idaho</option>
+                        <option>Illinois</option>
+                        <option>Indiana</option>
+                        <option>Iowa</option>
+                        <option>Kansas</option>
+                        <option>Kentucky</option>
+                        <option>Louisiana</option>
+                        <option>Maine</option>
+                        <option>Maryland</option>
+                        <option>Massachusetts</option>
+                        <option>Michigan</option>
+                        <option>Minnesota</option>
+                        <option>Mississippi</option>
+                        <option>Missouri</option>
+                        <option>Montana</option>
+                        <option>Nebraska</option>
+                        <option>Nevada</option>
+                        <option>New Hampshire</option>
+                        <option>New Jersey</option>
+                        <option>New Mexico</option>
+                        <option>New York</option>
+                        <option>North Carolina</option>
+                        <option>North Dakota</option>
+                        <option>Ohio</option>
+                        <option>Oklahoma</option>
+                        <option>Oregon</option>
+                        <option>Pennsylvania</option>
+                        <option>Rhode Island</option>
+                        <option>South Carolina</option>
+                        <option>South Dakota</option>
+                        <option>Tennessee</option>
+                        <option>Texas</option>
+                        <option>Utah</option>
+                        <option>Vermont</option>
+                        <option>Virginia</option>
+                        <option>Washington</option>
+                        <option>West Virginia</option>
+                        <option>Wisconsin</option>
+                        <option>Wyoming</option>
+                    </select>
+                </div>
+                <div class="state-error">
+                </div>
+                <div class="form-group">
+                    <label for="zip">Zip</label>
+                    <input type="text" class="form-control" id="zip" name="zip" placeholder="Zip" pattern="^[0-9]+$">
+                </div>
+                <small>Format: Only integer is allowed.</small>
+                <div class="zip-error">
+                </div>
+                <div class="form-group">
+                    <label for="type">Pet Type</label>
+                    <select class="form-control" id="type" name="type" required>
+                    <!-- Render each pet in the petList -->
+                    <option value="">Select a Pet Type</option>
+                    {{#if petTypeList}}
+                    {{#each petTypeList}}
+                        <option>{{this.type}}</option>
+                    {{/each}}
+                    {{else}}
+                        <option>No pets found</option>
+                    {{/if}}
+                    </select>
+                </div>
+                <div class="type-error">
+                </div>
+                <button type="submit" class="btn btn-primary">Search</button>
+            </form>
+            <div class="error">
+            </div>
+        </div>
+    </div>
+</div>
+<script src="/public/js/home.js"></script>
