@@ -99,8 +99,8 @@
                     <select class="form-control" id="type" name="type" required>
                     <!-- Render each pet in the petList -->
                     <option value="">Select a Pet Type</option>
-                    {{#if petList}}
-                    {{#each petList}}
+                    {{#if petTypeList}}
+                    {{#each petTypeList}}
                         <option>{{this.type}}</option>
                     {{/each}}
                     {{else}}
