@@ -344,27 +344,6 @@ async function getUserById(id){
 }
 
 
-/**
- * Feneel Doshi
- * Get email of the user
- * @param {Email of user} emailId 
- * @returns 
- */
-
- async function getUserByEmail(email) {
-    // Email validation
-    if (!email || email.trim() == "") {
-        throw `email is required`;
-    }
-    if (!emailValidator.validate(email)) {
-        throw `${email} is invalid email format`;
-    }
-
-    const usersCollection = await users();
-    return await usersCollection.findOne({ email: email });
-}
-
-
 
 /** 
 *Feneel Doshi
