@@ -299,7 +299,6 @@ async function createPet(name, petType, breed, age, size, gender, color, address
     } else throw "picture is required";
 
     const petsCollection = await pets();
-    // petTypeDocument._id=petTypeDocument._id.toString();
     const newPet = {
         name: name.trim(),
         type: {
@@ -322,6 +321,15 @@ async function createPet(name, petType, breed, age, size, gender, color, address
         updatedAt: new Date(),
         adoptedBy: null
     };
+
+    // Check if pet already exists
+    try {
+        await duplicatePetExists(name, petTypeDocument, breed, age, size, gender, color, address, zip, city, state, description, ownerId, picture);
+    } catch(e) {
+        throw "Pet already exists";
+    }
+
+
     const insertInfo = await petsCollection.insertOne(newPet);
     if (insertInfo.insertedCount === 0) throw "Could not add pet";console.log()
     const pet = await petsCollection.findOne({ _id: ObjectId(insertInfo.insertedId.toString()) });
@@ -562,11 +570,42 @@ function getPetTypeDocumentByPetType(petTypeCollection,petType){
 
     return { adoptedPetInserted: true };
 }
+
+async function duplicatePetExists(name, petTypeDocument, breed, age, size, gender, color, address, zip, city, state, description, ownerId, picture) {
+    const petsCollection = await pets(); 
+    
+    // Check if exact pet already exists
+    let isValidExists = await petsCollection.findOne({
+        name: name.trim(),
+        type: {
+            _id: ObjectId(petTypeDocument._id),
+            type: petTypeDocument.type
+        },
+        breed: breed.trim(),
+        age: age.trim(),
+        size: size.trim(),
+        gender: gender.trim(),
+        color: color.trim(),
+        address: address.trim(),
+        zip: zip.trim(),
+        city: city.trim(),
+        state: state.trim(),
+        description: description.trim(),
+        ownerId: ObjectId(ownerId),
+        picture: picture.trim(),
+    });
+    if (isValidExists) throw "Pet already exists";
+    return false;
+
+}
+
 module.exports = {
     homePageSearch,
     createPet,
     getPetDetailsByPetId,
     addPetUserFavorite,
     addQNA,
-    assignPet
+    assignPet,
+    duplicatePetExists,
+    getPetTypeDocumentByPetType
 }

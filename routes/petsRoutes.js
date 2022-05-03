@@ -11,6 +11,7 @@ const usersData = data.usersData;
 const mongoCollections = require('../config/mongoCollections');
 const petTypes = mongoCollections.petTypes;
 const formidable = require('formidable');
+const { getPetTypeDocumentByPetType } = require('../data/petsData');
 
 
 
@@ -397,7 +398,16 @@ petsRouter
                     });
                 }
 
-
+                // Duplicate Pet Entry
+                try {
+                    let petTypeDocument = await getPetTypeDocumentByPetType(petTypes, type);
+                    await petsData.duplicatePetExists(name, petTypeDocument, breed, age, size, gender, color, address, zip, city, state, description, ownerId, picture);
+                } catch(e) {
+                    return res.status(404).json({
+                        error: true,
+                        message: "Pet already exists"
+                    })
+                }
       
               try {
                 const pet = await petsData.createPet(name, type, breed, age, size, gender, color, address, zip, city, state, description, ownerId, picture);
