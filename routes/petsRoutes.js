@@ -145,7 +145,7 @@ petsRouter.
 
 /**
  * Feneel Doshi
- * Assigning pet to user APU
+ * Assigning pet to user API
  */
 
  petsRouter
