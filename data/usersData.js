@@ -609,7 +609,6 @@ module.exports = {
     getUserDetailsByEmail,
     updateUserProfile, 
     remove,
-    createUser,
     checkUser,
     updateUserEmailPassword
 }
