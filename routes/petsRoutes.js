@@ -143,5 +143,70 @@ petsRouter.
         }
     })
 
+/**
+ * Feneel Doshi
+ * Assigning pet to user API
+ */
+
+ petsRouter
+ .post('/users/assigned-pets', trimRequest.all, async (req, res) => {
+     const userId = xss(req.body.userId);
+     const petId = xss(req.body.petId);
+
+     const requestKeyList = Object.keys(req.body);
+     const postBodyKeys = ["userId", "petId"];
+
+     for (let requestKey of postBodyKeys) {
+         if (requestKeyList.indexOf(requestKey) === -1) {
+             return res.status(400).json({
+                 error: true,
+                 message: `${requestKey} key is missing in body`,
+             });
+         }
+     }
+     if (requestKeyList.length !== postBodyKeys.length) {
+         return res.status(400).json({
+             error: true,
+             message: "Json body is invalid",
+         });
+     }
+
+     if (!userId || userId.trim() === '') {
+         return res.status(400).json({ error: true, message: "invalid parameter", userId: "userId is required" });
+     }
+
+     if (!petId || petId.trim() === '') {
+         return res.status(400).json({ error: true, message: "invalid parameter", userId: "petId is required" });
+     }
+
+     try {
+         if (!commonValidators.isValidId(userId)) {
+             return res.status(400).json({ error: true, message: "invalid parameter", userId: "Invalid userId" });
+         }
+         if (!commonValidators.isValidId(petId)) {
+             return res.status(400).json({ error: true, message: "invalid parameter", petId: "Invalid petId" });
+         }
+
+         const assignInfo = await petsData.assignPet(userId, petId)
+         res.json(assignInfo)
+     }
+     catch (error) {
+         if (`No pet with id=${petId.trim()}` === error || `No user with id=${userId.trim()}` === error || `${petId} is already in adopted list` === error) {
+             res.status(404).json({
+                 error: true,
+                 message: error
+             });
+         } else {
+             res.status(500).json({
+                 error: true,
+                 message: "Something went wrong, please try after sometime"
+             })
+         }
+
+     }
+ })
+
+
+
 
 module.exports = petsRouter;
