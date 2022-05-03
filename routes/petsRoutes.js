@@ -367,6 +367,14 @@ petsRouter
                   zip: isValidZip[1]
                 });
               }
+              if (zip.length > 5) {
+                return res.status(400).json({
+                    error: true,
+                    message: "Invalid input",
+                    zip: "Zip code too long"
+                });
+            }
+
 
                 // Description
                 let isValidDescription = commonValidators.isValidString(description, 'description');
