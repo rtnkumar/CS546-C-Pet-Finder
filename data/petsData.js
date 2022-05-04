@@ -316,7 +316,7 @@ async function createPet(name, petType, breed, age, size, gender, color, address
         city: city.trim(),
         state: state.trim(),
         description: description.trim(),
-        ownerId: ObjectId(ownerId),
+        ownerId: ownerId,
         picture: picture.trim(),
         createdAt: new Date(),
         updatedAt: new Date(),

@@ -1,7 +1,5 @@
 (function ($) {
 
-    let petsListData = []
-  
     function hideBackButton() {
         $("#back").hide();
     }
@@ -14,11 +12,27 @@
     function showNextButton() {
         $("#next").show();
     }
-
-    let dogAgeList = ["All", "Puppy", "Young", "Adult", "Senior"];
-    for (let dogAge of dogAgeList) {
-        $('#age').append('<option value=' + dogAge + '>' + dogAge + '</option>');
+   
+    let breedList = ["All"].concat(petTypeList.breed);
+    for (let breed of breedList) {
+        $('#breed').append('<option value=' + breed + '>' + breed + '</option>');
     }
+
+    let ageList = ["All"].concat(petTypeList.age);
+    for (let age of ageList) {
+        $('#age').append('<option value=' + age + '>' + age + '</option>');
+    }
+
+    let sizeList = ["All"].concat(petTypeList.size);
+    for (let size of sizeList) {
+        $('#size').append('<option value=' + size + '>' + size + '</option>');
+    }
+
+    let colorList = ["All"].concat(petTypeList.color);
+    for (let color of colorList) {
+        $('#color').append('<option value=' + color + '>' + color + '</option>');
+    }
+
 
     $('#pet-list-container').on('click', 'button', function (e) {
         e.preventDefault();
@@ -37,7 +51,7 @@
         init();
     });
 
-    let image = '/public/assets/www/media/dog.jpg'
+    let imagePath = '/public/uploads/images/pets/'
     let count = 0;
     let searchedDataList = petsListData;
     let currentShownDataCount = 0;
@@ -61,7 +75,7 @@
                 $(selector).append('<div class="col-lg-3  text-black">' +
                     '<div style="text-align:center;">  <button pet-id=#' + searchedDataList[count]._id + ' style="margin-top: -5px;">Add Favorite</button></div>' +
 
-                    '<div><img src=' + image + ' width="250" height="200"></div>' +
+                    '<div><img src=' + imagePath+searchedDataList[count].picture + ' width="250" height="200"></div>' +
                     '<div style="text-align:center;">' + searchedDataList[count].name +
                     '</div>' +
                     '<div style="text-align:center;">  <button pet-id=' + searchedDataList[count]._id + ' style="margin-bottom: 20px;">View Details</button></div>' +
