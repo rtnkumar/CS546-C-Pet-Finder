@@ -2,6 +2,7 @@ const dbConnection = require('../config/mongoConnection');
 const { ObjectId } = require('mongodb');
 const data = require('../data');
 const petTypesData = data.petTypesData;
+const utils = require('../utils/utils');
 
 
 async function populateDummyUsers(db) {
@@ -25,10 +26,10 @@ async function populateDummyUsers(db) {
   };
 
   // Users
-  let user1 = makeUser("John", "Sean", "Doe", "jdoe@email.com", "password", "1234567890", "123 Main St", "Manhattan", "NY", "10001", "john.jpg");
-  let user2 = makeUser("Sam", "Patrick", "Smith", "psmith@gmail.com", "totallysafe", "5430592111", "300 Concord Road", "RealTown", "CA", "90002", "smith.jpg");
-  let user3 = makeUser("Martha", "Jane", "Meyer", "doublem@hotmail.com", "notsafe", "3125550111", "100 Washington St", "Hoboken", "NJ", "07030", "marthaMeyer.png");
-  let user4 = makeUser("Jane", "Mary", "Doe", "janeisnotjohn@gmail.com", "u89ji4ucdc", "0987654321", "123 Main St", "Manhattan", "NY", "10001", "jane.jpg");
+  let user1 = makeUser("John", "Sean", "Doe", "jdoe@email.com", await utils.getHashedPassword("password"), "1234567890", "123 Main St", "Manhattan", "NY", "10001", "john.jpg");
+  let user2 = makeUser("Sam", "Patrick", "Smith", "psmith@gmail.com", await utils.getHashedPassword("totallysafe"), "5430592111", "300 Concord Road", "RealTown", "CA", "90002", "smith.jpg");
+  let user3 = makeUser("Martha", "Jane", "Meyer", "doublem@hotmail.com", await utils.getHashedPassword("notsafe"), "3125550111", "100 Washington St", "Hoboken", "NJ", "07030", "marthaMeyer.png");
+  let user4 = makeUser("Jane", "Mary", "Doe", "janeisnotjohn@gmail.com", await utils.getHashedPassword("u89ji4ucdc"), "0987654321", "123 Main St", "Manhattan", "NY", "10001", "jane.jpg");
 
   await db.collection('users').insertMany([user1, user2, user3, user4]);
 }
