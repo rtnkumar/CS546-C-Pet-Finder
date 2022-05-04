@@ -19,12 +19,12 @@
     
 </main>
 
-<form id="sign-up" method="post" action="users/sign-up" style="border:1px solid #ccc" onsubmit="signUp(event)">
+<form id="updateProfile" method="post" action="users/userProfile" style="border:1px solid #ccc" onsubmit="updateProfile(event)">
     <div class="container">
         <table class="table">
             <thead>
                 <tr>
-                    <th class="text-center" colspan="4">Sign Up</th>
+                    <th class="text-center" colspan="4">Update Profile</th>
                 </tr>
             </thead>
             <tbody>
@@ -149,18 +149,13 @@
                     </td>
                     <td></td>
                 </tr>
-                <tr>
-                    <td colspan="4" class="text-center"> <button type="submit">Submit</button>
-                            <a href="/users/login">Already have an account? Click here to log-in</a>
-
-                    </td>
-                </tr>
+               
             </tbody>
         </table>
     </div>
 </form>
 <div class="error">
 </div>
-<script src="/public/js/signUp.js"></script>
+<script src="/public/js/updateProfile.js"></script>
 
 
