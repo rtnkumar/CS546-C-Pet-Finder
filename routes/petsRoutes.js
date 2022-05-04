@@ -90,10 +90,15 @@ petsRouter
         // Response
         try {
             const pets = await petsData.homePageSearch(city, state, zip, type);
-            res.status(200).json({
-                error: false,
-                pets: pets
-            });
+            let allPetTypeList = await petTypesData.getAllPetTypes();
+            let petTypeList=[];
+            for(let petType of allPetTypeList){
+                if(petType.type===type){
+                    petTypeList=petType;
+                    break;
+                }
+            }
+            res.render('petsViews/petsList',{title:"Pet Finder",error:false,data:JSON.stringify(pets),petTypeList:JSON.stringify(petTypeList)});
         } catch (e) {
             if (e === 'No pets found') {
                 return res.status(404).json({
