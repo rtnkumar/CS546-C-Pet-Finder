@@ -54,6 +54,7 @@ async function login(event) {
                 };
                 $.ajax(requestConfig).then(function (responseMessage) {
                     window.localStorage.setItem('userDetails', JSON.stringify(responseMessage));
+                    window.localStorage.setItem('isLogin', true);
                     window.location.assign('http://localhost:3000/users/sign-up');
                 });
             }
