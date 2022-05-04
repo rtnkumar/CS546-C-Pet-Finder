@@ -909,4 +909,51 @@ usersRouter.post("/profile/update",async (request, res) => {
   }
 });
 
+/**
+ * Feneel Doshi
+ * Route to redirect to user profile page
+ */
+
+usersRouter.get("/userProfile", async(req, res)=>{
+  let firstName = "<h1>Feneewe3l</h1>"
+  return res.render("usersViews/userProfile")
+});
+
+
+/**
+ * Feneel Doshi
+ * Route to redirect to user's favorite pet list
+ */
+
+usersRouter.get("/favoriteList", async(req, res)=>{
+  return res.render("usersViews/favoriteList")
+})
+
+/**
+ * Feneel Doshi
+ * Route to redirect to user's account settings
+ */
+
+usersRouter.get("/accountSettings", async(req, res)=>{
+  return res.render("usersViews/accountSettings")
+})
+
+/**
+ * Feneel Doshi
+ * Route to redirect to user's adopted pet list
+ */
+
+usersRouter.get("/adoptedList", async(req, res)=>{
+  return res.render("usersViews/adoptedList")
+})
+
+/**
+ * Feneel Doshi
+ * Route to redirect to upload a pet
+ */
+
+usersRouter.get("/uploadPet", async(req, res)=>{
+  res.render("usersViews/uploadPet")
+})
+
 module.exports = usersRouter;
