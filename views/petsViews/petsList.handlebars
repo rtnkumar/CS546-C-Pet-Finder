@@ -1,22 +1,25 @@
 <div style='float: right;'>
+    <label for="breed">Breed:</label>
+    <select id="breed">
+    </select>
+
     <label for="age">Age:</label>
     <select id="age">
     </select>
 
     <label for="size">Size:</label>
     <select id="size">
-        <option value="all">All</option>
-        <option value="small">Small</option>
-        <option value="medium">Medium</option>
-        <option value="large">Large</option>
-        <option value="extra-large">Extra Large</option>
     </select>
 
     <label for="gender">Gender:</label>
     <select id="gender">
         <option value="all">All</option>
-        <option value="male">Male</option>
-        <option value="female">Female</option>
+        <option value="M">Male</option>
+        <option value="F">Female</option>
+    </select>
+
+    <label for="color">Color:</label>
+    <select id="color">
     </select>
 
     <label for="sort">Sort:</label>
@@ -25,7 +28,7 @@
         <option value="-1">Latest</option>
         <option value="1">Oldest</option>
     </select>
-    
+
 
 </div>
 <div class="container" id="pet-list-container">
@@ -35,6 +38,12 @@
     <button id="back">Back</button>
     <button id="next">Next</button>
 </div>
+
+<script>
+    let petTypeList = {{{ petTypeList }}}
+    let petsListData = {{{ data }}}
+
+</script>
 
 <script src="https://code.jquery.com/jquery-2.2.4.min.js"
     integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44=" crossorigin="anonymous"></script>

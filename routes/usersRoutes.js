@@ -592,7 +592,7 @@ usersRouter
 */
 usersRouter.get("/user-details",trimRequest.all,async (req, res) => {
   
-  const email = xss(req.body.email);
+  const email = xss(req.query.email);
   try {
     // Email validation
     if (!email || email.trim() == "") {
