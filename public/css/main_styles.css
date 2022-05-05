@@ -1,7 +1,15 @@
+/* #38b6ff is blue color of logo */
+
+/* Create a schema that uses white, black and #38b6ff to make a very user-friendly interface */
+
+
+
 header{
-    background-color: blue;
-    height: 80px;
+    background-color: white;
+    height: 100px;
     width: auto;
+    line-height: 2;
+    overflow: hidden;
 }
 
 footer{
@@ -22,3 +30,8 @@ table {
 #pet-list-container   {
     margin-top: 50px;
   }
+
+.format-specifier {
+    color: #00819f;
+
+}
