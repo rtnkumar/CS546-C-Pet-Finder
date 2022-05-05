@@ -43,8 +43,8 @@ async function populateDummyUsers(db) {
   let user15 = makeUser("Samantha", "", "Reichenthal", "artandlove@artistry.com", await utils.getHashedPassword("art_and_love"), "459 Mayfield Drive", "Danville", "Virginia", "24540", "user15.jpg");
   let user16 = makeUser("Roushan", "", "Kumar", "rkumar@stevens.edu", await utils.getHashedPassword("roushan_did_most_of_the_work"), "9178675309", "7533 Old Windsor St.", "Roslindale", "Massachusetts", "02131", "user16.jpg");
   let user17 = makeUser("Feneel", "", "Doshi", "fdoshi@stevens.edu", await utils.getHashedPassword("feneel_is_the_best"), "5838675309", "9704 Durham Street", "Reading", "Massachusetts", "01867", "user17.jpg");
-  let user18 = makeUser("Dominick", "Patrick", "Varano", "dvarano@stevens.edu", await utils.getHashedPassword("dom_made_all_this_test_data"), "7777778888", "18 E. Prairie Drive", "Sacramento", "California", "95820", "user18.jpg");
-  let user19 = makeUser("Siddarth", "", "Singh", "ssingh@stevens.edu", await utils.getHashedPassword("siddarth_might_be_dead_right_now?"), "3336667777", "1 Young Street", "Mason", "Ohio", "45040", "user19.jpg");
+  let user18 = makeUser("Dominick", "Patrick", "Varano", "dvarano@stevens.edu", await utils.getHashedPassword("dom_made_all_this_test_data"), "7777778888", "18 E. Prairie Drive", "Sacramento", "California", "95820", "user18.png");
+  let user19 = makeUser("Siddarth", "", "Singh", "ssingh@stevens.edu", await utils.getHashedPassword("siddarth_might_be_dead_right_now?"), "3336667777", "1 Young Street", "Mason", "Ohio", "45040", "user19.jpeg");
   let user20 = makeUser("Patrick", "", "Hill", "phill@stevens.edu", await utils.getHashedPassword("patrick_is_a_fantastic_professor"), "0562048205", "431 Mill Lane", "Tuckerton", "New Jersey", "08087", "user20.jpg");
 
 
