@@ -1,3 +1,5 @@
+
+
 let error = document.getElementsByClassName("error")[0]
 error.getElementsByClassName.display = 'none'
 let firstNameError = document.getElementsByClassName("first-name-error")[0];
@@ -51,6 +53,7 @@ function init(){
     
 }
 init()
+
 async function updateProfile(event) {
     event.preventDefault();
     
@@ -58,7 +61,7 @@ async function updateProfile(event) {
     firstNameError.style.display = 'none';
     middleNameError.style.display = 'none';
     lastNameError.style.display = 'none';
-    emailError.style.display = 'none';
+    //emailError.style.display = 'none';
     phoneNumberError.style.display = 'none';
     addressError.style.display = 'none';
     cityError.style.display = 'none';
@@ -69,7 +72,7 @@ async function updateProfile(event) {
     let firstName = document.getElementById("first-name").value;
     let middleName = document.getElementById("middle-name").value;
     let lastName = document.getElementById("last-name").value;
-    let email = document.getElementById("email").value;
+   // let email = document.getElementById("email").value;
     let phoneNumber = document.getElementById("phone-number").value;
     let address = document.getElementById("address").value;
     let city = document.getElementById("city").value;
@@ -82,7 +85,7 @@ async function updateProfile(event) {
     formData.append('firstName', firstName);
     formData.append('middleName', middleName);
     formData.append('lastName', lastName);
-    formData.append('email', email);
+  //  formData.append('email', email);
     formData.append('phoneNumber', phoneNumber);
     formData.append('address', address);
     formData.append('city', city);
@@ -97,44 +100,39 @@ async function updateProfile(event) {
     })
         .then((response) => response.json())
         .then((result) => {
-         
+         console.log(result)
                 let message = null;
                 if (!result.firstName) {
                     message = result.firstName;
                     firstNameError.style.display = 'block';
                     firstNameError.innerHTML = message;
                     firstNameError.style.color = "#FF0000";
-                } else if (result.middleName) {
+                } else if (!result.middleName) {
                     message = result.middleName;
                     middleNameError.style.display = 'block';
                     middleNameError.innerHTML = message;
                     middleNameError.style.color = "#FF0000";
-                } else if (result.lastName) {
+                } else if (!result.lastName) {
                     message = result.lastName;
                     lastNameError.style.display = 'block';
                     lastNameError.innerHTML = message;
                     lastNameError.style.color = "#FF0000";
-                } else if (result.email) {
-                    message = result.email;
-                    emailError.style.display = 'block';
-                    emailError.innerHTML = message;
-                    emailError.style.color = "#FF0000";
-                } else if (result.phoneNumber) {
+                }else if (!result.phoneNumber) {
                     message = result.phoneNumber;
                     phoneNumberError.style.display = 'block';
                     phoneNumberError.innerHTML = message;
                     phoneNumberError.style.color = "#FF0000";
-                }  else if (result.address) {
+                }  else if (!result.address) {
                     message = result.address;
                     addressError.style.display = 'block';
                     addressError.innerHTML = message;
                     addressError.style.color = "#FF0000";
-                } else if (result.city) {
+                } else if (!result.city) {
                     message = result.city;
                     cityError.style.display = 'block';
                     cityError.innerHTML = message;
                     cityError.style.color = "#FF0000";
-                } else if (result.state) {
+                } else if (!result.state) {
                     message = result.state;
                     stateError.style.display = 'block';
                     stateError.innerHTML = message;
@@ -150,6 +148,7 @@ async function updateProfile(event) {
                     pictureError.innerHTML = message;
                     pictureError.style.color = "#FF0000";
                 } else if (result.message) {
+                    console.log("HI")
                     message = result.message;
                     error.style.display = 'block';
                     error.innerHTML = message;
@@ -157,11 +156,25 @@ async function updateProfile(event) {
 
                 }
                  else {
+                
+                window.location.assign('http://localhost:3000/users/userProfile');
+                
+                userDetails = JSON.parse(window.localStorage.getItem('userDetails'));
+                console.log(userDetails)    
+                userDetails.firstName = result.firstName
+                userDetails.middleName = result.middleName
+                userDetails.lastName = result.lastName
+                userDetails.phoneNumber = result.phoneNumber
+                userDetails.address = result.address
+                userDetails.city = result.city
+                userDetails.state = result.state
+                userDetails.zip = result.zip
+                userDetails.picture = result.picture
+                window.localStorage.setItem('userDetails', JSON.stringify(userDetails)); 
+
+                console.log(userDetails)
                 alert('Updated user details successfully.');
-                window.location('http://localhost:3000/users/userProfile');
             }
         })
-        .catch((error) => {
-            console.error('Error:', error);
-        });
+       
 }
