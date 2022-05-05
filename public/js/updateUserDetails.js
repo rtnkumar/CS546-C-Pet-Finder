@@ -10,8 +10,6 @@ let emailError = document.getElementsByClassName("email-error")[0];
 emailError.style.display = 'none';
 let phoneNumberError = document.getElementsByClassName("phone-number-error")[0];
 phoneNumberError.style.display = 'none';
-let passwordError = document.getElementsByClassName("password-error")[0];
-passwordError.style.display = 'none';
 let addressError = document.getElementsByClassName("address-error")[0];
 addressError.style.display = 'none';
 let cityError = document.getElementsByClassName("city-error")[0];
@@ -22,19 +20,46 @@ let zipError = document.getElementsByClassName("zip-error")[0];
 zipError.style.display = 'none';
 let pictureError = document.getElementsByClassName("picture-error")[0];
 pictureError.style.display = 'none';
+let imagePath = '/public/assets/www/media/'
 
 
 
+function init(){
+    let isLogin=window.localStorage.getItem('isLogin');
+    if(isLogin === null){
+        alert("You are not logged in")
+        window.location.assign('http://localhost:3000/users/sign-up')
+
+    }
+    else{
+        let userDetails = JSON.parse(window.localStorage.getItem('userDetails'));
+        
+         
+         $('#first-name').val(userDetails.firstName)
+         $('#middle-name').val(userDetails.middleName)
+         $('#last-name').val(userDetails.lastName)
+         $('#email').val(userDetails.email)
+         $('#phone-number').val(userDetails.phoneNumber)
+         $('#address').val(userDetails.address)
+         $('#city').val(userDetails.city)
+         $('#state').val(userDetails.state)
+         $('#zip').val(userDetails.zip)
+         $('.image').append('<img src='+ imagePath+userDetails.picture + ' width="50" height="60">')
+
+
+    }
+    
+}
+init()
 async function updateProfile(event) {
     event.preventDefault();
-
+    
     error.style.display = 'none';
     firstNameError.style.display = 'none';
     middleNameError.style.display = 'none';
     lastNameError.style.display = 'none';
     emailError.style.display = 'none';
     phoneNumberError.style.display = 'none';
-    passwordError.style.display = 'none';
     addressError.style.display = 'none';
     cityError.style.display = 'none';
     stateError.style.display = 'none';
@@ -46,7 +71,6 @@ async function updateProfile(event) {
     let lastName = document.getElementById("last-name").value;
     let email = document.getElementById("email").value;
     let phoneNumber = document.getElementById("phone-number").value;
-    let password = document.getElementById("password").value;
     let address = document.getElementById("address").value;
     let city = document.getElementById("city").value;
     let state = document.getElementById("state").value;
@@ -60,7 +84,6 @@ async function updateProfile(event) {
     formData.append('lastName', lastName);
     formData.append('email', email);
     formData.append('phoneNumber', phoneNumber);
-    formData.append('password', password);
     formData.append('address', address);
     formData.append('city', city);
     formData.append('state', state);
@@ -68,15 +91,15 @@ async function updateProfile(event) {
     formData.append('picture', picture);
 
 
-    await fetch('/users/userProfile', {
+    await fetch('/users/profile/update', {
         method: "POST",
         body: formData
     })
         .then((response) => response.json())
         .then((result) => {
-            if (!result.userInserted) {
+         
                 let message = null;
-                if (result.firstName) {
+                if (!result.firstName) {
                     message = result.firstName;
                     firstNameError.style.display = 'block';
                     firstNameError.innerHTML = message;
@@ -101,12 +124,7 @@ async function updateProfile(event) {
                     phoneNumberError.style.display = 'block';
                     phoneNumberError.innerHTML = message;
                     phoneNumberError.style.color = "#FF0000";
-                } else if (result.password) {
-                    message = result.password;
-                    passwordError.style.display = 'block';
-                    passwordError.innerHTML = message;
-                    passwordError.style.color = "#FF0000";
-                } else if (result.address) {
+                }  else if (result.address) {
                     message = result.address;
                     addressError.style.display = 'block';
                     addressError.innerHTML = message;
@@ -138,9 +156,9 @@ async function updateProfile(event) {
                     error.style.color = "#FF0000";
 
                 }
-            } else {
+                 else {
                 alert('Updated user details successfully.');
-                window.location.assign('http://localhost:3000/users/userProfile');
+                window.location('http://localhost:3000/users/userProfile');
             }
         })
         .catch((error) => {
