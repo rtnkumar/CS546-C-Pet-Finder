@@ -18,7 +18,7 @@ $('.sign-in__button').click(function(e) {
   $('.register__button').removeClass('active');
   $('.login__form').show();
   $('.register__form').hide();
-  $('#edit-email').focus(); //Should appear after $('.login__form').show(); because if it's before that, the register form doesn't exist in the DOM
+  $('#edit-email').focus(); 
 });
 
 $('.register__button').click(function(e) {
@@ -27,7 +27,7 @@ $('.register__button').click(function(e) {
   $('.sign-in__button').removeClass('active');
   $('.register__form').show();
   $('.login__form').hide();
-  $('#edit-firstname').focus(); //Should appear after $('.register__form').show(); because if it's before that, the register form doesn't exist in the DOM
+  $('#edit-firstname').focus(); 
 });
 
  $('.change_password').hide();
@@ -38,7 +38,7 @@ $('.register__button').click(function(e) {
    $('.change_password_button').removeClass('active');
    $('.change_email').show();
    $('.change_password').hide();
-   $('#edit-email').focus(); //Should appear after $('.change_email').show(); because if it's before that, the register form doesn't exist in the DOM
+   $('#edit-email').focus(); 
  });
 
  $('.change_password_button').click(function(e) {
@@ -47,7 +47,7 @@ $('.register__button').click(function(e) {
    $('.change_email_button').removeClass('active');
    $('.change_password').show();
    $('.change_email').hide();
-   $('#edit-firstname').focus(); //Should appear after $('.change_password').show(); because if it's before that, the register form doesn't exist in the DOM
+   $('#edit-firstname').focus();
  });
 
 
@@ -65,7 +65,6 @@ function init(){
      
          $('#edit-email').val(userDetails.email)
          $('#edit-email2').val(userDetails.email)
-        // $('#edit-password').val(userDetails.password)
         console.log(userDetails.email)
 
 
@@ -100,17 +99,21 @@ async function updateEmail(event){
 
         if (result.email) {
             message = result.email;
-            // email.style.display = 'block';
-            // email.innerHTML = message;
-            // email.style.color = "#FF0000";
+            oldEmailError.style.display = 'block'
+            oldEmailError.innerHTML = message
+            oldEmailError.style.color = "#FF0000"
         } else if (result.newEmail) {
-            message = result.middleName;
-            // newEmail.style.display = 'block';
-            // newEmail.innerHTML = message;
-            // newEmail.style.color = "#FF0000";
+            message = result.newEmail;
+            newEmailError.style.display = 'block'
+            newEmailError.innerHTML = message
+            newEmailError.style.color = "#FF0000"
         }
 
         else if(result.message){
+            message = result.message
+            error.style.display = 'block'
+            error.innerHTML = message
+            error.style.color = "#FF0000"
             
             
         }
@@ -121,7 +124,7 @@ async function updateEmail(event){
             userDetails.email = result.email
 
             window.localStorage.setItem('userDetails', JSON.stringify(userDetails)); 
-            alert("Success")
+            alert("Email changed successfully!")
 
         }
     })
@@ -156,18 +159,24 @@ async function updatePassword(event){
 
         if (result.email) {
             message = result.email;
-            // email.style.display = 'block';
-            // email.innerHTML = message;
-            // email.style.color = "#FF0000";
         } 
         else if(result.newPassword){
             message = result.newPassword
+            newPasswordError.style.display = 'block'
+            newPasswordError.innerHTML = message
+            newPasswordError.style.color = "#FF0000"
         }
         else if(result.confirmPassword){
             message = result.confirmPassword
+            confirmNewPasswordError.style.display = 'block'
+            confirmNewPasswordError.innerHTML = message
+            confirmNewPasswordError.style.color = "#FF0000"
         }
 
         else if(result.message){
+            message = result.message
+            error.style.display = 'block'
+            error.innerHTML = message
             
             
         }
@@ -179,7 +188,7 @@ async function updatePassword(event){
              
 
             window.localStorage.setItem('userDetails', JSON.stringify(userDetails)); 
-            alert("Success")
+            alert("Password updated successfully!")
 
         }
     })

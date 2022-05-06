@@ -4,7 +4,7 @@
   <nav class="navbar navbar-default" role="navigation">
     <!-- Brand and toggle get grouped for better mobile display -->
     
-      <p class=><span class="welcome">Welcome, username</span> <br><a href="#" class=>My Account</a> | <a href="#">Logout</a>
+      <p class=><span class="welcome">Welcome {{firstName}}</span> <br> | <a href="/users/logout">Logout</a>
       <ul>
             <li><a href="/users/userProfile">Update Profile</a></li>
             <li><a href="/users/favoriteList">Favorites</a></li>
@@ -16,22 +16,20 @@
   
   </nav>
     
-
-
 </div><div class="container">
 
   <div class="col-xs-12 col-sm-10 col-sm-offset-1 col-md-8 col-md-offset-2 col-lg-6 col-lg-offset-3">
     <div class="login-button-container clearfix">
 
       <div class="col-xs-6 sign-in">
-        <button class="btn sign-in__button active">
-          Sign in        
+        <button class="sign-in__button active">
+          Change email address        
         </button>
       </div>
 
       <div class="col-xs-6 register">
-        <button class="btn register__button">
-          Register        
+        <button class="register__button">
+          Change password        
         </button>
       </div>
 
@@ -92,7 +90,7 @@
                         </div>
               <div class="middle-bottom-inner-left">
                 <div class="form__field__wrapper form-item"> <label for="edit-password1" class="input__label"> Confirm password <span class="form-required" aria-hidden="true" title="This field is required."></span><span class="hidden_clip">.</span></label>
-                  <input placeholder="Enter your email address" class="form-control form-text required text-input__field" type="password" id="edit-password1" size="60" maxlength="128" aria-required="true" aria-describedby="edit-email--2-descriptor">
+                  <input class="form-control form-text required text-input__field" type="password" id="edit-password1" size="60" maxlength="128" aria-required="true" aria-describedby="edit-email--2-descriptor">
                 </div>
               </div>
               <div class="edit-password1-error">

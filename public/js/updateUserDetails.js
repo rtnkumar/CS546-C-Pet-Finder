@@ -1,5 +1,3 @@
-
-
 let error = document.getElementsByClassName("error")[0]
 error.getElementsByClassName.display = 'none'
 let firstNameError = document.getElementsByClassName("first-name-error")[0];
@@ -46,7 +44,7 @@ function init(){
          $('#city').val(userDetails.city)
          $('#state').val(userDetails.state)
          $('#zip').val(userDetails.zip)
-         $('.image').append('<img src='+ imagePath+userDetails.picture + ' width="50" height="60">')
+         $('#image').append('<img src='+ imagePath+userDetails.picture + ' width="50" height="60">')
 
 
     }
@@ -61,7 +59,6 @@ async function updateProfile(event) {
     firstNameError.style.display = 'none';
     middleNameError.style.display = 'none';
     lastNameError.style.display = 'none';
-    //emailError.style.display = 'none';
     phoneNumberError.style.display = 'none';
     addressError.style.display = 'none';
     cityError.style.display = 'none';
@@ -72,7 +69,6 @@ async function updateProfile(event) {
     let firstName = document.getElementById("first-name").value;
     let middleName = document.getElementById("middle-name").value;
     let lastName = document.getElementById("last-name").value;
-   // let email = document.getElementById("email").value;
     let phoneNumber = document.getElementById("phone-number").value;
     let address = document.getElementById("address").value;
     let city = document.getElementById("city").value;
@@ -85,7 +81,6 @@ async function updateProfile(event) {
     formData.append('firstName', firstName);
     formData.append('middleName', middleName);
     formData.append('lastName', lastName);
-  //  formData.append('email', email);
     formData.append('phoneNumber', phoneNumber);
     formData.append('address', address);
     formData.append('city', city);
@@ -102,37 +97,38 @@ async function updateProfile(event) {
         .then((result) => {
          console.log(result)
                 let message = null;
-                if (!result.firstName) {
+                if(error === null || error === false){
+                if (result.firstName) {
                     message = result.firstName;
                     firstNameError.style.display = 'block';
                     firstNameError.innerHTML = message;
                     firstNameError.style.color = "#FF0000";
-                } else if (!result.middleName) {
+                } else if (result.middleName) {
                     message = result.middleName;
                     middleNameError.style.display = 'block';
                     middleNameError.innerHTML = message;
                     middleNameError.style.color = "#FF0000";
-                } else if (!result.lastName) {
+                } else if (result.lastName) {
                     message = result.lastName;
                     lastNameError.style.display = 'block';
                     lastNameError.innerHTML = message;
                     lastNameError.style.color = "#FF0000";
-                }else if (!result.phoneNumber) {
+                }else if (result.phoneNumber) {
                     message = result.phoneNumber;
                     phoneNumberError.style.display = 'block';
                     phoneNumberError.innerHTML = message;
                     phoneNumberError.style.color = "#FF0000";
-                }  else if (!result.address) {
+                }  else if (result.address) {
                     message = result.address;
                     addressError.style.display = 'block';
                     addressError.innerHTML = message;
                     addressError.style.color = "#FF0000";
-                } else if (!result.city) {
+                } else if (result.city) {
                     message = result.city;
                     cityError.style.display = 'block';
                     cityError.innerHTML = message;
                     cityError.style.color = "#FF0000";
-                } else if (!result.state) {
+                } else if (result.state) {
                     message = result.state;
                     stateError.style.display = 'block';
                     stateError.innerHTML = message;
@@ -148,17 +144,18 @@ async function updateProfile(event) {
                     pictureError.innerHTML = message;
                     pictureError.style.color = "#FF0000";
                 } else if (result.message) {
-                    console.log("HI")
                     message = result.message;
                     error.style.display = 'block';
                     error.innerHTML = message;
                     error.style.color = "#FF0000";
 
                 }
+            }
                  else {
                 
                 window.location.assign('http://localhost:3000/users/userProfile');
                 
+                alert('Updated user details successfully.');
                 userDetails = JSON.parse(window.localStorage.getItem('userDetails'));
                 console.log(userDetails)    
                 userDetails.firstName = result.firstName
@@ -173,7 +170,6 @@ async function updateProfile(event) {
                 window.localStorage.setItem('userDetails', JSON.stringify(userDetails)); 
 
                 console.log(userDetails)
-                alert('Updated user details successfully.');
             }
         })
        

@@ -14,7 +14,6 @@ const trimRequest = require('trim-request');
 
 
 const data = require('../data');
-const { petsData } = require('../data');
 const usersData = data.usersData;
 
 
