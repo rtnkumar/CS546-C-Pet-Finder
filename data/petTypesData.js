@@ -46,14 +46,14 @@ async function populatePetTypeCollection() {
 
     // Horse
     let horse = makePet("Horse");
-    horse.breed.push("Arabian", "Mustang", "Greyhound");
+    horse.breed.push("Arabian", "Mustang", "Appaloosa");
     horse.age.push("Foal", "Young", "Adult", "Senior");
     horse.size.push("Small", "Medium", "Large", "Extra Large");
     horse.color.push("Black", "White", "Brown", "Grey", "Yellow");
 
     // Rabbit
     let rabbit = makePet("Rabbit");
-    rabbit.breed.push("Burmese", "Calico", "Domestic");
+    rabbit.breed.push("Cottontail", "Dutch", "Domestic");
     rabbit.age.push("Baby", "Young", "Adult", "Senior");
     rabbit.size.push("Small", "Medium", "Large", "Extra Large");
     rabbit.color.push("Black", "White", "Brown", "Grey", "Yellow");
