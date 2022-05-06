@@ -201,8 +201,8 @@ async function createPet(name, petType, breed, age, size, gender, color, address
         let isValidSize = commonValidators.isValidString(size, 'size');
         if (!isValidSize[0]) throw isValidSize[1];
 
-        // Valid Alphabet
-        isValidSize = commonValidators.isValidAlphabet(size, 'size');
+        // Valid Size
+        isValidSize = commonValidators.isValidSize(size, 'size');
         if (!isValidSize[0]) throw isValidSize[1];
 
         // Valid Existence in petTypes collection
@@ -317,7 +317,7 @@ async function createPet(name, petType, breed, age, size, gender, color, address
         city: city.trim(),
         state: state.trim(),
         description: description.trim(),
-        ownerId: ownerId,
+        ownerId: ObjectId(ownerId),
         picture: picture.trim(),
         createdAt: new Date(),
         updatedAt: new Date(),
@@ -326,7 +326,7 @@ async function createPet(name, petType, breed, age, size, gender, color, address
 
     // Check if pet already exists
     try {
-        await duplicatePetExists(name, petTypeDocument, breed, age, size, gender, color, address, zip, city, state, description, ownerId, picture);
+        await duplicatePetExists(name.trim(), petTypeDocument, breed.trim(), age.trim(), size.trim(), gender.trim(), color.trim(), address.trim(), zip.trim(), city.trim(), state.trim(), description.trim(), ObjectId(ownerId), picture.trim());
     } catch(e) {
         throw "Pet already exists";
     }
@@ -515,6 +515,7 @@ async function addQNA(question,petId,ownerId,askedBy){
 }
 
 function getPetTypeDocumentByPetType(petTypeCollection,petType){
+    console.log(petTypeCollection);
 
     for(let petDocument of petTypeCollection){
         if(petDocument.type===petType){
