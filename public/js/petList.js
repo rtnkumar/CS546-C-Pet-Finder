@@ -1,5 +1,6 @@
 (function ($) {
-
+    let searchedDataList = petsListData;
+    let count = 0;
     function hideBackButton() {
         $("#back").hide();
     }
@@ -12,7 +13,7 @@
     function showNextButton() {
         $("#next").show();
     }
-   
+
     let breedList = ["All"].concat(petTypeList.breed);
     for (let breed of breedList) {
         $('#breed').append('<option value=' + breed + '>' + breed + '</option>');
@@ -36,26 +37,57 @@
 
     $('#pet-list-container').on('click', 'button', function (e) {
         e.preventDefault();
+        let isLogin = window.localStorage.getItem('isLogin');
         let petId = $(this).val();
-        console.log(petId);
-
-        // If button name is "favorite", add to favorites
-        if ($(this).attr('name') === "favorite") {
+        if (petId.includes('#') && isLogin === null) {
+            window.location.assign('http://localhost:3000/users/sign-up');
+        } else if (petId.includes('#') && isLogin === "true") {
+            let id = petId.replace('#', '');
             $.ajax({
-                type: 'POST',
-                url: '/pets/favorites/pets/' + petId,
-            });
-        }
-        // If button name is "details", redirect to pet details page
-        else if ($(this).attr('name') === "details") {
-            $.ajax({
-                type: 'GET',
-                url: '/pets/' + petId,
-            });
-        }
+                type: "POST",
+                url: 'http://localhost:3000/pets/favorites/pets/' + id,
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                //if received a response from the server
+                success: function (response, textStatus, jqXHR) {
+                    if (response.favoritePetInserted && response.favoritePetInserted == true) {
+                        alert("Added successfully");
+                        searchedDataList = updatePetList(id);
+                        count = 0;
+                        $(".pet-list").remove();
+                        init();
+                    } else {
+                        alert("Try after sometime")
+                    }
+                },
 
-        // window.location.assign('http://localhost:3000/pets/' + $(this).attr("petid"));
+                //If there was no resonse from the server
+                error: function (jqXHR, textStatus, errorThrown) {
+                    let response = jqXHR.responseJSON;
+                    if(response.message==="login is required"){
+                        alert(response.message);
+                        window.location.assign('http://localhost:3000/users/login');
+                    }else if(`${id.trim()} is already in favorite list`==response.message){
+                        alert("This pet is already in favorite list")
+                    }else{
+                        console.log(response);
+                        alert(response);
+                    }
+                },
 
+                //capture the request before it was sent to server
+                beforeSend: function (jqXHR, settings) {
+                },
+
+                //this is called after the response or error functions are finished
+                //so that we can take some action
+                complete: function (jqXHR, textStatus) {
+                }
+            })
+
+        } else {
+            window.location.assign('http://localhost:3000/pets/' + petId);
+        }
     });
 
 
@@ -72,8 +104,6 @@
     });
 
     let imagePath = '/public/uploads/images/pets/'
-    let count = 0;
-    let searchedDataList = petsListData;
     let currentShownDataCount = 0;
     function init() {
         let totalCol = null;
@@ -93,7 +123,7 @@
                 currentShownDataCount++;
                 let selector = '#' + id;
                 $(selector).append('<div class="col-lg-3  text-black">' +
-                    '<div style="text-align:center;">  <button name="favorite" value="' + searchedDataList[count]._id + '" style="margin-top: -5px;">Add Favorite</button></div>' +
+                    '<div style="text-align:center;">  <button name="favorite" value="#' + searchedDataList[count]._id + '" style="margin-top: -5px;">Add Favorite</button></div>' +
 
                     '<div><img src=' + imagePath+searchedDataList[count].picture + ' alt=' + searchedDataList[count].name +' width="250" height="200"></div>' +
                     '<div style="text-align:center;">' + searchedDataList[count].name +
@@ -107,28 +137,48 @@
             hideNextButton();
 
         }
-        if(dataLength>16){
+        if (dataLength > 16) {
             showNextButton();
         }
 
         if (count - currentShownDataCount > 0) {
             showBackButton();
         }
-        if(count-currentShownDataCount<=0){
+        if (count - currentShownDataCount <= 0) {
             hideBackButton();
         }
     }
     init();
     hideBackButton();
-    let sizeFilterFlag = false;
-    let genderFilterFlag = false;
 
-    $("#age").change(function () {
-        var filterValue = $(this).val();
-        if (filterValue == "all") {
+    $("#breed").change(function () {
+        let breed = $('#breed').val();
+        let age = $('#age').val();
+        let size = $('#size').val();
+        let gender = $('#gender').val();
+        let color = $('#color').val();
+
+        if (breed.toLowerCase() == "all") {
             searchedDataList = petsListData;
         } else {
-            searchedDataList = getSizeFilteredData(petsListData, filterValue);
+            searchedDataList = getFilteredData(petsListData, breed, age, size, gender, color);
+        }
+        count = 0;
+        $(".pet-list").remove();
+        init();
+    });
+
+    $("#age").change(function () {
+        let breed = $('#breed').val();
+        let age = $('#age').val();
+        let size = $('#size').val();
+        let gender = $('#gender').val();
+        let color = $('#color').val();
+
+        if (age.toLowerCase() == "all") {
+            searchedDataList = petsListData;
+        } else {
+            searchedDataList = getFilteredData(petsListData, breed, age, size, gender, color);
         }
         count = 0;
         $(".pet-list").remove();
@@ -137,11 +187,16 @@
 
 
     $("#size").change(function () {
-        var filterValue = $(this).val();
-        if (filterValue == "all") {
+        let breed = $('#breed').val();
+        let age = $('#age').val();
+        let size = $('#size').val();
+        let gender = $('#gender').val();
+        let color = $('#color').val();
+
+        if (size.toLowerCase() == "all") {
             searchedDataList = petsListData;
         } else {
-            searchedDataList = getSizeFilteredData(petsListData, filterValue);
+            searchedDataList = getFilteredData(petsListData, breed, age, size, gender, color);
         }
         count = 0;
         $(".pet-list").remove();
@@ -149,11 +204,33 @@
     });
 
     $("#gender").change(function () {
-        var filterValue = $(this).val();
-        if (filterValue == "all") {
+        let breed = $('#breed').val();
+        let age = $('#age').val();
+        let size = $('#size').val();
+        let gender = $('#gender').val();
+        let color = $('#color').val();
+
+        if (gender.toLowerCase() == "all") {
             searchedDataList = petsListData;
         } else {
-            searchedDataList = getGenderFilteredData(petsListData, filterValue);
+            searchedDataList = getFilteredData(petsListData, breed, age, size, gender, color);
+        }
+        count = 0;
+        $(".pet-list").remove();
+        init();
+    });
+
+    $("#color").change(function () {
+        let breed = $('#breed').val();
+        let age = $('#age').val();
+        let size = $('#size').val();
+        let gender = $('#gender').val();
+        let color = $('#color').val();
+
+        if (color.toLowerCase() == "all") {
+            searchedDataList = petsListData;
+        } else {
+            searchedDataList = getFilteredData(petsListData, breed, age, size, gender, color);
         }
         count = 0;
         $(".pet-list").remove();
@@ -162,7 +239,7 @@
 
     $("#sort").change(function () {
         var filterValue = $(this).val();
-        if (filterValue == "all") {
+        if (filterValue.toLowerCase() == "all") {
             searchedDataList = petsListData;
         } else {
             searchedDataList = getSortedFilteredData(petsListData, filterValue);
@@ -172,26 +249,50 @@
         init();
     });
 
-
-    function getSizeFilteredData(dataList, value) {
+    function getFilteredData(petsListData, breed, age, size, gender, color) {
         let result = [];
-        for (let filterData of dataList) {
-            if (filterData.size.toLowerCase() === value) {
-                result.push(filterData);
+        let filter = {};
+        if (breed.toLowerCase() != 'all') {
+            filter.breed = breed.toLowerCase();
+        }
+        if (age.toLowerCase() != 'all') {
+            filter.age = age.toLowerCase();
+        }
+        if (size.toLowerCase() != 'all') {
+            filter.size = size.toLowerCase();
+        }
+        if (gender.toLowerCase() != 'all') {
+            filter.gender = gender.toLowerCase();
+        }
+        if (color.toLowerCase() != 'all') {
+            filter.color = color.toLowerCase();
+        }
+
+        for (let filterData of petsListData) {
+            if (filter.breed && filter.breed != filterData.breed.toLowerCase()) {
+                continue;
             }
+
+            if (filter.age && filter.age != filterData.age.toLowerCase()) {
+                continue;
+            }
+
+            if (filter.size && filter.size != filterData.size.toLowerCase()) {
+                continue;
+            }
+
+            if (filter.gender && filter.gender != filterData.gender.toLowerCase()) {
+                continue;
+            }
+            if (filter.color && filter.color != filterData.color.toLowerCase()) {
+                continue;
+            }
+
+            result.push(filterData);
         }
         return result;
     }
 
-    function getGenderFilteredData(dataList, value) {
-        let result = [];
-        for (let filterData of dataList) {
-            if (filterData.gender.toLowerCase() === value) {
-                result.push(filterData);
-            }
-        }
-        return result;
-    }
 
     function getSortedFilteredData(dataList, value) {
         let result = null;
@@ -203,6 +304,17 @@
         return result;
     }
 
+    function updatePetList(id) {
 
+        let petList = [];
+        for (pet of searchedDataList) {
+            if (pet._id === id) {
+                continue;
+            }
+            petList.push(pet);
+        }
+
+        return petList;
+    }
 
 })(window.jQuery);

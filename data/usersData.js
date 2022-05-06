@@ -391,29 +391,26 @@ async function getUserDetailsByEmail(emailId) {
 
     // favorite pet list
     let favoriteIdList = user.favoriteList;
-    let favoriteListObjectIdList = [];
-    for (id of favoriteIdList) {
-        favoriteListObjectIdList.push(ObjectId(id));
-    }
+
     const petCollection = await pets();
-    const favoritePetsList = await petCollection.find({ _id: { $in: favoriteListObjectIdList } }).toArray();
+    const favoritePetsList = await petCollection.find({ _id: { $in: favoriteIdList } }).toArray();
     for (let pet of favoritePetsList) {
         pet._id = pet._id.toString();
     }
 
     // adopted pet list
     let adoptedIdList = user.adoptedList;
-    let adoptedListObjectIdList = [];
-    for (id of adoptedIdList) {
-        adoptedListObjectIdList.push(ObjectId(id));
-    }
-    const adoptedPetsList = await petCollection.find({ _id: { $in: adoptedListObjectIdList } }).toArray();
+    const adoptedPetsList = await petCollection.find({ _id: { $in: adoptedIdList } }).toArray();
     for (let pet of adoptedPetsList) {
         pet._id = pet._id.toString();
     }
 
+    // pet list
+    const uploadedPetList = await petCollection.find({ _id: user._id}).toArray();
+
     user.favoriteList = favoritePetsList;
     user.adoptedList = adoptedPetsList;
+    user.uploadedPetList=uploadedPetList;
     delete user.password;
     return user;
 
