@@ -911,6 +911,81 @@ usersRouter.route("/delete").delete(async (req, res) => {
 
 
 /**
+ * Feneel Doshi
+ * Route to redirect to user profile page
+ */
+
+usersRouter.get("/userProfile", async(req, res)=>{
+  
+  return res.render("usersViews/userProfile")
+});
+
+
+/**
+ * Feneel Doshi
+ * Route to redirect to user's favorite pet list
+ */
+
+usersRouter.get("/favoriteList", async(req, res)=>{
+  return res.render("usersViews/favoriteList")
+})
+
+/**
+ * Feneel Doshi
+ * Route to redirect to user's account settings
+ */
+
+usersRouter.get("/accountSettings", async(req, res)=>{
+  return res.render("usersViews/accountSettings")
+})
+
+/**
+ * Feneel Doshi
+ * Route to redirect to user's adopted pet list
+ */
+
+usersRouter.get("/adoptedList", async(req, res)=>{
+  return res.render("usersViews/adoptedList")
+})
+
+
+
+
+
+/**
+ * Feneel Doshi
+ * Route for viewing owner's unanswered questions
+ */
+
+usersRouter.get("/unansweredQuestions", async(req, res)=>{
+  
+  const petId = xss(req.body.petId);
+  const ownerId = xss(req.body.ownerId);
+  if (!commonValidators.isValidId(petId)) {
+    return res.status(400).json({ error: true, message: "invalid parameter", petId: "Invalid petId" });
+}
+if (!commonValidators.isValidId(ownerId)) {
+    return res.status(400).json({ error: true, message: "invalid parameter", ownerId: "Invalid ownerId" });
+}
+
+  try{
+  
+    const getQuestions = await usersData.getUnansweredQuestions(ownerId, petId)
+
+    return res.json(getQuestions)
+
+  }
+
+  catch (e) {
+      return res.status(500).json({
+        error: true,
+        message: "Something went wrong, please try after sometime",
+      });
+  }
+})
+
+
+/**
  * Roushan Kumar
  * Check whether is login or not
 */
@@ -948,4 +1023,5 @@ usersRouter.
     }
     
   });
+
 module.exports = usersRouter;
