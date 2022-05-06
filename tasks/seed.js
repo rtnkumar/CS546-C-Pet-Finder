@@ -65,10 +65,10 @@ async function populateAdoptedByPets(db) {
   let pet5 = await db.collection('pets').findOne({name: "Luna"});
   let pet6 = await db.collection('pets').findOne({name: "Coco"});
 
-  let user1 = await db.collection('users').findOne({username: "John"});
-  let user2 = await db.collection('users').findOne({username: "Michael"});
-  let user3 = await db.collection('users').findOne({username: "Sydney"});
-  let user4 = await db.collection('users').findOne({username: "Dorothy"});
+  let user1 = await db.collection('users').findOne({firstName: "John"});
+  let user2 = await db.collection('users').findOne({firstName: "Michael"});
+  let user3 = await db.collection('users').findOne({firstName: "Sydney"});
+  let user4 = await db.collection('users').findOne({firstName: "Dorothy"});
 
   // Set pet1's and pet2's adoptedBy field to the user1's _id
   await db.collection('pets').updateOne({_id: pet1._id}, {$set: {adoptedBy: user1._id}});
