@@ -948,14 +948,7 @@ usersRouter.get("/adoptedList", async(req, res)=>{
   return res.render("usersViews/adoptedList")
 })
 
-/**
- * Feneel Doshi
- * Route to redirect to upload a pet
- */
 
-usersRouter.get("/uploadPet", async(req, res)=>{
-  res.render("usersViews/uploadPet")
-})
 
 
 
@@ -979,12 +972,10 @@ if (!commonValidators.isValidId(ownerId)) {
   
     const getQuestions = await usersData.getUnansweredQuestions(ownerId, petId)
 
-    if(getQuestions){
-      console.log(getQuestions)
     return res.json(getQuestions)
 
   }
-}
+
   catch (e) {
       return res.status(500).json({
         error: true,
@@ -992,7 +983,7 @@ if (!commonValidators.isValidId(ownerId)) {
       });
   }
 })
-=======
+
 
 /**
  * Roushan Kumar
