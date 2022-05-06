@@ -21,7 +21,10 @@ async function populateDummyUsers(db) {
       city: city,
       state: state,
       zip: zip,
-      picture: picture
+      picture: picture,
+      favoriteList: [],
+      createdAt: new Date(),
+      updatedAt: new Date()
     };
   };
 
@@ -50,6 +53,61 @@ async function populateDummyUsers(db) {
 
   await db.collection('users').insertMany([user1, user2, user3, user4, user5, user6, user7, user8, user9, user10, user11, user12, user13, user14, user15, user16, user17, user18, user19, user20]);
 } 
+
+async function populateUserFavoriteLists(db) {
+  await db.collection('pets');
+  await db.collection('users');
+
+  let pet1 = await db.collection('pets').findOne({name: "Bella"});
+  let pet2 = await db.collection('pets').findOne({name: "Max"});
+  let pet3 = await db.collection('pets').findOne({name: "Lady"});
+  let pet4 = await db.collection('pets').findOne({name: "Cash"});
+  let pet5 = await db.collection('pets').findOne({name: "Simba"});
+  let pet6 = await db.collection('pets').findOne({name: "Luna"});
+  let pet7 = await db.collection('pets').findOne({name: "Charlie"});
+  let pet8 = await db.collection('pets').findOne({name: "Buddy"});
+  let pet9 = await db.collection('pets').findOne({name: "Coco"});
+  let pet10 = await db.collection('pets').findOne({name: "Jack"});
+
+
+  let user1 = await db.collection('users').findOne({firstName: "Dana"});
+  let user2 = await db.collection('users').findOne({firstName: "Sydney"});
+  let user3 = await db.collection('users').findOne({firstName: "Sophia"});
+  let user4 = await db.collection('users').findOne({firstName: "Tim"});
+  let user5 = await db.collection('users').findOne({firstName: "Paul"});
+  let user6 = await db.collection('users').findOne({firstName: "Patrick"});
+
+  // Push pet1 and pet2 to user1's favorite list
+  await db.collection('users').updateOne({_id: user1._id}, {$push: {favoriteList: pet1._id}});
+  await db.collection('users').updateOne({_id: user1._id}, {$push: {favoriteList: pet2._id}});
+
+  // Push pet3 and pet4 to user2's favorite list
+  await db.collection('users').updateOne({_id: user2._id}, {$push: {favoriteList: pet3._id}});
+  await db.collection('users').updateOne({_id: user2._id}, {$push: {favoriteList: pet4._id}});
+
+  // Push pet5 and pet6 to user3's favorite list
+  await db.collection('users').updateOne({_id: user3._id}, {$push: {favoriteList: pet5._id}});
+  await db.collection('users').updateOne({_id: user3._id}, {$push: {favoriteList: pet6._id}});
+
+  // Push pet7 and pet8 to user4's favorite list
+  await db.collection('users').updateOne({_id: user4._id}, {$push: {favoriteList: pet7._id}});
+  await db.collection('users').updateOne({_id: user4._id}, {$push: {favoriteList: pet8._id}});
+
+  // Push pet9 to user5's favorite list
+  await db.collection('users').updateOne({_id: user5._id}, {$push: {favoriteList: pet9._id}});
+
+  // Push pet1 to user5's favorite list
+  await db.collection('users').updateOne({_id: user5._id}, {$push: {favoriteList: pet1._id}});
+
+  // Push pet2 to user5's favorite list
+  await db.collection('users').updateOne({_id: user5._id}, {$push: {favoriteList: pet2._id}});
+
+  // Push pet3 to user5's favorite list
+  await db.collection('users').updateOne({_id: user5._id}, {$push: {favoriteList: pet3._id}});
+
+  // Push pet10 to user6's favorite list
+  await db.collection('users').updateOne({_id: user6._id}, {$push: {favoriteList: pet10._id}});
+}
 
 async function populateDummyPets(db) {
   await db.collection('pets');
@@ -374,6 +432,9 @@ const main = async () => {
 
   // Populate dummy pets
   await populateDummyPets(db);
+
+  // Populate user favorite lists
+  await populateUserFavoriteLists(db);
 
   // Populate dummy questions and answers
   await populateDummyQuestionsAnswers(db);
