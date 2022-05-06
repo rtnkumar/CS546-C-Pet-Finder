@@ -361,7 +361,7 @@ async function getPetDetailsByPetId(id){
 
    let owner=await usersData.getUserById(petDetails.ownerId.toString());
    const petsQuestionsAnswersCollection= await petsQuestionsAnswers();
-   let petsQuestionsAnswerList=await petsQuestionsAnswersCollection.find({petId:id}).toArray();
+   let petsQuestionsAnswerList=await petsQuestionsAnswersCollection.find({petId:ObjectId(id)}).toArray();
    petDetails.owner={
        id:owner._id,
        firstName:owner.firstName,
@@ -424,15 +424,19 @@ async function addPetUserFavorite(id,email){
     if (petDetails === null) {
         throw `No pet with id=${id}`;
     }
-
+    
     const usersCollection= await users();
     const user=await usersCollection.findOne({email:email});
-    if(user.favoriteList.includes(id)){
-         throw `${id} is already in favorite list`;
+    // Loop through user favorite list and check if pet is already there
+    for(let pet of user.favoriteList){
+        if(pet.toString()==id){
+            throw `${id} is already in favorite list`;
+        }
     }
+    
     const updatedInfo = await usersCollection.updateOne(
         { email: email },
-        { $push: {favoriteList:id} }
+        { $push: {favoriteList: ObjectId(id)} }
     );
     if (updatedInfo.modifiedCount === 0) {
         throw 'could not update favorite list successfully';
