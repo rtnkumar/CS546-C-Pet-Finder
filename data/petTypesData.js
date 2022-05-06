@@ -34,28 +34,28 @@ async function populatePetTypeCollection() {
     let dog = makePet("Dog");
     dog.breed.push("Labrador", "Poodle", "Pug", "Retriever", "Shepherd");
     dog.age.push("Puppy", "Young", "Adult", "Senior");
-    dog.size.push("Small", "Medium", "Large", "Extra Large");
+    dog.size.push("Small", "Medium", "Large", "Extra-Large");
     dog.color.push("Black", "White", "Brown", "Grey", "Yellow");
 
     // Cat
     let cat = makePet("Cat");
     cat.breed.push("Persian", "Siamese", "Ragdoll", "Maine", "Bengal");
     cat.age.push("Kitten", "Young", "Adult", "Senior");
-    cat.size.push("Small", "Medium", "Large", "Extra Large");
+    cat.size.push("Small", "Medium", "Large", "Extra-Large");
     cat.color.push("Black", "White", "Brown", "Grey", "Yellow");
 
     // Horse
     let horse = makePet("Horse");
     horse.breed.push("Arabian", "Mustang", "Appaloosa");
     horse.age.push("Foal", "Young", "Adult", "Senior");
-    horse.size.push("Small", "Medium", "Large", "Extra Large");
+    horse.size.push("Small", "Medium", "Large", "Extra-Large");
     horse.color.push("Black", "White", "Brown", "Grey", "Yellow");
 
     // Rabbit
     let rabbit = makePet("Rabbit");
     rabbit.breed.push("Cottontail", "Dutch", "Domestic");
     rabbit.age.push("Baby", "Young", "Adult", "Senior");
-    rabbit.size.push("Small", "Medium", "Large", "Extra Large");
+    rabbit.size.push("Small", "Medium", "Large", "Extra-Large");
     rabbit.color.push("Black", "White", "Brown", "Grey", "Yellow");
 
     petList.push(dog, cat, horse, rabbit);

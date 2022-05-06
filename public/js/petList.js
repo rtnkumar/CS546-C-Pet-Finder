@@ -36,9 +36,29 @@
 
     $('#pet-list-container').on('click', 'button', function (e) {
         e.preventDefault();
-        window.location.assign('http://localhost:3000/pets/' + $(this).attr("pet-id"));
+        let petId = $(this).val();
+        console.log(petId);
+
+        // If button name is "favorite", add to favorites
+        if ($(this).attr('name') === "favorite") {
+            $.ajax({
+                type: 'POST',
+                url: '/pets/favorites/pets/' + petId,
+            });
+        }
+        // If button name is "details", redirect to pet details page
+        else if ($(this).attr('name') === "details") {
+            $.ajax({
+                type: 'GET',
+                url: '/pets/' + petId,
+            });
+        }
+
+        // window.location.assign('http://localhost:3000/pets/' + $(this).attr("petid"));
 
     });
+
+
 
     $('#next').click(function () {
         $(".pet-list").remove();
@@ -73,12 +93,12 @@
                 currentShownDataCount++;
                 let selector = '#' + id;
                 $(selector).append('<div class="col-lg-3  text-black">' +
-                    '<div style="text-align:center;">  <button pet-id=#' + searchedDataList[count]._id + ' style="margin-top: -5px;">Add Favorite</button></div>' +
+                    '<div style="text-align:center;">  <button name="favorite" value="' + searchedDataList[count]._id + '" style="margin-top: -5px;">Add Favorite</button></div>' +
 
-                    '<div><img src=' + imagePath+searchedDataList[count].picture + ' width="250" height="200"></div>' +
+                    '<div><img src=' + imagePath+searchedDataList[count].picture + ' alt=' + searchedDataList[count].name +' width="250" height="200"></div>' +
                     '<div style="text-align:center;">' + searchedDataList[count].name +
                     '</div>' +
-                    '<div style="text-align:center;">  <button pet-id=' + searchedDataList[count]._id + ' style="margin-bottom: 20px;">View Details</button></div>' +
+                    '<div style="text-align:center;">  <button name="details" value="' + searchedDataList[count]._id + '" style="margin-bottom: 20px;">View Details</button></div>' +
                     '</div>');
             }
         }
