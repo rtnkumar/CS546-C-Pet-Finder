@@ -359,7 +359,7 @@ async function getPetDetailsByPetId(id){
     }
     petDetails._id = petDetails._id.toString();
 
-   let owner=await usersData.getUserById(petDetails.ownerId);
+   let owner=await usersData.getUserById(petDetails.ownerId.toString());
    const petsQuestionsAnswersCollection= await petsQuestionsAnswers();
    let petsQuestionsAnswerList=await petsQuestionsAnswersCollection.find({petId:id}).toArray();
    petDetails.owner={
@@ -488,15 +488,17 @@ async function addQNA(question,petId,ownerId,askedBy){
         throw `No user with ownerId=${ownerId}`;
     }
 
+
     const askedByUser=await usersCollection.findOne({email:askedBy});
+    console.log(askedByUser);
     let newQuestion = {
         question:question,
         answer:'',
-        petId:petId,
-        askedBy:askedByUser._id.toString(),
-        ownerId:ownerId,
-        createdAt:Date(),
-        updatedAt:Date()
+        petId: ObjectId(petId),
+        askedBy: ObjectId(askedByUser._id),
+        ownerId: ObjectId(ownerId),
+        createdAt: new Date(),
+        updatedAt: new Date()
     };
 
     const petQuestionAnswersCollection = await petsQuestionsAnswers();

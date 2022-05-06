@@ -775,6 +775,7 @@ petsRouter.
         const question = xss(req.body.question);
         const petId = xss(req.params.id);
         const ownerId = xss(req.body.ownerId);
+        const askedBy = req.session.email;
 
         // Password validation
         let isValidPassword = commonValidators.isValidString(question, 'question');
@@ -794,7 +795,7 @@ petsRouter.
         }
 
         try {
-            let result = await petsData.addQNA(question,petId,ownerId,"r@gmail.com");
+            let result = await petsData.addQNA(question,petId,ownerId, askedBy);
             res.json(result);
         } catch (error) {
             if (`No pet with petId=${petId}` === error || `No user with ownerId=${ownerId}`) {
