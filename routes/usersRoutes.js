@@ -396,7 +396,7 @@ usersRouter.
     try {
       const userData = await usersData.checkUser(email, password);
       if (userData && userData.authenticated) {
-        email=email.trim().toLowerCase();
+        email = email.trim().toLowerCase();
         req.session.email = email;
         res.json(userData);
       } else {
@@ -568,30 +568,30 @@ usersRouter.
   });
 
 usersRouter
-    .route('/logout')
-    .get(async (request, res) => {
-        try {
-            request.session.destroy();
-            res.render('users/logout', {
-                error: false,
-                message: "Successfully logged out."
-            });
-        } catch (e) {
-            res.sendStatus(500).render('users/logout', {
-                error: true,
-                message: "Server error while logging out."
-            });
-        }
-    });
+  .route('/logout')
+  .get(async (request, res) => {
+    try {
+      request.session.destroy();
+      res.render('users/logout', {
+        error: false,
+        message: "Successfully logged out."
+      });
+    } catch (e) {
+      res.sendStatus(500).render('users/logout', {
+        error: true,
+        message: "Server error while logging out."
+      });
+    }
+  });
 
-        
-  
+
+
 /**
  * Route for getting user details
  * Feneel Doshi
 */
-usersRouter.get("/user-details",trimRequest.all,async (req, res) => {
-  
+usersRouter.get("/user-details", trimRequest.all, async (req, res) => {
+
   const email = xss(req.query.email);
   try {
     // Email validation
@@ -626,7 +626,7 @@ usersRouter.get("/user-details",trimRequest.all,async (req, res) => {
     }
   }
 });
-usersRouter.post("/profile/update",async (request, res) => {
+usersRouter.post("/profile/update", async (request, res) => {
 
   try {
     let form = new formidable.IncomingForm();
@@ -882,15 +882,15 @@ usersRouter.post("/profile/update",async (request, res) => {
  * Route for deleting a user
  * Feneel Doshi
  */
- usersRouter.route("/delete").delete(async (req, res) => {
+usersRouter.route("/delete").delete(async (req, res) => {
 
-  if(!req.session || !req.session.email){
+  if (!req.session || !req.session.email) {
     return res.status(401).json({
       error: true,
       message: "authentication is required",
     });
   }
-  const emailId=req.session.email;  
+  const emailId = req.session.email;
   try {
     const deleteUser = await usersData.remove(emailId);
     res.json(deleteUser);
@@ -909,4 +909,43 @@ usersRouter.post("/profile/update",async (request, res) => {
   }
 });
 
+
+/**
+ * Roushan Kumar
+ * Check whether is login or not
+*/
+usersRouter.
+  get('/auth/:email', trimRequest.all, async (req, res) => {
+    const email = xss(req.params.email);
+
+    // Email validation
+    if (!email || email.trim() == "") {
+      return res.status(400).json({
+        error: true,
+        message: "Invalid input",
+        email: `email is required`
+      })
+    }
+
+    if (!emailValidator.validate(email)) {
+      return res.status(400).json({
+        error: true,
+        message: "Invalid input",
+        email: `${email} is invalid email format`
+      })
+    }
+
+    if (!req.session || !req.session.email) {
+      return res.status(404).json({
+        isLogin:false 
+      });
+    }else if(req.session.email.toLowerCase()===email.toLowerCase()){
+      return res.status(200).json({
+        isLogin:true 
+      });
+    }else{
+      return res.status(404).json({isLogin:false});
+    }
+    
+  });
 module.exports = usersRouter;

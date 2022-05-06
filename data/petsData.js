@@ -491,7 +491,7 @@ async function addQNA(question,petId,ownerId,askedBy){
     const askedByUser=await usersCollection.findOne({email:askedBy});
     let newQuestion = {
         question:question,
-        answer:null,
+        answer:'',
         petId:petId,
         askedBy:askedByUser._id.toString(),
         ownerId:ownerId,
