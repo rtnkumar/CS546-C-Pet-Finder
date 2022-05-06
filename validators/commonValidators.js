@@ -161,12 +161,12 @@ function isValidName(string, key) {
  */
 function isValidAddress(string, key) {
     string = string.trim();
-    const regEx = /^[0-9a-zA-Z ,:-]+$/;
+    const regEx = /^[0-9a-zA-Z ,:-.]+$/;
     if (string.match(regEx)) {
         return [true];
     }
     else {
-        return [false, `Only digits, alphabet, space, comma, colon and hyphen are allowed in ${key}`];
+        return [false, `Only digits, alphabet, space, comma, colon, period and hyphen are allowed in ${key}`];
     }
 }
 
