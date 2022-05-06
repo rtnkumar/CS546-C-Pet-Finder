@@ -129,6 +129,42 @@
 
     $('#askQuesForm').submit(function (event) {
         event.preventDefault();
+        let userDetails = JSON.parse(window.localStorage.getItem('userDetails'));
+        if (userDetails == null || userDetails.email==null) {
+            alert("Login is required");
+            window.location.assign('http://localhost:3000/users/login');
+        }
+
+        $.ajax({
+            type: "GET",
+            url: 'http://localhost:3000/users/auth/' + userDetails.email,
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            //if received a response from the server
+            success: function (response, textStatus, jqXHR) {
+            },
+
+            //If there was no resonse from the server
+            error: function (jqXHR, textStatus, errorThrown) {
+                let response = jqXHR.responseJSON;
+                if (response.isLogin === false) {
+                    alert("Login is required");
+                    window.location.assign('http://localhost:3000/users/login');
+                } else {
+                    alert("Please try after sometime!");
+                }
+            },
+
+            //capture the request before it was sent to server
+            beforeSend: function (jqXHR, settings) {
+            },
+
+            //this is called after the response or error functions are finished
+            //so that we can take some action
+            complete: function (jqXHR, textStatus) {
+            }
+        })
+
 
         const question = $('#question').val();
         if (!question || question.trim() == '') {
@@ -139,9 +175,9 @@
             let requestConfig = {
                 method: 'POST',
                 url: 'http://localhost:3000/pets/qna/' + petDetails._id,
-                data:{
-                    question:question,
-                    ownerId:petDetails.owner.id
+                data: {
+                    question: question,
+                    ownerId: petDetails.owner.id
                 }
             };
 

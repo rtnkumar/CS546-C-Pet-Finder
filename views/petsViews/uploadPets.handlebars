@@ -1,89 +1,84 @@
-<form id="sign-up" method="post" action="users/sign-up" style="border:1px solid #ccc" onsubmit="signUp(event)">
+<form id="upload-new-pet" method="post" action="pets/upload" style="border:1px solid #ccc" onsubmit="uploadNewPet(event)">
     <div class="container">
         <table class="table">
             <thead>
                 <tr>
-                    <th class="text-center" colspan="4">Sign Up</th>
+                    <th class="text-center" colspan="4">Upload Pet</th>
                 </tr>
             </thead>
             <tbody>
                 <tr>
                     <td class="text-start">
-                        <label for="first-name"><b>First Name</b></label>
+                        <label for="pet-name"><b>Pet Name</b></label>
 
-                        <div><input type="text" placeholder="Enter First Name" name="firstName" id="first-name"
+                        <div><input type="text" placeholder="Enter Pet Name" name="petName" id="pet-name"
                                 pattern="[a-zA-Z ]+$" title="Only space and alphabet are allowed" required /></div>
                         <small>Format: Only space and alphabet are allowed.</small>
-                        <div class="first-name-error">
+                        <div class="pet-name-error">
                         </div>
                     </td>
                     <td class="text-start">
-                        <label for="middle-name"><b>Middle Name</b></label>
+                        <label for="pet-type"><b>Pet Type</b></label>
+                        <div>
+                            <select id="pet-type">
+                            </select>
+                        </div>
+                    </td>
+                    <td class="text-start">
+                        <label for="breed"><b>Breed</b></label>
 
                         <div>
-                            <input type="text" placeholder="Enter Middle Name" name="middleName" id="middle-name"
-                                pattern="[a-zA-Z ]+$" title="Only space and alphabet are allowed" required />
-                        </div>
-                        <small>Format: Only space and alphabet are allowed.</small>
-                        <div class="middle-name-error">
+                            <select id="breed">
+                            </select>
                         </div>
                     </td>
                     <td class="text-start">
-                        <label for="last-name"><b>Last Name</b></label>
-                    
+                        <label for="age"><b>Age</b></label>
                         <div>
-                            <input type="text" placeholder="Enter Last Name" name="lastName" id="last-name"
-                                pattern="[a-zA-Z ]+$" title="Only space and alphabet are allowed" required />
-                        </div>
-                        <div><small>Format: Only space and alphabet are allowed.</small></div>
-                        <div class="last-name-error">
-                        </div>
-                    </td>
-                    <td class="text-start">
-                        <label for="email"><b>Email</b></label>
-                        <div>
-                            <input type="email" placeholder="Enter Email" name="email" id="email"
-                                pattern="^[-!#$%&'*+\/0-9=?A-Z^_a-z`{|}~](\.?[-!#$%&'*+\/0-9=?A-Z^_a-z`{|}~])*@[a-zA-Z0-9](-*\.?[a-zA-Z0-9])*\.[a-zA-Z](-?[a-zA-Z0-9])+$"
-                                title="Invalid email format" required />
-                        </div>
-                        <small>Format: local-part@domain.</small>
-                        <div class="email-error">
+                            <select id="age">
+                            </select>
                         </div>
                     </td>
 
                 </tr>
                 <tr>
                     <td class="text-start">
-                        <label for="phone-number"><b>Phone Number</b></label>
+                        <label for="size"><b>Size</b></label>
                         <div>
-                            <input type="text" placeholder="Enter Phone Number" name="phoneNumber" id="phone-number"
-                                pattern="^\d{3}[-]\d{3}[-]\d{4}$" title="Invalid phone number format" required />
-                        </div>
-                        <small>Format: xxx-xxx-xxxx</small>
-                        <div class="phone-number-error">
+                            <select id="size">
+                            </select>
                         </div>
                     </td>
                     <td class="text-start">
-                        <label for="password"><b>Password</b></label>
+                        <label for="color"><b>Color</b></label>
                         <div>
-                            <input type="password" placeholder="Enter Password" name="password" id="password"
-                                minlength="6" title="At least 6 characters are required" required />
+                            <select id="color">
+                            </select>
                         </div>
-                        <small>Format: At least 6 characters is required</small>
-                        <div class="password-error">
+                    </td>
+                    <td class="text-start">
+                        <label for="gender"><b>Gender</b></label>
+                        <div>
+                            <select id="gender">
+                                <option value="M">Male</option>
+                                <option value="F">Female</option>
+                            </select>
                         </div>
                     </td>
                     <td class="text-start">
                         <label for="address"><b>Address</b></label>
                         <div>
                             <input type="text" placeholder="Enter Address" name="address" id="address"
-                                pattern="^[0-9a-zA-Z ,:-.]+$"
-                                title="Only digits, alphabet, space, comma, colon, period and hyphen are allowed" required />
+                                pattern="^[0-9a-zA-Z ,:-]+$"
+                                title="Only digits, alphabet, space, comma, colon and hyphen are allowed" required />
                         </div>
                         <small>Format: Only digits, alphabet, space, comma, colon and hyphen are allowed</small>
                         <div class="address-error">
                         </div>
                     </td>
+                    
+                </tr>
+                <tr>
                     <td class="text-start">
                         <label for="city"><b>City</b></label>
                         <div>
@@ -94,8 +89,6 @@
                         <div class="city-error">
                         </div>
                     </td>
-                </tr>
-                <tr>
                     <td class="text-start">
                         <label for="state"><b>State</b></label>
                         <div> <input type="text" placeholder="Enter State" name="state" id="state"
@@ -119,8 +112,8 @@
                     <td class="text-start">
                         <label for="picture"><b>Picture</b></label>
                         <div>
-                            <input type="file" name="picture" id="picture"
-                                accept="image/jpg, image/jpeg, image/png" required />
+                            <input type="file" name="picture" id="picture" accept="image/jpg, image/jpeg, image/png"
+                                required />
                         </div>
                         <small>Format: jpg, jpeg and png are allowed.</small>
                         <div class="picture-error">
@@ -128,10 +121,16 @@
                     </td>
                     <td></td>
                 </tr>
+                 <tr>
+                    <td class="text-start">
+                        <label for="description"><b>Description</b></label>
+                        <div>
+                            <textarea id="description" name="description" rows="2" cols="25"></textarea>
+                        </div>
+                    </td>
+                </tr>
                 <tr>
                     <td colspan="4" class="text-center"> <button type="submit">Submit</button>
-                            <a href="/users/login">Already have an account? Click here to log-in</a>
-
                     </td>
                 </tr>
             </tbody>
@@ -140,4 +139,11 @@
 </form>
 <div class="error">
 </div>
-<script src="/public/js/signUp.js"></script>
+
+<script>
+    let petTypesListData = {{{ data }}}
+</script>
+
+<script src="https://code.jquery.com/jquery-2.2.4.min.js"
+    integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44=" crossorigin="anonymous"></script>
+<script src="/public/js/uploadPets.js"></script>
