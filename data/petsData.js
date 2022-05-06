@@ -95,6 +95,8 @@ async function homePageSearch(city, state, zip, petType) {
             _id: petTypeObject._id,
             type: petTypeObject.type
         };
+        // Pet must not be adopted already
+        query.adoptedBy = null;
 
      // Retrieve all pets that match criteria
         petsToReturn = await petCollection.find(query).toArray();
