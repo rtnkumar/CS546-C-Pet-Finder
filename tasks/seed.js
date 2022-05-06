@@ -23,6 +23,7 @@ async function populateDummyUsers(db) {
       zip: zip,
       picture: picture,
       favoriteList: [],
+      adoptedList: [],
       createdAt: new Date(),
       updatedAt: new Date()
     };
@@ -72,17 +73,23 @@ async function populateAdoptedByPets(db) {
 
   // Set pet1's and pet2's adoptedBy field to the user1's _id
   await db.collection('pets').updateOne({_id: pet1._id}, {$set: {adoptedBy: user1._id}});
+  await db.collection('users').updateOne({_id: user1._id}, {$push: {adoptedList: pet1._id}});
   await db.collection('pets').updateOne({_id: pet2._id}, {$set: {adoptedBy: user1._id}});
+  await db.collection('users').updateOne({_id: user1._id}, {$push: {adoptedList: pet2._id}});
 
   // Set pet3's and pet4's adoptedBy field to the user2's _id
   await db.collection('pets').updateOne({_id: pet3._id}, {$set: {adoptedBy: user2._id}});
+  await db.collection('users').updateOne({_id: user2._id}, {$push: {adoptedList: pet3._id}});
   await db.collection('pets').updateOne({_id: pet4._id}, {$set: {adoptedBy: user2._id}});
+  await db.collection('users').updateOne({_id: user2._id}, {$push: {adoptedList: pet4._id}});
 
   // Set pet5's adoptedBy field to the user3's _id
   await db.collection('pets').updateOne({_id: pet5._id}, {$set: {adoptedBy: user3._id}});
+  await db.collection('users').updateOne({_id: user3._id}, {$push: {adoptedList: pet5._id}});
 
   // Set pet6's adoptedBy field to the user4's _id
   await db.collection('pets').updateOne({_id: pet6._id}, {$set: {adoptedBy: user4._id}});
+  await db.collection('users').updateOne({_id: user4._id}, {$push: {adoptedList: pet6._id}});
 }
 
 async function populateUserFavoriteLists(db) {
