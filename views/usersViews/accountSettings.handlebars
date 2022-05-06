@@ -1,0 +1,114 @@
+    <header>
+        <h1>PetFinder</h1>
+    </header>
+  <nav class="navbar navbar-default" role="navigation">
+    <!-- Brand and toggle get grouped for better mobile display -->
+    
+      <p class=><span class="welcome">Welcome {{firstName}}</span> <br> | <a href="/users/logout">Logout</a>
+      <ul>
+            <li><a href="/users/userProfile">Update Profile</a></li>
+            <li><a href="/users/favoriteList">Favorites</a></li>
+            <li><a href="#">Account Settings</a></li>
+            <li><a href="/users/adoptedList">Adopted List</a></li>
+            <li><a href="/users/uploadPet">Upload Pet</a></li>
+      </ul>
+    
+  
+  </nav>
+    
+</div><div class="container">
+
+  <div class="col-xs-12 col-sm-10 col-sm-offset-1 col-md-8 col-md-offset-2 col-lg-6 col-lg-offset-3">
+    <div class="login-button-container clearfix">
+
+      <div class="col-xs-6 sign-in">
+        <button class="sign-in__button active">
+          Change email address        
+        </button>
+      </div>
+
+      <div class="col-xs-6 register">
+        <button class="register__button">
+          Change password        
+        </button>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="col-xs-12 col-sm-10 col-sm-offset-1 col-md-8 col-md-offset-2 col-lg-6 col-lg-offset-3">
+
+    <div class="row login__form" style="display: block;">
+      <form action="" method="post" accept-charset="UTF-8">
+        <div>
+          <fieldset class="form__fieldset required form__login">
+            <legend class="form__legend--subtitle">
+              Sign in using email </legend>
+
+            <div class="form__field__wrapper form-item"> <label for="edit-email" class="text-input__label">Current Email address <span class="form-required" aria-hidden="true" title="This field is required."></span><span class="hidden_clip">.</span></label>
+              <input class="edit-email" type="text" id="edit-email" name="email" value="" size="60" maxlength="128" aria-required="true" aria-describedby="edit-email-descriptor" disabled>
+            </div>
+            <div class="edit-email-error">
+                        </div>
+            <div class="edit-email1"> <label for="edit-email1" class="text-input__label">New Email Address <span class="form-required" aria-hidden="true" title="This field is required."></span><span class="hidden_clip">.</span></label>
+              <input class="form-control form-text password__field text-input__field required" type="text" id="edit-email1" name="password" size="60" maxlength="128" aria-required="true">
+            </div>
+          </fieldset>
+          <button class="inpt-btn btn btn-primary form-submit js-registerSubmit" type="submit" id="edit-submit" value="Register" onclick="updateEmail(event)">Change Email</button>
+        </div>
+        <div class="edit-email1-error">
+                        </div>
+      </form>
+    </div>
+
+    <div class="row register__form" style="display: none;">
+      <div id="registration-form-wrapper">
+        <form action="" method="post" accept-charset="UTF-8">
+          <div>
+            <div class="form__register">
+
+
+              <div class="clearfix"></div>
+
+              <div class="divide-width">
+                <div class="middle-bottom-inner-left">
+                  <div class="form__field__wrapper form-item"> <label for="edit-email2" class="text-input__label">Email Address <span class="form-required" aria-hidden="true" title="This field is required."></span><span class="hidden_clip">.</span></label>
+                    <input class="form-control form-text required text-input__field" type="text" id="edit-email2" size="60" maxlength="128" aria-required="true" aria-describedby="edit-firstname-descriptor" disabled>
+                  </div>
+                </div>
+              </div>
+              <div class="edit-email-error">
+                        </div>
+              <div class="divide-width divide-mrgn">
+                <div class="middle-bottom-inner-left">
+                  <div class="form__field__wrapper form-item"> <label for="edit-password" class="input__label">New password <span class="form-required" aria-hidden="true" title="This field is required."></span><span class="hidden_clip">.</span></label>
+                    <input class="form-control form-text required text-input__field" type="password" id="edit-password"  size="60" maxlength="128" aria-required="true" aria-describedby="edit-lastname-descriptor">
+                  </div>
+                </div>
+              </div>
+              <div class="edit-password-error">
+                        </div>
+              <div class="middle-bottom-inner-left">
+                <div class="form__field__wrapper form-item"> <label for="edit-password1" class="input__label"> Confirm password <span class="form-required" aria-hidden="true" title="This field is required."></span><span class="hidden_clip">.</span></label>
+                  <input class="form-control form-text required text-input__field" type="password" id="edit-password1" size="60" maxlength="128" aria-required="true" aria-describedby="edit-email--2-descriptor">
+                </div>
+              </div>
+              <div class="edit-password1-error">
+                        </div>
+
+            </div>
+
+            <button class="inpt-btn btn btn-primary form-submit js-registerSubmit" type="submit" id="edit-submit--2" name="op" value="Register" onclick="updatePassword(event)">Change Password</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+  </div>
+
+</div>
+<div class="error"></div>
+
+<script src="https://code.jquery.com/jquery-2.2.4.min.js"
+    integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44=" crossorigin="anonymous"></script>
+<script src="/public/js/accountSettings.js"></script>
