@@ -1,0 +1,149 @@
+<form id="upload-new-pet" method="post" action="pets/upload" style="border:1px solid #ccc" onsubmit="uploadNewPet(event)">
+    <div class="container">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th class="text-center" colspan="4">Upload Pet</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="text-start">
+                        <label for="pet-name"><b>Pet Name</b></label>
+
+                        <div><input type="text" placeholder="Enter Pet Name" name="petName" id="pet-name"
+                                pattern="[a-zA-Z ]+$" title="Only space and alphabet are allowed" required /></div>
+                        <small>Format: Only space and alphabet are allowed.</small>
+                        <div class="pet-name-error">
+                        </div>
+                    </td>
+                    <td class="text-start">
+                        <label for="pet-type"><b>Pet Type</b></label>
+                        <div>
+                            <select id="pet-type">
+                            </select>
+                        </div>
+                    </td>
+                    <td class="text-start">
+                        <label for="breed"><b>Breed</b></label>
+
+                        <div>
+                            <select id="breed">
+                            </select>
+                        </div>
+                    </td>
+                    <td class="text-start">
+                        <label for="age"><b>Age</b></label>
+                        <div>
+                            <select id="age">
+                            </select>
+                        </div>
+                    </td>
+
+                </tr>
+                <tr>
+                    <td class="text-start">
+                        <label for="size"><b>Size</b></label>
+                        <div>
+                            <select id="size">
+                            </select>
+                        </div>
+                    </td>
+                    <td class="text-start">
+                        <label for="color"><b>Color</b></label>
+                        <div>
+                            <select id="color">
+                            </select>
+                        </div>
+                    </td>
+                    <td class="text-start">
+                        <label for="gender"><b>Gender</b></label>
+                        <div>
+                            <select id="gender">
+                                <option value="M">Male</option>
+                                <option value="F">Female</option>
+                            </select>
+                        </div>
+                    </td>
+                    <td class="text-start">
+                        <label for="address"><b>Address</b></label>
+                        <div>
+                            <input type="text" placeholder="Enter Address" name="address" id="address"
+                                pattern="^[0-9a-zA-Z ,:-]+$"
+                                title="Only digits, alphabet, space, comma, colon and hyphen are allowed" required />
+                        </div>
+                        <small>Format: Only digits, alphabet, space, comma, colon and hyphen are allowed</small>
+                        <div class="address-error">
+                        </div>
+                    </td>
+                    
+                </tr>
+                <tr>
+                    <td class="text-start">
+                        <label for="city"><b>City</b></label>
+                        <div>
+                            <input type="text" placeholder="Enter City" name="city" id="city"
+                                title="Only space and alphabet are allowed" pattern="[a-zA-Z ]+$" required />
+                        </div>
+                        <small>Format: Only space and alphabet are allowed.</small>
+                        <div class="city-error">
+                        </div>
+                    </td>
+                    <td class="text-start">
+                        <label for="state"><b>State</b></label>
+                        <div> <input type="text" placeholder="Enter State" name="state" id="state"
+                                title="Only space and alphabet are allowed" pattern="[a-zA-Z ]+$" required />
+                        </div>
+                        <small>Format: Only space and alphabet are allowed.</small>
+                        <div class="state-error">
+                        </div>
+
+                    </td>
+                    <td class="text-start">
+                        <label for="zip"><b>Zip</b></label>
+                        <div>
+                            <input type="text" placeholder="Enter Zip" name="zip" id="zip"
+                                title="Only integer is allowed" pattern="^[0-9]+$" required />
+                        </div>
+                        <small>Format: Only integer is allowed.</small>
+                        <div class="zip-error">
+                        </div>
+                    </td>
+                    <td class="text-start">
+                        <label for="picture"><b>Picture</b></label>
+                        <div>
+                            <input type="file" name="picture" id="picture" accept="image/jpg, image/jpeg, image/png"
+                                required />
+                        </div>
+                        <small>Format: jpg, jpeg and png are allowed.</small>
+                        <div class="picture-error">
+                        </div>
+                    </td>
+                    <td></td>
+                </tr>
+                 <tr>
+                    <td class="text-start">
+                        <label for="description"><b>Description</b></label>
+                        <div>
+                            <textarea id="description" name="description" rows="2" cols="25"></textarea>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="4" class="text-center"> <button type="submit">Submit</button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</form>
+<div class="error">
+</div>
+
+<script>
+    let petTypesListData = {{{ data }}}
+</script>
+
+<script src="https://code.jquery.com/jquery-2.2.4.min.js"
+    integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44=" crossorigin="anonymous"></script>
+<script src="/public/js/uploadPets.js"></script>

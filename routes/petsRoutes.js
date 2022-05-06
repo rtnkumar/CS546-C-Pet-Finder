@@ -710,6 +710,12 @@ petsRouter.
 petsRouter.
     post('/favorites/pets/:id', trimRequest.all, async (req, res) => {
         let id = xss(req.params.id);
+        if(!req.session || !req.session.email){
+            return res.status(401).json({
+              error: true,
+              message: "login is required",
+            });
+          }
         try {
             if (!commonValidators.isValidId(id)) {
                 return res.status(400).json({ error: true, message: "invalid parameter", id: "Invalid id" });
@@ -858,7 +864,28 @@ petsRouter.
      }
  })
 
+/**
+ * Roushan Kumar
+ * Render the upload pet page 
+*/
+petsRouter
+.get('/new/upload', async(req, res) => {
+    let allPetTypes=await petTypesData.getAllPetTypes();
+    let data={};
+    for(let petType of allPetTypes){
+        data[petType.type]=petType;
+    }
+  res.render('petsViews/uploadPets', { title: "Pets Finder",data:JSON.stringify(data)});
+});
 
+/**
+ * Roushan Kumar
+ * Render the upload pet list page 
+*/
+petsRouter
+.get('/upload/list', async(req, res) => {
+      res.render('petsViews/uploadPetList');
+});
 
 
 module.exports = petsRouter;
