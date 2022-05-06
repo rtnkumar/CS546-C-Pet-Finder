@@ -54,6 +54,37 @@ async function populateDummyUsers(db) {
   await db.collection('users').insertMany([user1, user2, user3, user4, user5, user6, user7, user8, user9, user10, user11, user12, user13, user14, user15, user16, user17, user18, user19, user20]);
 } 
 
+async function populateAdoptedByPets(db) {
+  await db.collection('pets');
+  await db.collection('users');
+
+  let pet1 = await db.collection('pets').findOne({name: "Cinnabun"});
+  let pet2 = await db.collection('pets').findOne({name: "Lilly"});
+  let pet3 = await db.collection('pets').findOne({name: "BooBear"});
+  let pet4 = await db.collection('pets').findOne({name: "Oliver"});
+  let pet5 = await db.collection('pets').findOne({name: "Luna"});
+  let pet6 = await db.collection('pets').findOne({name: "Coco"});
+
+  let user1 = await db.collection('users').findOne({username: "John"});
+  let user2 = await db.collection('users').findOne({username: "Michael"});
+  let user3 = await db.collection('users').findOne({username: "Sydney"});
+  let user4 = await db.collection('users').findOne({username: "Dorothy"});
+
+  // Set pet1's and pet2's adoptedBy field to the user1's _id
+  await db.collection('pets').updateOne({_id: pet1._id}, {$set: {adoptedBy: user1._id}});
+  await db.collection('pets').updateOne({_id: pet2._id}, {$set: {adoptedBy: user1._id}});
+
+  // Set pet3's and pet4's adoptedBy field to the user2's _id
+  await db.collection('pets').updateOne({_id: pet3._id}, {$set: {adoptedBy: user2._id}});
+  await db.collection('pets').updateOne({_id: pet4._id}, {$set: {adoptedBy: user2._id}});
+
+  // Set pet5's adoptedBy field to the user3's _id
+  await db.collection('pets').updateOne({_id: pet5._id}, {$set: {adoptedBy: user3._id}});
+
+  // Set pet6's adoptedBy field to the user4's _id
+  await db.collection('pets').updateOne({_id: pet6._id}, {$set: {adoptedBy: user4._id}});
+}
+
 async function populateUserFavoriteLists(db) {
   await db.collection('pets');
   await db.collection('users');
@@ -435,6 +466,9 @@ const main = async () => {
 
   // Populate user favorite lists
   await populateUserFavoriteLists(db);
+
+  // Have several users adopts pets
+  await populateAdoptedByPets(db);
 
   // Populate dummy questions and answers
   await populateDummyQuestionsAnswers(db);
