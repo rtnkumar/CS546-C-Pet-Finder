@@ -333,7 +333,7 @@ async function createPet(name, petType, breed, age, size, gender, color, address
 
 
     const insertInfo = await petsCollection.insertOne(newPet);
-    if (insertInfo.insertedCount === 0) throw "Could not add pet";console.log()
+    if (insertInfo.insertedCount === 0) throw "Could not add pet";
     const pet = await petsCollection.findOne({ _id: ObjectId(insertInfo.insertedId.toString()) });
     pet._id = pet._id.toString();
     return pet;
