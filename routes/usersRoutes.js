@@ -14,6 +14,7 @@ const trimRequest = require('trim-request');
 
 
 const data = require('../data');
+const { petsData } = require('../data');
 const usersData = data.usersData;
 
 
@@ -915,7 +916,7 @@ usersRouter.post("/profile/update",async (request, res) => {
  */
 
 usersRouter.get("/userProfile", async(req, res)=>{
-  let firstName = "<h1>Feneewe3l</h1>"
+  
   return res.render("usersViews/userProfile")
 });
 
@@ -956,4 +957,39 @@ usersRouter.get("/uploadPet", async(req, res)=>{
   res.render("usersViews/uploadPet")
 })
 
+
+
+/**
+ * Feneel Doshi
+ * Route for viewing owner's unanswered questions
+ */
+
+usersRouter.get("/unansweredQuestions", async(req, res)=>{
+  
+  const petId = xss(req.body.petId);
+  const ownerId = xss(req.body.ownerId);
+  if (!commonValidators.isValidId(petId)) {
+    return res.status(400).json({ error: true, message: "invalid parameter", petId: "Invalid petId" });
+}
+if (!commonValidators.isValidId(ownerId)) {
+    return res.status(400).json({ error: true, message: "invalid parameter", ownerId: "Invalid ownerId" });
+}
+
+  try{
+  
+    const getQuestions = await usersData.getUnansweredQuestions(ownerId, petId)
+
+    if(getQuestions){
+      console.log(getQuestions)
+    return res.json(getQuestions)
+
+  }
+}
+  catch (e) {
+      return res.status(500).json({
+        error: true,
+        message: "Something went wrong, please try after sometime",
+      });
+  }
+})
 module.exports = usersRouter;

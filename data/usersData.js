@@ -615,6 +615,40 @@ async function remove(emailId) {
     return { deleted: true }
 }
 
+/**
+ * 
+ * Feneel Doshi
+ * get unanswered questions
+ * @param {Email of user} emailId
+ * @returns 
+ */
+async function getUnansweredQuestions(ownerId, petId){
+    
+    if (arguments.length != 2) {
+        throw 'Only 2 argument are required';
+    }
+
+    if (!commonValidators.isValidId(ownerId)) {
+        throw 'Invalid owner ID'
+    }
+    if (!commonValidators.isValidId(petId)) {
+        throw 'Invalid petId'
+    }
+
+  
+
+    const petQnACollections = await petsQuestionsAnswers()
+
+   
+    const petQnAList = await petQnACollections.find({ ownerId: ObjectId(ownerId), petId: ObjectId(petId), answer: ""}).toArray()
+    
+    for(let qna of petQnAList){
+        qna._id = qna._id.toString()
+    }
+    return petQnAList    
+
+}
+
 module.exports = {
     createUser,
     checkUser,
@@ -622,5 +656,6 @@ module.exports = {
     getUserById,
     getUserDetailsByEmail,
     updateUserProfile,
-    remove
+    remove,
+    getUnansweredQuestions
 }
