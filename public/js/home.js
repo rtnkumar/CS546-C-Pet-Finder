@@ -3,8 +3,18 @@ window.addEventListener('load', () => {
     document.getElementById('homeButton').remove()
 }, false);
 
-let error = document.getElementsByClassName("error")[0];
-error.style.display = 'none';
+/* If the page loads with a message of 'No pets found', display it in the error div */
+window.addEventListener('load', () => {
+    if (document.getElementById('error').innerHTML === 'No pets found') {
+        document.getElementById('error').style.display = 'block'
+    } else {
+        document.getElementById('error').style.display = 'none'
+    }
+}, false);
+
+
+// let error = document.getElementsByClassName("error")[0];
+// error.style.display = 'none';
 let cityError = document.getElementsByClassName("city-error")[0];
 cityError.style.display = 'none';
 let stateError = document.getElementsByClassName("state-error")[0];

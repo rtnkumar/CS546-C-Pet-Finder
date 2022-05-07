@@ -116,6 +116,9 @@
                 <button type="submit" class="btn btn-primary">Search</button>
             </form>
             <div class="error">
+                {{#if error}}
+                    <p class="text-center">{{message}}</p>
+                {{/if}}
             </div>
         </div>
     </div>
