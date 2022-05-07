@@ -20,7 +20,7 @@ let zipError = document.getElementsByClassName("zip-error")[0];
 zipError.style.display = 'none';
 let pictureError = document.getElementsByClassName("picture-error")[0];
 pictureError.style.display = 'none';
-let imagePath = '/public/assets/www/media/'
+let imagePath = '/public/uploads/images/users/'
 
 
 
@@ -44,7 +44,7 @@ function init(){
          $('#city').val(userDetails.city)
          $('#state').val(userDetails.state)
          $('#zip').val(userDetails.zip)
-         $('#image').append('<img src='+ imagePath+userDetails.picture + ' width="50" height="60">')
+         $('.image').append('<img src='+ imagePath + userDetails.picture + ' width="50" height="60" alt="/public/assets/www/media/no_image.jpeg">')
 
 
     }
@@ -95,9 +95,8 @@ async function updateProfile(event) {
     })
         .then((response) => response.json())
         .then((result) => {
-         console.log(result)
                 let message = null;
-                if(error === null || error === false){
+                if(error == null || error === false){
                 if (result.firstName) {
                     message = result.firstName;
                     firstNameError.style.display = 'block';
@@ -168,8 +167,7 @@ async function updateProfile(event) {
                 userDetails.zip = result.zip
                 userDetails.picture = result.picture
                 window.localStorage.setItem('userDetails', JSON.stringify(userDetails)); 
-
-                console.log(userDetails)
+              
             }
         })
        
