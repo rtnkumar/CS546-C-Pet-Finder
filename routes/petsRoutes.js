@@ -712,7 +712,15 @@ petsRouter.
                 return res.status(400).json({ error: true, message: "invalid parameter", id: "Invalid id" });
             }
             let petList = await petsData.getPetDetailsByPetId(id);
-            res.render('petsViews/petsDetails', { title: "Pets Finder", data: JSON.stringify(petList) });
+            let navList=null;
+            let userFirstName=null;
+            if(req.session && req.session.firstName){
+                userFirstName=req.session.firstName;
+                navList=utils.getLoggedInUserHomeNavList;
+            }else{
+                navList=utils.getNotLoggedInUserHomeNavList;
+            }
+            res.render('petsViews/petsDetails', { title: "Pets Finder", data: JSON.stringify(petList), navList: navList, firstName: userFirstName });
         } catch (error) {
             if (`No pet with id=${id.trim()}` === error) {
                 res.status(404).json({
