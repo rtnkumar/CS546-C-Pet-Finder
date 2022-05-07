@@ -1,11 +1,22 @@
 <header>
-    <div class="row">
-        <div class="col-12">
-            <p class="text-center">
-                {{!-- <a href="{{root}}" type="image/svg+xml">
-                    <img src="{{root}}/public/assets/www/media/petFinder.png" alt="Pet Finder Logo" class="img-fluid" class="rounded float-start"> --}}
-                <a href="/users/login">Login</a> or <a href="/users/sign-up">Signup</a> to find other users looking for pets.
-            </p>
-        </div>
-    </div>
+    <nav class="navbar navbar-default" role="navigation">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <p class=><span class="welcome">
+                <a href="/">
+                    <img src="{{root}}/public/assets/www/media/petFinder.png" width="100" height="100"
+                        alt="Pet Finder Logo" class="img-fluid" class="rounded float-start">
+                </a>
+            </span>
+
+            {{#if firstName}}
+        <p class=><span class="welcome">Welcome,{{firstName}} </span>
+            {{/if}}
+        <ul>
+            {{#each navList}}
+            <li><a href={{this.url}}>{{this.name}}</a></li>
+            {{/each}}
+        </ul>
+
+
+    </nav>
 </header>
