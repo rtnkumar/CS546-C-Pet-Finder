@@ -590,8 +590,7 @@ usersRouter.
   });
 
 usersRouter
-  .route('/logout')
-  .get(async (request, res) => {
+  .get('/logout',async (request, res) => {
     try {
       request.session.destroy();
       res.redirect("/");

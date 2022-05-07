@@ -6,7 +6,6 @@ function checkAuthenticated(req, res, next) {
 }
 
 function checkNotAuthenticated(req, res, next) {
-    console.log("login");
     if (isAuthenticated(req)) {
         return res.redirect('/users/userProfile')
     }
