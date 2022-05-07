@@ -20,6 +20,7 @@ const constructorMethod = (app) => {
         
         res.render('home', { title: "Pet Finder",navList:navList,firstName:userFirstName, petTypeList: petTypeList });
     });
+
     app.use('*', (req, res) => {
         res.status(404).json({ error: 'Not found' });
     })
