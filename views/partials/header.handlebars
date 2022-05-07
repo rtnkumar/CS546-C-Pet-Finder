@@ -1,11 +1,5 @@
 <header>
-    <div class="row">
-        <div class="col-12">
-            <p class="text-center">
-                {{!-- <a href="{{root}}" type="image/svg+xml">
-                    <img src="{{root}}/public/assets/www/media/petFinder.png" alt="Pet Finder Logo" class="img-fluid" class="rounded float-start"> --}}
-                <a href="/users/login">Login</a> or <a href="/users/sign-up">Signup</a> to find other users looking for pets.
-            </p>
-        </div>
-    </div>
+    <img src="{{root}}/public/assets/www/media/petFinder.png" alt="Pet Finder Logo" class="img-fluid" class="rounded float-start" id="petFinderLogoHeader">
+    <button class="btn btn-primary" id="loginButton" onclick="window.location.href='/users/login'">Login</button>
+    <button class="btn btn-primary" id="signUpButton" onclick="window.location.href='/users/sign-up'">Sign Up</button>
 </header>
