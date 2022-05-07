@@ -44,7 +44,7 @@ function init(){
          $('#city').val(userDetails.city)
          $('#state').val(userDetails.state)
          $('#zip').val(userDetails.zip)
-         $('.image').append('<img src='+ imagePath + userDetails.picture + ' width="50" height="60" alt="UserImage">')
+         $('.image').append('<img src='+ imagePath + userDetails.picture + ' width="50" height="60" alt="/public/assets/no_image.jpeg">')
 
 
     }
@@ -167,9 +167,7 @@ async function updateProfile(event) {
                 userDetails.zip = result.zip
                 userDetails.picture = result.picture
                 window.localStorage.setItem('userDetails', JSON.stringify(userDetails)); 
-                //userDetails = JSON.parse(window.localStorage.getItem('userDetails'));
-
-                console.log(userDetails)
+              
             }
         })
        
