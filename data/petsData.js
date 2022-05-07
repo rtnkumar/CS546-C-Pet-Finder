@@ -201,8 +201,8 @@ async function createPet(name, petType, breed, age, size, gender, color, address
         let isValidSize = commonValidators.isValidString(size, 'size');
         if (!isValidSize[0]) throw isValidSize[1];
 
-        // Valid Alphabet
-        isValidSize = commonValidators.isValidAlphabet(size, 'size');
+        // Valid Size
+        isValidSize = commonValidators.isValidSize(size, 'size');
         if (!isValidSize[0]) throw isValidSize[1];
 
         // Valid Existence in petTypes collection
@@ -317,7 +317,7 @@ async function createPet(name, petType, breed, age, size, gender, color, address
         city: city.trim(),
         state: state.trim(),
         description: description.trim(),
-        ownerId: ownerId,
+        ownerId: ObjectId(ownerId),
         picture: picture.trim(),
         createdAt: new Date(),
         updatedAt: new Date(),
@@ -326,7 +326,7 @@ async function createPet(name, petType, breed, age, size, gender, color, address
 
     // Check if pet already exists
     try {
-        await duplicatePetExists(name, petTypeDocument, breed, age, size, gender, color, address, zip, city, state, description, ownerId, picture);
+        await duplicatePetExists(name.trim(), petTypeDocument, breed.trim(), age.trim(), size.trim(), gender.trim(), color.trim(), address.trim(), zip.trim(), city.trim(), state.trim(), description.trim(), ObjectId(ownerId), picture.trim());
     } catch(e) {
         throw "Pet already exists";
     }
@@ -359,9 +359,9 @@ async function getPetDetailsByPetId(id){
     }
     petDetails._id = petDetails._id.toString();
 
-   let owner=await usersData.getUserById(petDetails.ownerId);
+   let owner=await usersData.getUserById(petDetails.ownerId.toString());
    const petsQuestionsAnswersCollection= await petsQuestionsAnswers();
-   let petsQuestionsAnswerList=await petsQuestionsAnswersCollection.find({petId:id}).toArray();
+   let petsQuestionsAnswerList=await petsQuestionsAnswersCollection.find({petId:ObjectId(id)}).toArray();
    petDetails.owner={
        id:owner._id,
        firstName:owner.firstName,
@@ -424,15 +424,19 @@ async function addPetUserFavorite(id,email){
     if (petDetails === null) {
         throw `No pet with id=${id}`;
     }
-
+    
     const usersCollection= await users();
     const user=await usersCollection.findOne({email:email});
-    if(user.favoriteList.includes(id)){
-         throw `${id} is already in favorite list`;
+    // Loop through user favorite list and check if pet is already there
+    for(let pet of user.favoriteList){
+        if(pet.toString()==id){
+            throw `${id} is already in favorite list`;
+        }
     }
+    
     const updatedInfo = await usersCollection.updateOne(
         { email: email },
-        { $push: {favoriteList:id} }
+        { $push: {favoriteList: ObjectId(id)} }
     );
     if (updatedInfo.modifiedCount === 0) {
         throw 'could not update favorite list successfully';
@@ -488,15 +492,17 @@ async function addQNA(question,petId,ownerId,askedBy){
         throw `No user with ownerId=${ownerId}`;
     }
 
+
     const askedByUser=await usersCollection.findOne({email:askedBy});
+    console.log(askedByUser);
     let newQuestion = {
         question:question,
         answer:'',
-        petId:petId,
-        askedBy:askedByUser._id.toString(),
-        ownerId:ownerId,
-        createdAt:Date(),
-        updatedAt:Date()
+        petId: ObjectId(petId),
+        askedBy: ObjectId(askedByUser._id),
+        ownerId: ObjectId(ownerId),
+        createdAt: new Date(),
+        updatedAt: new Date()
     };
 
     const petQuestionAnswersCollection = await petsQuestionsAnswers();
@@ -509,6 +515,7 @@ async function addQNA(question,petId,ownerId,askedBy){
 }
 
 function getPetTypeDocumentByPetType(petTypeCollection,petType){
+    console.log(petTypeCollection);
 
     for(let petDocument of petTypeCollection){
         if(petDocument.type===petType){

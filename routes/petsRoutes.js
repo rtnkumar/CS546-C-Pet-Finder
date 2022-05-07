@@ -11,8 +11,6 @@ const usersData = data.usersData;
 const mongoCollections = require('../config/mongoCollections');
 const petTypes = mongoCollections.petTypes;
 const formidable = require('formidable');
-const { getPetTypeDocumentByPetType } = require('../data/petsData');
-
 
 
 // Routes
@@ -118,6 +116,13 @@ petsRouter
 
 petsRouter
     .post('/upload', trimRequest.all, async (request, res) => {
+        // Confirm user is signed in.
+        if (!request.session || !request.session.email) {
+            return res.status(401).json({
+                error: true,
+                message: 'You must be signed in to upload a pet.'
+            });
+        }
         try {
             let form = new formidable.IncomingForm();
             form.parse(request, async (err, fields, files) => {
@@ -405,7 +410,9 @@ petsRouter
 
                 // Duplicate Pet Entry
                 try {
-                    let petTypeDocument = await getPetTypeDocumentByPetType(petTypes, type);
+                    // Get petTypeCollection
+                    const petTypeCollection = await petTypesData.getAllPetTypes();
+                    let petTypeDocument = await petsData.getPetTypeDocumentByPetType(petTypeCollection, type);
                     await petsData.duplicatePetExists(name, petTypeDocument, breed, age, size, gender, color, address, zip, city, state, description, ownerId, picture);
                 } catch(e) {
                     return res.status(404).json({
@@ -583,8 +590,8 @@ async function sizeTests(size, petType) {
         let isValidSize = commonValidators.isValidString(size, 'size');
         if (!isValidSize[0]) throw isValidSize[1];
 
-        // Valid Alphabet
-        isValidSize = commonValidators.isValidAlphabet(size, 'size');
+        // Valid Size
+        isValidSize = commonValidators.isValidSize(size, 'size');
         if (!isValidSize[0]) throw isValidSize[1];
 
         // Check size in petTypes collection
@@ -775,6 +782,7 @@ petsRouter.
         const question = xss(req.body.question);
         const petId = xss(req.params.id);
         const ownerId = xss(req.body.ownerId);
+        const askedBy = req.session.email;
 
         // Password validation
         let isValidPassword = commonValidators.isValidString(question, 'question');
@@ -794,7 +802,7 @@ petsRouter.
         }
 
         try {
-            let result = await petsData.addQNA(question,petId,ownerId,"r@gmail.com");
+            let result = await petsData.addQNA(question,petId,ownerId, askedBy);
             res.json(result);
         } catch (error) {
             if (`No pet with petId=${petId}` === error || `No user with ownerId=${ownerId}`) {
