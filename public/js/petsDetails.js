@@ -47,11 +47,11 @@
         }
         $('#show dl').append('<dt>Color</dt><dd>' + color + '</dd>');
 
-        let length = "N/A";
-        if (petDetails && petDetails.length) {
-            length = petDetails.length;
-        }
-        $('#show dl').append('<dt>Length</dt><dd>' + length + '</dd>');
+        // let length = "N/A";
+        // if (petDetails && petDetails.length) {
+        //     length = petDetails.length;
+        // }
+        // $('#show dl').append('<dt>Length</dt><dd>' + length + '</dd>');
 
         let address = "N/A";
         if (petDetails && petDetails.address) {
