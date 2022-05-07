@@ -161,12 +161,23 @@ function isValidName(string, key) {
  */
 function isValidAddress(string, key) {
     string = string.trim();
-    const regEx = /^[0-9a-zA-Z ,:-.]+$/;
+    const regEx = /^[0-9a-zA-Z ,:.-]+$/;
     if (string.match(regEx)) {
         return [true];
     }
     else {
         return [false, `Only digits, alphabet, space, comma, colon, period and hyphen are allowed in ${key}`];
+    }
+}
+
+function isValidSize(size, key) {
+    string = size.trim();
+    const regEx = /^[a-zA-Z-]+$/;
+    if (size.match(regEx)) {
+        return [true];
+    }
+    else {
+        return [false, `Only alphabet and hyphen is required in ${key}`];
     }
 }
 
@@ -179,5 +190,6 @@ module.exports = {
     isValidFile,
     isValidId,
     isValidName,
-    isValidAddress
+    isValidAddress,
+    isValidSize
 }
