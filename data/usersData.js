@@ -406,7 +406,10 @@ async function getUserDetailsByEmail(emailId) {
     }
 
     // pet list
-    const uploadedPetList = await petCollection.find({ _id: user._id}).toArray();
+    const uploadedPetList = await petCollection.find({ ownerId: user._id}).toArray();
+    for (let pet of adoptedPetsList) {
+        pet._id = pet._id.toString();
+    }
 
     user.favoriteList = favoritePetsList;
     user.adoptedList = adoptedPetsList;

@@ -893,9 +893,9 @@ petsRouter
  * Render the upload pet list page 
 */
 petsRouter
-.get('/upload/list', async(req, res) => {
-      res.render('petsViews/uploadPetList');
-});
+    .get('/upload/list', async (req, res) => {
+        res.render('petsViews/uploadPetList', { title: 'Pet Finder'});
+    });
 
 
 module.exports = petsRouter;
