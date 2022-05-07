@@ -1,3 +1,8 @@
+window.addEventListener('load', () => {
+    // Disable and remove the button
+    document.getElementById('homeButton').remove()
+}, false);
+
 let error = document.getElementsByClassName("error")[0];
 error.style.display = 'none';
 let cityError = document.getElementsByClassName("city-error")[0];
@@ -65,3 +70,4 @@ async function homeSearch(event) {
             error.innerHTML = "Something went wrong., please try again.";
         }); 
 }
+
