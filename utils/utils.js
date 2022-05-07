@@ -14,6 +14,7 @@ function getLoggedInUserNavList(){
     { url: "/users/favoriteList", name: "Favorites" },
     { url: "/users/adoptedList", name: "Adopted List" },
     { url: "/pets/upload/list", name: "Uploaded Pet List" },
+    { url: "/users/deleteAccount", name: "Delete Account" },
     { url: "/users/logout", name: "Logout" }];
 }
 
@@ -25,6 +26,7 @@ function getLoggedInUserHomeNavList(){
     { url: "/users/favoriteList", name: "Favorites" },
     { url: "/users/adoptedList", name: "Adopted List" },
     { url: "/pets/upload/list", name: "Uploaded Pet List" },
+    { url: "/users/deleteAccount", name: "Delete Account" },
     { url: "/users/logout", name: "Logout" }];
 }
 function getLoggedInUserUpdateProfileNavList(){
@@ -35,6 +37,7 @@ function getLoggedInUserUpdateProfileNavList(){
     { url: "/users/favoriteList", name: "Favorites" },
     { url: "/users/adoptedList", name: "Adopted List" },
     { url: "/pets/upload/list", name: "Uploaded Pet List" },
+    { url: "/users/deleteAccount", name: "Delete Account" },
     { url: "/users/logout", name: "Logout" }];
 }
 function getLoggedInUserAccountSettingNavList(){
@@ -45,6 +48,7 @@ function getLoggedInUserAccountSettingNavList(){
     { url: "/users/favoriteList", name: "Favorites" },
     { url: "/users/adoptedList", name: "Adopted List" },
     { url: "/pets/upload/list", name: "Uploaded Pet List" },
+    { url: "/users/deleteAccount", name: "Delete Account" },
     { url: "/users/logout", name: "Logout" }];
 }
 function getLoggedInUserUploadPetNavList(){
@@ -55,6 +59,7 @@ function getLoggedInUserUploadPetNavList(){
     { url: "/users/favoriteList", name: "Favorites" },
     { url: "/users/adoptedList", name: "Adopted List" },
     { url: "/pets/upload/list", name: "Uploaded Pet List" },
+    { url: "/users/deleteAccount", name: "Delete Account" },
     { url: "/users/logout", name: "Logout" }];
 }
 function getLoggedInUserFavoritesNavList(){
@@ -65,6 +70,7 @@ function getLoggedInUserFavoritesNavList(){
     { url: "#", name: "Favorites" },
     { url: "/users/adoptedList", name: "Adopted List" },
     { url: "/pets/upload/list", name: "Uploaded Pet List" },
+    { url: "/users/deleteAccount", name: "Delete Account" },
     { url: "/users/logout", name: "Logout" }];
 }
 
@@ -76,6 +82,7 @@ function getLoggedInUserAdoptedListNavList(){
     { url: "/users/favoriteList", name: "Favorites" },
     { url: "#", name: "Adopted List" },
     { url: "/pets/upload/list", name: "Uploaded Pet List" },
+    { url: "/users/deleteAccount", name: "Delete Account" },
     { url: "/users/logout", name: "Logout" }];
 }
 
@@ -87,8 +94,22 @@ function getLoggedInUserUploadedPetListNavList(){
     { url: "/users/favoriteList", name: "Favorites" },
     { url: "/users/adoptedList", name: "Adopted List" },
     { url: "#", name: "Uploaded Pet List" },
+    { url: "/users/deleteAccount", name: "Delete Account" },
     { url: "/users/logout", name: "Logout" }];
 }
+
+function getLoggedInUserPetDetailsNavList(){
+    return [{ url: "/", name: "Home" },
+    { url: "/users/userProfile", name: "Update Profile" },
+    { url: "/users/accountSettings", name: "Account Settings" },
+    { url: "/pets/new/upload", name: "Upload Pet" },
+    { url: "/users/favoriteList", name: "Favorites" },
+    { url: "/users/adoptedList", name: "Adopted List" },
+    { url: "/pets/upload/list", name: "Uploaded Pet List" },
+    { url: "/users/deleteAccount", name: "Delete Account" },
+    { url: "/users/logout", name: "Logout" },];
+}
+
 
 function getNotLoggedInUserNavList(){
     return [{ url: "/", name: "Home" }, { url: "/users/login", name: "Login" }, { url: "/users/sign-up", name: "Sign Up" }];
@@ -106,6 +127,10 @@ function getNotLoggedInUserSignUpNavList(){
     return [{ url: "/", name: "Home" }, { url: "/users/login", name: "Login" }, { url: "#", name: "Sign Up" }];
 }
 
+function getNotLoggedInUserPetDetailsNavList() {
+    return [{ url: "/", name: "Home" }, { url: "/users/login", name: "Login" }, { url: "/users/sign-up", name: "Sign Up" }];
+}
+
 module.exports={
     getHashedPassword,
     getLoggedInUserNavList,
@@ -119,5 +144,7 @@ module.exports={
     getLoggedInUserUploadPetNavList,
     getLoggedInUserFavoritesNavList,
     getLoggedInUserAdoptedListNavList,
-    getLoggedInUserUploadedPetListNavList
+    getLoggedInUserUploadedPetListNavList,
+    getNotLoggedInUserPetDetailsNavList,
+    getLoggedInUserPetDetailsNavList
 }
