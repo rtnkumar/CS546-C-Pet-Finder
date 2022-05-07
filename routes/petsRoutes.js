@@ -111,10 +111,8 @@ petsRouter
             res.render('petsViews/petsList',{title:"Pet Finder",error:false,data:JSON.stringify(pets),petTypeList:JSON.stringify(petTypeList),navList:navList,firstName:userFirstName});
         } catch (e) {
             if (e === 'No pets found') {
-                return res.status(404).json({
-                    error: true,
-                    message: e
-                });
+                let petTypeList = await petTypesData.getAllPetTypes();
+                return res.status(404).render('home', { title: 'Home', petTypeList: petTypeList, error: true, message: e });
             } else {
                 return res.status(500).json({
                     error: true,
