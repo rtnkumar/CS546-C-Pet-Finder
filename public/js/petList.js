@@ -38,7 +38,7 @@
     $('#pet-list-container').on('click', 'button', function (e) {
         e.preventDefault();
         let isLogin = window.localStorage.getItem('isLogin');
-        let petId = $(this).attr("pet-id");
+        let petId = $(this).val();
         if (petId.includes('#') && isLogin === null) {
             window.location.assign('http://localhost:3000/users/sign-up');
         } else if (petId.includes('#') && isLogin === "true") {
@@ -90,6 +90,8 @@
         }
     });
 
+
+
     $('#next').click(function () {
         $(".pet-list").remove();
         init();
@@ -121,12 +123,12 @@
                 currentShownDataCount++;
                 let selector = '#' + id;
                 $(selector).append('<div class="col-lg-3  text-black">' +
-                    '<div style="text-align:center;">  <button pet-id=#' + searchedDataList[count]._id + ' style="margin-top: -5px;">Add Favorite</button></div>' +
+                    '<div style="text-align:center;">  <button name="favorite" value="#' + searchedDataList[count]._id + '" style="margin-top: -5px;">Add Favorite</button></div>' +
 
-                    '<div><img src=' + imagePath + searchedDataList[count].picture + ' width="250" height="200"></div>' +
+                    '<div><img src=' + imagePath+searchedDataList[count].picture + ' alt=' + searchedDataList[count].name +' width="250" height="200"></div>' +
                     '<div style="text-align:center;">' + searchedDataList[count].name +
                     '</div>' +
-                    '<div style="text-align:center;">  <button pet-id=' + searchedDataList[count]._id + ' style="margin-bottom: 20px;">View Details</button></div>' +
+                    '<div style="text-align:center;">  <button name="details" value="' + searchedDataList[count]._id + '" style="margin-bottom: 20px;">View Details</button></div>' +
                     '</div>');
             }
         }

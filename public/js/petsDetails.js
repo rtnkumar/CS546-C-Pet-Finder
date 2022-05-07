@@ -14,7 +14,7 @@
         if (petDetails && petDetails.picture) {
             image = "/public/uploads/images/pets/" + petDetails.picture;
         }
-        $('#show').append('<img src=' + image + ' alt=' + image + 'width="250" height="200">');
+        $('#show').append('<img src=' + image + ' alt="' + name + '"width="250" height="200">');
         $('#show').append('<dl></dl>');
 
         let breed = "N/A";
@@ -183,7 +183,7 @@
 
             $.ajax(requestConfig).then(function (responseMessage) {
                 $('#qna').append('<div>' + "<strong>Question:&nbsp&nbsp</strong>" + responseMessage.question + '</div>');
-
+                $('#qna').append('<div>' + "<strong>Answer:&nbsp&nbsp</strong>" + '</div>');
             });
         }
 
