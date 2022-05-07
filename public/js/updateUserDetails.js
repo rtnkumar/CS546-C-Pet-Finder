@@ -44,7 +44,7 @@ function init(){
          $('#city').val(userDetails.city)
          $('#state').val(userDetails.state)
          $('#zip').val(userDetails.zip)
-         $('.image').append('<img src='+ imagePath + userDetails.picture + ' width="50" height="60" alt="/public/assets/www/media/no_image.jpeg">')
+         $('.image').append('<img src='+ imagePath + userDetails.picture + ' width="50" height="60" alt="userDetails.firstName">')
 
 
     }
