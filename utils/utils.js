@@ -98,6 +98,18 @@ function getLoggedInUserUploadedPetListNavList(){
     { url: "/users/logout", name: "Logout" }];
 }
 
+function getLoggedInUserDeletedAccountNavList(){
+    return [{ url: "/", name: "Home" },
+    { url: "/users/userProfile", name: "Update Profile" },
+    { url: "/users/accountSettings", name: "Account Settings" },
+    { url: "/pets/new/upload", name: "Upload Pet" },
+    { url: "/users/favoriteList", name: "Favorites" },
+    { url: "/users/adoptedList", name: "Adopted List" },
+    { url: "/pets/upload/list", name: "Uploaded Pet List" },
+    { url: "#", name: "Delete Account" },
+    { url: "/users/logout", name: "Logout" }];
+}
+
 function getLoggedInUserPetDetailsNavList(){
     return [{ url: "/", name: "Home" },
     { url: "/users/userProfile", name: "Update Profile" },
@@ -146,5 +158,6 @@ module.exports={
     getLoggedInUserAdoptedListNavList,
     getLoggedInUserUploadedPetListNavList,
     getNotLoggedInUserPetDetailsNavList,
-    getLoggedInUserPetDetailsNavList
+    getLoggedInUserPetDetailsNavList,
+    getLoggedInUserDeletedAccountNavList
 }
