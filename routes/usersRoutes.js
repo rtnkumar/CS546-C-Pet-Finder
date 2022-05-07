@@ -1066,6 +1066,11 @@ usersRouter.
    */
 
   usersRouter.get('/deleteAccount', async(req, res)=>{
+    let userFirstName = req.session.firstName;
+  let navList = utils.getLoggedInUserDeletedAccountNavList;
+
+  return res.render("usersViews/deleteAccount",{ title: "DeleteAccount", navList: navList, firstName: userFirstName })
+
     return res.render('usersViews/deleteAccount', {title: 'Delete Account'})
   })
 

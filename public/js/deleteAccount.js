@@ -50,6 +50,8 @@ async function deleteProfile(event) {
       }
     });
 
+  alert("Account has been deleted successfully!");
+
   await fetch("/users/logout", {
     method: "GET",
     headers: {
@@ -57,5 +59,4 @@ async function deleteProfile(event) {
     },
   });
 
-  alert("Account has been deleted successfully!");
 }
