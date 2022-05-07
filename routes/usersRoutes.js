@@ -318,7 +318,7 @@ usersRouter
       });
 
       form.on('fileBegin', function (name, file) {
-        file.filepath = 'public/uploads/images/users/' + file.originalFilename;
+        file.filepath = '/public/uploads/images/users/' + file.originalFilename;
       });
 
     } catch (e) {
@@ -866,7 +866,7 @@ usersRouter.post("/profile/update", async (request, res) => {
     });
 
     form.on('fileBegin', function (name, file) {
-      file.filepath = 'public/uploads/images/users/' + file.originalFilename;
+      file.filepath = '/public/uploads/images/users/' + file.originalFilename;
     });
 
   } catch (e) {
@@ -917,7 +917,7 @@ usersRouter.route("/delete").delete(async (req, res) => {
 
 usersRouter.get("/userProfile", async(req, res)=>{
   
-  return res.render("usersViews/userProfile")
+  return res.render("usersViews/userProfile", {title: 'User Profile'})
 });
 
 
@@ -927,7 +927,7 @@ usersRouter.get("/userProfile", async(req, res)=>{
  */
 
 usersRouter.get("/favoriteList", async(req, res)=>{
-  return res.render("usersViews/favoriteList")
+  return res.render("usersViews/favoriteList", {title: 'Favorite List'})
 })
 
 /**
@@ -936,7 +936,7 @@ usersRouter.get("/favoriteList", async(req, res)=>{
  */
 
 usersRouter.get("/accountSettings", async(req, res)=>{
-  return res.render("usersViews/accountSettings")
+  return res.render("usersViews/accountSettings", {title: 'Account Settings'})
 })
 
 /**
@@ -945,7 +945,7 @@ usersRouter.get("/accountSettings", async(req, res)=>{
  */
 
 usersRouter.get("/adoptedList", async(req, res)=>{
-  return res.render("usersViews/adoptedList")
+  return res.render("usersViews/adoptedList", {title: 'Adopted List'})
 })
 
 
@@ -1023,5 +1023,14 @@ usersRouter.
     }
     
   });
+
+  /**
+   * Feneel Doshi
+   * Route to redirect to deleting account page
+   */
+
+  usersRouter.get('/deleteAccount', async(req, res)=>{
+    return res.render('usersViews/deleteAccount', {title: 'Delete Account'})
+  })
 
 module.exports = usersRouter;

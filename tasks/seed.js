@@ -30,26 +30,26 @@ async function populateDummyUsers(db) {
   };
 
   // Users
-  let user1 = makeUser("John", "Sean", "Doe", "jdoe@email.com", await utils.getHashedPassword("password"), "1234567890", "123 Main St", "Manhattan", "NY", "10001", "user1.jpg");
-  let user2 = makeUser("Sam", "Patrick", "Smith", "psmith@gmail.com", await utils.getHashedPassword("totallysafe"), "5430592111", "300 Concord Road", "RealTown", "CA", "90002", "user2.jpg");
-  let user3 = makeUser("Martha", "Jane", "Meyer", "doublem@hotmail.com", await utils.getHashedPassword("notsafe"), "3125550111", "100 Washington St", "Hoboken", "NJ", "07030", "user3.jpg");
-  let user4 = makeUser("Jane", "Mary", "Doe", "janeisnotjohn@gmail.com", await utils.getHashedPassword("u89ji4ucdc"), "0987654321", "123 Main St", "Manhattan", "NY", "10001", "user4.jpg");
-  let user5 = makeUser("Dorothy", "", "Bubbles", "bubblemail@stevens.edu", await utils.getHashedPassword("bubbles"), "5515730573", "570 Water Drive", "Murrells Inlet", "South Carolina", "29573", "user5.jpg");
-  let user6 = makeUser("Peter", "", "Trautman", "ptraut@doctors.md", await utils.getHashedPassword("trout_fish"), "9365018400", "39 West Vale Street", "Santa Clara", "California", "95050", "user6.jpg");
-  let user7 = makeUser("Paul", "", "Bunyan", "wherethefoodisgood@icloud.com", await utils.getHashedPassword("paaaauuuulbunyan500!!"), "9475821111", "23 East Wall Ave.", "Port Richey", "Florida", "34668", "user7.jpg");
-  let user8 = makeUser("Tim", "", "Horton", "heardawho@gmail.com", await utils.getHashedPassword("allTheWho'sInWhoville#50'"), "0184930566", "619 Livingston Ave.", "Key West", "Florida", "33040", "user8.jpg");
-  let user9 = makeUser("Sydney", "", "Crawford", "crazycatlady@icloud.com", await utils.getHashedPassword("c@1sG@10Re"), "2468013579", "30 Monroe Rd.", "Fort Mill", "South Carolina", "29708", "user9.jpg");
-  let user10 = makeUser("Dana", "", "Baker", "prettygirlxoxo@stevens.edu", await utils.getHashedPassword("try_and_hack_me_hackerzzz;D"), "0864297531", "36 East Rose St.", "Rolling Meadows", "Illinois", "60008", "user10.jpg");
-  let user11 = makeUser("Mariam", "", "Gibson", "mariamgib@hotmail.com", await utils.getHashedPassword("chromeDidn'tMakeMeAGoodPassword"), "7776665454", "12 East Wall Ave.", "Port Richey", "Florida", "34668", "user11.jpg");
-  let user12 = makeUser("Sophia", "Rose", "Meyer", "therose@gmail.com", await utils.getHashedPassword("1_L0V3_P13"), "3232323232", "67 Amherst St.", "Oakland Gardens", "New York", "11364", "user12.jpg");
-  let user13 = makeUser("Michael", "", "Smith", "anothersmith@gmail.com", await utils.getHashedPassword("definitelysafe"), "1110001010", "7222 Bayberry Street", "Miami Beach", "Florida", "33139", "user13.jpg");
-  let user14 = makeUser("Methuselah", "Oldman", "Abradolf", "oldestmanalive@notreally.org", await utils.getHashedPassword("old_older_oldest_999999999"), "4832647894", "38 2nd St.", "Valley Stream", "New York", "11580", "user14.jpg");
+  let user1 = makeUser("John", "Sean", "Doe", "jdoe@email.com", await utils.getHashedPassword("password"), "123-456-7890", "123 Main St", "Manhattan", "NY", "10001", "user1.jpg");
+  let user2 = makeUser("Sam", "Patrick", "Smith", "psmith@gmail.com", await utils.getHashedPassword("totallysafe"), "543-059-2111", "300 Concord Road", "RealTown", "CA", "90002", "user2.jpg");
+  let user3 = makeUser("Martha", "Jane", "Meyer", "doublem@hotmail.com", await utils.getHashedPassword("notsafe"), "312-5550-111", "100 Washington St", "Hoboken", "NJ", "07030", "user3.jpg");
+  let user4 = makeUser("Jane", "Mary", "Doe", "janeisnotjohn@gmail.com", await utils.getHashedPassword("u89ji4ucdc"), "098-765-4321", "123 Main St", "Manhattan", "NY", "10001", "user4.jpg");
+  let user5 = makeUser("Dorothy", "", "Bubbles", "bubblemail@stevens.edu", await utils.getHashedPassword("bubbles"), "551-573-0573", "570 Water Drive", "Murrells Inlet", "South Carolina", "29573", "user5.jpg");
+  let user6 = makeUser("Peter", "", "Trautman", "ptraut@doctors.md", await utils.getHashedPassword("trout_fish"), "936-501-8400", "39 West Vale Street", "Santa Clara", "California", "95050", "user6.jpg");
+  let user7 = makeUser("Paul", "", "Bunyan", "wherethefoodisgood@icloud.com", await utils.getHashedPassword("paaaauuuulbunyan500!!"), "947-582-1111", "23 East Wall Ave.", "Port Richey", "Florida", "34668", "user7.jpg");
+  let user8 = makeUser("Tim", "", "Horton", "heardawho@gmail.com", await utils.getHashedPassword("allTheWho'sInWhoville#50'"), "018-493-0566", "619 Livingston Ave.", "Key West", "Florida", "33040", "user8.jpg");
+  let user9 = makeUser("Sydney", "", "Crawford", "crazycatlady@icloud.com", await utils.getHashedPassword("c@1sG@10Re"), "246-801-3579", "30 Monroe Rd.", "Fort Mill", "South Carolina", "29708", "user9.jpg");
+  let user10 = makeUser("Dana", "", "Baker", "prettygirlxoxo@stevens.edu", await utils.getHashedPassword("try_and_hack_me_hackerzzz;D"), "086-429-7531", "36 East Rose St.", "Rolling Meadows", "Illinois", "60008", "user10.jpg");
+  let user11 = makeUser("Mariam", "", "Gibson", "mariamgib@hotmail.com", await utils.getHashedPassword("chromeDidn'tMakeMeAGoodPassword"), "777-666-5454", "12 East Wall Ave.", "Port Richey", "Florida", "34668", "user11.jpg");
+  let user12 = makeUser("Sophia", "Rose", "Meyer", "therose@gmail.com", await utils.getHashedPassword("1_L0V3_P13"), "323-232-3232", "67 Amherst St.", "Oakland Gardens", "New York", "11364", "user12.jpg");
+  let user13 = makeUser("Michael", "", "Smith", "anothersmith@gmail.com", await utils.getHashedPassword("definitelysafe"), "111-000-1010", "7222 Bayberry Street", "Miami Beach", "Florida", "33139", "user13.jpg");
+  let user14 = makeUser("Methuselah", "Oldman", "Abradolf", "oldestmanalive@notreally.org", await utils.getHashedPassword("old_older_oldest_999999999"), "483-264-7894", "38 2nd St.", "Valley Stream", "New York", "11580", "user14.jpg");
   let user15 = makeUser("Samantha", "", "Reichenthal", "artandlove@artistry.com", await utils.getHashedPassword("art_and_love"), "459 Mayfield Drive", "Danville", "Virginia", "24540", "user15.jpg");
-  let user16 = makeUser("Roushan", "", "Kumar", "rkumar@stevens.edu", await utils.getHashedPassword("roushan_did_most_of_the_work"), "9178675309", "7533 Old Windsor St.", "Roslindale", "Massachusetts", "02131", "user16.jpg");
-  let user17 = makeUser("Feneel", "", "Doshi", "fdoshi@stevens.edu", await utils.getHashedPassword("feneel_is_the_best"), "5838675309", "9704 Durham Street", "Reading", "Massachusetts", "01867", "user17.jpg");
-  let user18 = makeUser("Dominick", "Patrick", "Varano", "dvarano@stevens.edu", await utils.getHashedPassword("dom_made_all_this_test_data"), "7777778888", "18 E. Prairie Drive", "Sacramento", "California", "95820", "user18.png");
-  let user19 = makeUser("Siddarth", "", "Singh", "ssingh@stevens.edu", await utils.getHashedPassword("siddarth_might_be_dead_right_now?"), "3336667777", "1 Young Street", "Mason", "Ohio", "45040", "user19.jpeg");
-  let user20 = makeUser("Patrick", "", "Hill", "phill@stevens.edu", await utils.getHashedPassword("patrick_is_a_fantastic_professor"), "0562048205", "431 Mill Lane", "Tuckerton", "New Jersey", "08087", "user20.jpg");
+  let user16 = makeUser("Roushan", "", "Kumar", "rkumar@stevens.edu", await utils.getHashedPassword("roushan_did_most_of_the_work"), "917-867-5309", "7533 Old Windsor St.", "Roslindale", "Massachusetts", "02131", "user16.jpg");
+  let user17 = makeUser("Feneel", "", "Doshi", "fdoshi@stevens.edu", await utils.getHashedPassword("feneel_is_the_best"), "583-867-5309", "9704 Durham Street", "Reading", "Massachusetts", "01867", "user17.jpg");
+  let user18 = makeUser("Dominick", "Patrick", "Varano", "dvarano@stevens.edu", await utils.getHashedPassword("dom_made_all_this_test_data"), "777-777-8888", "18 E. Prairie Drive", "Sacramento", "California", "95820", "user18.png");
+  let user19 = makeUser("Siddarth", "", "Singh", "ssingh@stevens.edu", await utils.getHashedPassword("siddarth_might_be_dead_right_now?"), "333-666-7777", "1 Young Street", "Mason", "Ohio", "45040", "user19.jpeg");
+  let user20 = makeUser("Patrick", "", "Hill", "phill@stevens.edu", await utils.getHashedPassword("patrick_is_a_fantastic_professor"), "056-204-8205", "431 Mill Lane", "Tuckerton", "New Jersey", "08087", "user20.jpg");
 
 
   await db.collection('users').insertMany([user1, user2, user3, user4, user5, user6, user7, user8, user9, user10, user11, user12, user13, user14, user15, user16, user17, user18, user19, user20]);
