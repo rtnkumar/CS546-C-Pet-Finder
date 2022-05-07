@@ -38,7 +38,7 @@ table {
     margin: 0;
     padding: 0;
     overflow: hidden;
-    /* background-color: #333; */
+    background-color: #333;
   }
    li {
      
@@ -62,7 +62,7 @@ table {
 
 }
 
-/* center the homeButton id */
+/* center the homeButton id
 #homeButton {
     margin-left: auto;
     margin-right: auto;
@@ -79,7 +79,7 @@ table {
     height: 90px;
     margin-left: 10px;
     margin-top: 10px;
-}
+} */
 
 .error {
     border: 1px solid red;

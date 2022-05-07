@@ -1,7 +1,3 @@
-window.addEventListener('load', () => {
-    // Disable and remove the button
-    document.getElementById('homeButton').remove()
-}, false);
 
 /* If the page loads with a message of 'No pets found', display it in the error div */
 window.addEventListener('load', () => {
