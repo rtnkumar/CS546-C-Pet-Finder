@@ -9,8 +9,8 @@ header{
     height: 100px;
     width: auto;
     line-height: 2;
-    overflow: hidden;
-    margin-bottom: auto;
+    overflow-y: hidden;
+    padding: auto;
 }
 
 footer{

@@ -112,7 +112,15 @@ petsRouter
         } catch (e) {
             if (e === 'No pets found') {
                 let petTypeList = await petTypesData.getAllPetTypes();
-                return res.status(404).render('home', { title: 'Home', petTypeList: petTypeList, error: true, message: e });
+                let navList=null;
+                let userFirstName=null;
+                if(req.session && req.session.firstName){
+                    userFirstName=req.session.firstName;
+                    navList=utils.getLoggedInUserHomeNavList;
+                }else{
+                    navList=utils.getNotLoggedInUserHomeNavList;
+                }
+                return res.status(404).render('home', { title: 'Home', petTypeList: petTypeList, error: true, message: e, navList: navList, firstName: userFirstName });
             } else {
                 return res.status(500).json({
                     error: true,
