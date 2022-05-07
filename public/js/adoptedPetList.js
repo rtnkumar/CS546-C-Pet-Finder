@@ -1,6 +1,6 @@
 (function ($) {
     let userDetails = JSON.parse(window.localStorage.getItem('userDetails'));
-    let searchedDataList = userDetails.uploadedPetList;
+    let searchedDataList = userDetails.adoptedList;
     let petsListData = searchedDataList;
     let count = 0;
     function hideBackButton() {

@@ -657,5 +657,6 @@ module.exports = {
     getUserDetailsByEmail,
     updateUserProfile,
     remove,
-    getUnansweredQuestions
+    getUnansweredQuestions,
+    getUserByEmail
 }

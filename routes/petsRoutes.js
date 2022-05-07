@@ -11,6 +11,9 @@ const usersData = data.usersData;
 const mongoCollections = require('../config/mongoCollections');
 const petTypes = mongoCollections.petTypes;
 const formidable = require('formidable');
+const middlewares=require('../middlewares');
+const utils = require('../utils/utils');
+
 
 
 // Routes
@@ -97,7 +100,15 @@ petsRouter
                     break;
                 }
             }
-            res.render('petsViews/petsList',{title:"Pet Finder",error:false,data:JSON.stringify(pets),petTypeList:JSON.stringify(petTypeList)});
+            let navList=null;
+            let userFirstName=null;
+            if(req.session && req.session.firstName){
+                userFirstName=req.session.firstName;
+                navList=utils.getLoggedInUserHomeNavList;
+            }else{
+                navList=utils.getNotLoggedInUserHomeNavList;
+            }
+            res.render('petsViews/petsList',{title:"Pet Finder",error:false,data:JSON.stringify(pets),petTypeList:JSON.stringify(petTypeList),navList:navList,firstName:userFirstName});
         } catch (e) {
             if (e === 'No pets found') {
                 return res.status(404).json({
@@ -887,13 +898,15 @@ petsRouter.
  * Render the upload pet page 
 */
 petsRouter
-.get('/new/upload', async(req, res) => {
+.get('/new/upload',middlewares.checkAuthenticated, async(req, res) => {
     let allPetTypes=await petTypesData.getAllPetTypes();
+    let navList = utils.getLoggedInUserUploadPetNavList;
+    let userFirstName = req.session.firstName;
     let data={};
     for(let petType of allPetTypes){
         data[petType.type]=petType;
     }
-  res.render('petsViews/uploadPets', { title: "Pets Finder",data:JSON.stringify(data)});
+  res.render('petsViews/uploadPets', { title: "Upload Pet",data:JSON.stringify(data),navList: navList, firstName: userFirstName});
 });
 
 /**
@@ -901,8 +914,10 @@ petsRouter
  * Render the upload pet list page 
 */
 petsRouter
-    .get('/upload/list', async (req, res) => {
-        res.render('petsViews/uploadPetList', { title: 'Pet Finder'});
+    .get('/upload/list',middlewares.checkAuthenticated, async (req, res) => {
+        let userFirstName = req.session.firstName;
+        let navList = utils.getLoggedInUserUploadedPetListNavList;
+        res.render('petsViews/uploadPetList', { title: "Uploaded Pet List", navList: navList, firstName: userFirstName });
     });
 
 

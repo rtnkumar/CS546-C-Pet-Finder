@@ -47,7 +47,6 @@ async function login(event) {
 
                 }
             } else {
-                alert('login successfully.');
                 let requestConfig = {
                     method: 'GET',
                     url: 'http://localhost:3000/users/user-details?email='+body.email
@@ -55,8 +54,9 @@ async function login(event) {
                 $.ajax(requestConfig).then(function (responseMessage) {
                     window.localStorage.setItem('userDetails', JSON.stringify(responseMessage));
                     window.localStorage.setItem('isLogin', true);
-                    window.location.assign('http://localhost:3000/users/sign-up');
+                    window.location.assign('http://localhost:3000');
                 });
+                alert('login successfully.');
             }
         })
         .catch((error) => {
