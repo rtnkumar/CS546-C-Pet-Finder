@@ -13,15 +13,10 @@ header{
     margin-bottom: auto;
 }
 
-footer{
-    background-color: white;
-    height: 100px;
-    width: auto;
-    margin-top: 50px;
-}
+
 
 small {
-    color: skyblue;
+    color: #00819f; background-color: rgba(0, 0, 0, 0);
   }
 
 table {

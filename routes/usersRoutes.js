@@ -338,7 +338,7 @@ usersRouter
       });
 
       form.on('fileBegin', function (name, file) {
-        file.filepath = 'public/uploads/images/users/' + file.originalFilename;
+        file.filepath = '/public/uploads/images/users/' + file.originalFilename;
       });
 
     } catch (e) {
@@ -884,7 +884,7 @@ usersRouter.post("/profile/update", async (request, res) => {
     });
 
     form.on('fileBegin', function (name, file) {
-      file.filepath = 'public/uploads/images/users/' + file.originalFilename;
+      file.filepath = '/public/uploads/images/users/' + file.originalFilename;
     });
 
   } catch (e) {
@@ -938,6 +938,7 @@ usersRouter.get("/userProfile", middlewares.checkAuthenticated, async (req, res)
   let navList = utils.getLoggedInUserUpdateProfileNavList;
 
   return res.render("usersViews/userProfile", { title: "User Profile", navList: navList, firstName: userFirstName })
+
 });
 
 
@@ -946,11 +947,13 @@ usersRouter.get("/userProfile", middlewares.checkAuthenticated, async (req, res)
  * Route to redirect to user's favorite pet list
  */
 
+
 usersRouter.get("/favoriteList",middlewares.checkAuthenticated, async(req, res)=>{
   let userFirstName = req.session.firstName;
   let navList = utils.getLoggedInUserFavoritesNavList;
 
   return res.render("usersViews/favoriteList",{ title: "Favorites", navList: navList, firstName: userFirstName })
+
 })
 
 /**
@@ -958,11 +961,13 @@ usersRouter.get("/favoriteList",middlewares.checkAuthenticated, async(req, res)=
  * Route to redirect to user's account settings
  */
 
+
 usersRouter.get("/accountSettings",middlewares.checkAuthenticated, async(req, res)=>{
   let userFirstName = req.session.firstName;
   let navList = utils.getLoggedInUserAccountSettingNavList;
 
   return res.render("usersViews/accountSettings",{ title: "Account Setting", navList: navList, firstName: userFirstName })
+
 })
 
 /**
@@ -970,11 +975,13 @@ usersRouter.get("/accountSettings",middlewares.checkAuthenticated, async(req, re
  * Route to redirect to user's adopted pet list
  */
 
+
 usersRouter.get("/adoptedList",middlewares.checkAuthenticated, async(req, res)=>{
   let userFirstName = req.session.firstName;
   let navList = utils.getLoggedInUserAdoptedListNavList;
 
   return res.render("usersViews/adoptedList",{ title: "Adopted List", navList: navList, firstName: userFirstName })
+
 })
 
 
@@ -1052,5 +1059,14 @@ usersRouter.
     }
     
   });
+
+  /**
+   * Feneel Doshi
+   * Route to redirect to deleting account page
+   */
+
+  usersRouter.get('/deleteAccount', async(req, res)=>{
+    return res.render('usersViews/deleteAccount', {title: 'Delete Account'})
+  })
 
 module.exports = usersRouter;
