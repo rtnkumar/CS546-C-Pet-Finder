@@ -22,9 +22,12 @@
 
                         <div>
                             <input type="text" placeholder="Enter Middle Name" name="middleName" id="middle-name"
-                                pattern="[a-zA-Z ]+$" title="Only space and alphabet are allowed" required />
+                                pattern="[a-zA-Z ]+$" title="Only space and alphabet are allowed"/>
                         </div>
                         <small>Middle name format: Only space and alphabet are allowed.</small>
+
+                        <small>Format: Only space and alphabet are allowed. Middle Name is optional.</small>
+
                         <div class="middle-name-error">
                         </div>
                     </td>
@@ -77,7 +80,7 @@
                         <label for="address"><b>Address</b></label>
                         <div>
                             <input type="text" placeholder="Enter Address" name="address" id="address"
-                                pattern="^[0-9a-zA-Z ,:-.]+$"
+                                pattern="^[0-9a-zA-Z ,:.-]+$"
                                 title="Only digits, alphabet, space, comma, colon, period and hyphen are allowed" required />
                         </div>
                         <small>Address format: Only digits, alphabet, space, comma, colon and hyphen are allowed</small>

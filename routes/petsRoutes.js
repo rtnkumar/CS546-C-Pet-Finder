@@ -11,7 +11,8 @@ const usersData = data.usersData;
 const mongoCollections = require('../config/mongoCollections');
 const petTypes = mongoCollections.petTypes;
 const formidable = require('formidable');
-const { getPetTypeDocumentByPetType } = require('../data/petsData');
+const middlewares=require('../middlewares');
+const utils = require('../utils/utils');
 
 
 
@@ -99,13 +100,19 @@ petsRouter
                     break;
                 }
             }
-            res.render('petsViews/petsList',{title:"Pet Finder",error:false,data:JSON.stringify(pets),petTypeList:JSON.stringify(petTypeList)});
+            let navList=null;
+            let userFirstName=null;
+            if(req.session && req.session.firstName){
+                userFirstName=req.session.firstName;
+                navList=utils.getLoggedInUserHomeNavList;
+            }else{
+                navList=utils.getNotLoggedInUserHomeNavList;
+            }
+            res.render('petsViews/petsList',{title:"Pet Finder",error:false,data:JSON.stringify(pets),petTypeList:JSON.stringify(petTypeList),navList:navList,firstName:userFirstName});
         } catch (e) {
             if (e === 'No pets found') {
-                return res.status(404).json({
-                    error: true,
-                    message: e
-                });
+                let petTypeList = await petTypesData.getAllPetTypes();
+                return res.status(404).render('home', { title: 'Home', petTypeList: petTypeList, error: true, message: e });
             } else {
                 return res.status(500).json({
                     error: true,
@@ -118,6 +125,13 @@ petsRouter
 
 petsRouter
     .post('/upload', trimRequest.all, async (request, res) => {
+        // Confirm user is signed in.
+        if (!request.session || !request.session.email) {
+            return res.status(401).json({
+                error: true,
+                message: 'You must be signed in to upload a pet.'
+            });
+        }
         try {
             let form = new formidable.IncomingForm();
             form.parse(request, async (err, fields, files) => {
@@ -405,7 +419,9 @@ petsRouter
 
                 // Duplicate Pet Entry
                 try {
-                    let petTypeDocument = await getPetTypeDocumentByPetType(petTypes, type);
+                    // Get petTypeCollection
+                    const petTypeCollection = await petTypesData.getAllPetTypes();
+                    let petTypeDocument = await petsData.getPetTypeDocumentByPetType(petTypeCollection, type);
                     await petsData.duplicatePetExists(name, petTypeDocument, breed, age, size, gender, color, address, zip, city, state, description, ownerId, picture);
                 } catch(e) {
                     return res.status(404).json({
@@ -583,8 +599,8 @@ async function sizeTests(size, petType) {
         let isValidSize = commonValidators.isValidString(size, 'size');
         if (!isValidSize[0]) throw isValidSize[1];
 
-        // Valid Alphabet
-        isValidSize = commonValidators.isValidAlphabet(size, 'size');
+        // Valid Size
+        isValidSize = commonValidators.isValidSize(size, 'size');
         if (!isValidSize[0]) throw isValidSize[1];
 
         // Check size in petTypes collection
@@ -775,6 +791,7 @@ petsRouter.
         const question = xss(req.body.question);
         const petId = xss(req.params.id);
         const ownerId = xss(req.body.ownerId);
+        const askedBy = req.session.email;
 
         // Password validation
         let isValidPassword = commonValidators.isValidString(question, 'question');
@@ -794,7 +811,7 @@ petsRouter.
         }
 
         try {
-            let result = await petsData.addQNA(question,petId,ownerId,"r@gmail.com");
+            let result = await petsData.addQNA(question,petId,ownerId, askedBy);
             res.json(result);
         } catch (error) {
             if (`No pet with petId=${petId}` === error || `No user with ownerId=${ownerId}`) {
@@ -879,13 +896,15 @@ petsRouter.
  * Render the upload pet page 
 */
 petsRouter
-.get('/new/upload', async(req, res) => {
+.get('/new/upload',middlewares.checkAuthenticated, async(req, res) => {
     let allPetTypes=await petTypesData.getAllPetTypes();
+    let navList = utils.getLoggedInUserUploadPetNavList;
+    let userFirstName = req.session.firstName;
     let data={};
     for(let petType of allPetTypes){
         data[petType.type]=petType;
     }
-  res.render('petsViews/uploadPets', { title: "Pets Finder",data:JSON.stringify(data)});
+  res.render('petsViews/uploadPets', { title: "Upload Pet",data:JSON.stringify(data),navList: navList, firstName: userFirstName});
 });
 
 /**
@@ -893,9 +912,11 @@ petsRouter
  * Render the upload pet list page 
 */
 petsRouter
-.get('/upload/list', async(req, res) => {
-      res.render('petsViews/uploadPetList');
-});
+    .get('/upload/list',middlewares.checkAuthenticated, async (req, res) => {
+        let userFirstName = req.session.firstName;
+        let navList = utils.getLoggedInUserUploadedPetListNavList;
+        res.render('petsViews/uploadPetList', { title: "Uploaded Pet List", navList: navList, firstName: userFirstName });
+    });
 
 
 module.exports = petsRouter;

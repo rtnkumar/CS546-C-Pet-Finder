@@ -9,14 +9,17 @@
     <div class="row">
         <div class="col-12">
             <p class="text-center">
-                This website is for pet owners to find other pet owners who are also looking for pets.
+                On our website, you can find loving pets looking for new owners to adopt them!<br>
+                If you own a pet yourself, you can share your pet and find a new owner to adopt it!<br>
+                Let's start searching!<br>
             </p>
         </div>
     </div>
     <div class="row">
         <div class="col-12">
             <p class="text-center">
-                Please search for pets by city/state/zip and pet type.
+                Start by choosing the type of pet you are looking for,<br>
+                then choose either a city, state, or zip code to find your new pet!<br>
             </p>
         </div>
     </div>
@@ -113,6 +116,9 @@
                 <button type="submit" class="btn btn-primary">Search</button>
             </form>
             <div class="error">
+                {{#if error}}
+                    <p class="text-center">{{message}}</p>
+                {{/if}}
             </div>
         </div>
     </div>

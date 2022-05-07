@@ -9,6 +9,9 @@ const validators = require('../validators');
 const commonValidators = validators.commonValidators;
 const emailValidator = require("email-validator");
 const trimRequest = require('trim-request');
+const middlewares=require('../middlewares');
+const utils = require('../utils/utils');
+
 
 
 
@@ -22,8 +25,16 @@ const usersData = data.usersData;
  * Login page API
  */
 usersRouter
-  .get('/login', (req, res) => {
-    res.render('usersViews/login', { title: "Pets Finder", footer: "foooter" });
+  .get('/login',middlewares.checkNotAuthenticated, (req, res) => {
+    let navList = null;
+    let userFirstName = null;
+    if (req.session && req.session.firstName) {
+      userFirstName = req.session.firstName;
+      navList = utils.getLoggedInUserNavList;
+    } else {
+      navList = utils.getNotLoggedInUserLoginNavList;
+    }
+    res.render('usersViews/login', { title: "Login", navList: navList, firstName: userFirstName });
   });
 
 
@@ -32,8 +43,17 @@ usersRouter
  * Sign-up page API
  */
 usersRouter
-  .get('/sign-up', (req, res) => {
-    res.render('usersViews/signUp', { title: "Pets Finder", footer: "foooter" });
+  .get('/sign-up', middlewares.checkNotAuthenticated,(req, res) => {
+
+    let navList = null;
+    let userFirstName = null;
+    if (req.session && req.session.firstName) {
+      userFirstName = req.session.firstName;
+      navList = utils.getLoggedInUserNavList;
+    } else {
+      navList = utils.getNotLoggedInUserSignUpNavList;
+    }
+    res.render('usersViews/signUp', { title: "Sign Up", navList: navList, firstName: userFirstName });
   });
 
 
@@ -395,9 +415,11 @@ usersRouter.
 
     try {
       const userData = await usersData.checkUser(email, password);
+      const user=await usersData.getUserByEmail(email.toLowerCase());
       if (userData && userData.authenticated) {
         email = email.trim().toLowerCase();
         req.session.email = email;
+        req.session.firstName=user.firstName;
         res.json(userData);
       } else {
         return res.status(500).json({
@@ -568,16 +590,12 @@ usersRouter.
   });
 
 usersRouter
-  .route('/logout')
-  .get(async (request, res) => {
+  .get('/logout',async (request, res) => {
     try {
       request.session.destroy();
-      res.render('users/logout', {
-        error: false,
-        message: "Successfully logged out."
-      });
+      res.redirect("/");
     } catch (e) {
-      res.sendStatus(500).render('users/logout', {
+      res.status(500).json({
         error: true,
         message: "Server error while logging out."
       });
@@ -915,9 +933,12 @@ usersRouter.route("/delete").delete(async (req, res) => {
  * Route to redirect to user profile page
  */
 
-usersRouter.get("/userProfile", async(req, res)=>{
-  
-  return res.render("usersViews/userProfile", {title: 'User Profile'})
+usersRouter.get("/userProfile", middlewares.checkAuthenticated, async (req, res) => {
+  let userFirstName = req.session.firstName;
+  let navList = utils.getLoggedInUserUpdateProfileNavList;
+
+  return res.render("usersViews/userProfile", { title: "User Profile", navList: navList, firstName: userFirstName })
+
 });
 
 
@@ -926,8 +947,13 @@ usersRouter.get("/userProfile", async(req, res)=>{
  * Route to redirect to user's favorite pet list
  */
 
-usersRouter.get("/favoriteList", async(req, res)=>{
-  return res.render("usersViews/favoriteList", {title: 'Favorite List'})
+
+usersRouter.get("/favoriteList",middlewares.checkAuthenticated, async(req, res)=>{
+  let userFirstName = req.session.firstName;
+  let navList = utils.getLoggedInUserFavoritesNavList;
+
+  return res.render("usersViews/favoriteList",{ title: "Favorites", navList: navList, firstName: userFirstName })
+
 })
 
 /**
@@ -935,8 +961,13 @@ usersRouter.get("/favoriteList", async(req, res)=>{
  * Route to redirect to user's account settings
  */
 
-usersRouter.get("/accountSettings", async(req, res)=>{
-  return res.render("usersViews/accountSettings", {title: 'Account Settings'})
+
+usersRouter.get("/accountSettings",middlewares.checkAuthenticated, async(req, res)=>{
+  let userFirstName = req.session.firstName;
+  let navList = utils.getLoggedInUserAccountSettingNavList;
+
+  return res.render("usersViews/accountSettings",{ title: "Account Setting", navList: navList, firstName: userFirstName })
+
 })
 
 /**
@@ -944,8 +975,13 @@ usersRouter.get("/accountSettings", async(req, res)=>{
  * Route to redirect to user's adopted pet list
  */
 
-usersRouter.get("/adoptedList", async(req, res)=>{
-  return res.render("usersViews/adoptedList", {title: 'Adopted List'})
+
+usersRouter.get("/adoptedList",middlewares.checkAuthenticated, async(req, res)=>{
+  let userFirstName = req.session.firstName;
+  let navList = utils.getLoggedInUserAdoptedListNavList;
+
+  return res.render("usersViews/adoptedList",{ title: "Adopted List", navList: navList, firstName: userFirstName })
+
 })
 
 

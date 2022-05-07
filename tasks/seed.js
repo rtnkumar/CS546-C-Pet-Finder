@@ -482,6 +482,7 @@ const main = async () => {
 
 
   console.log('Done seeding database');
+  return dbConnection.closeConnection();
 };
 
 main().catch(console.log);
