@@ -1,5 +1,5 @@
 (function ($) {
-    let userDetails = JSON.parse(window.localStorage.getItem('userDetails'));
+    window.localStorage.setItem('userDetails', JSON.stringify(userDetails));
     let searchedDataList = userDetails.uploadedPetList;
     let petsListData = searchedDataList;
     let count = 0;

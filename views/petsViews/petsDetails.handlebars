@@ -9,11 +9,13 @@
                 <div id="qna">
                 </div>
                 <div>
+                    {{#if isNotPetUploadedDetails}}
                     <form id="askQuesForm">
                         <label for="question">Ask Questions</label>
                         <input id="question">
                         <button type="submit">Submit</button>
                     </form>
+                    {{/if}}
                     <div id="error">
                     </div>
                 </div>
