@@ -224,11 +224,8 @@
 
     $("#sort").change(function () {
         var filterValue = $(this).val();
-        if (filterValue.toLowerCase() == "all") {
-            searchedDataList = petsListData;
-        } else {
-            searchedDataList = getSortedFilteredData(petsListData, filterValue);
-        }
+        searchedDataList = getSortedFilteredData(searchedDataList, filterValue);
+
         count = 0;
         $(".pet-list").remove();
         init();
