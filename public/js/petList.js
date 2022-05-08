@@ -158,11 +158,8 @@
         let gender = $('#gender').val();
         let color = $('#color').val();
 
-        if (breed.toLowerCase() == "all") {
-            searchedDataList = petsListData;
-        } else {
-            searchedDataList = getFilteredData(petsListData, breed, age, size, gender, color);
-        }
+        searchedDataList = getFilteredData(petsListData, breed, age, size, gender, color);
+
         count = 0;
         $(".pet-list").remove();
         init();
@@ -175,11 +172,8 @@
         let gender = $('#gender').val();
         let color = $('#color').val();
 
-        if (age.toLowerCase() == "all") {
-            searchedDataList = petsListData;
-        } else {
-            searchedDataList = getFilteredData(petsListData, breed, age, size, gender, color);
-        }
+        searchedDataList = getFilteredData(petsListData, breed, age, size, gender, color);
+
         count = 0;
         $(".pet-list").remove();
         init();
@@ -193,11 +187,8 @@
         let gender = $('#gender').val();
         let color = $('#color').val();
 
-        if (size.toLowerCase() == "all") {
-            searchedDataList = petsListData;
-        } else {
-            searchedDataList = getFilteredData(petsListData, breed, age, size, gender, color);
-        }
+        searchedDataList = getFilteredData(petsListData, breed, age, size, gender, color);
+
         count = 0;
         $(".pet-list").remove();
         init();
@@ -210,11 +201,8 @@
         let gender = $('#gender').val();
         let color = $('#color').val();
 
-        if (gender.toLowerCase() == "all") {
-            searchedDataList = petsListData;
-        } else {
-            searchedDataList = getFilteredData(petsListData, breed, age, size, gender, color);
-        }
+        searchedDataList = getFilteredData(petsListData, breed, age, size, gender, color);
+
         count = 0;
         $(".pet-list").remove();
         init();
@@ -227,11 +215,8 @@
         let gender = $('#gender').val();
         let color = $('#color').val();
 
-        if (color.toLowerCase() == "all") {
-            searchedDataList = petsListData;
-        } else {
-            searchedDataList = getFilteredData(petsListData, breed, age, size, gender, color);
-        }
+        searchedDataList = getFilteredData(petsListData, breed, age, size, gender, color);
+
         count = 0;
         $(".pet-list").remove();
         init();
@@ -269,22 +254,22 @@
         }
 
         for (let filterData of petsListData) {
-            if (filter.breed && filter.breed != filterData.breed.toLowerCase()) {
+            if ((filter.breed) && (filter.breed != filterData.breed.toLowerCase())) {
                 continue;
             }
 
-            if (filter.age && filter.age != filterData.age.toLowerCase()) {
+            if ((filter.age) && (filter.age != filterData.age.toLowerCase())) {
                 continue;
             }
 
-            if (filter.size && filter.size != filterData.size.toLowerCase()) {
+            if ((filter.size) && (filter.size != filterData.size.toLowerCase())) {
                 continue;
             }
 
-            if (filter.gender && filter.gender != filterData.gender.toLowerCase()) {
+            if ((filter.gender) && (filter.gender != filterData.gender.toLowerCase())) {
                 continue;
             }
-            if (filter.color && filter.color != filterData.color.toLowerCase()) {
+            if ((filter.color) && (filter.color != filterData.color.toLowerCase())) {
                 continue;
             }
 
