@@ -567,6 +567,7 @@ usersRouter.
       const updatedInfo = await usersData.updateUserEmailPassword(email, newEmail, newPassword, confirmPassword);
       if (updatedInfo && updatedInfo.isUpdated) {
         req.session.email = email;
+        req.session.destroy()
         res.json(updatedInfo);
       } else {
         return res.status(500).json({
@@ -1074,6 +1075,13 @@ usersRouter.
   return res.render("usersViews/deleteAccount",{ title: "DeleteAccount", navList: navList, firstName: userFirstName })
 
    
+  })
+
+
+  usersRouter.get('/feedback', async(req, res)=>{
+    let userFirstName = req.session.firstName;
+    
+    return res.render("usersViews/feedback", { title: "Feedback", firstName: userFirstName})
   })
 
 module.exports = usersRouter;
