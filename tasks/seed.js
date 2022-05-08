@@ -459,6 +459,8 @@ async function populateDummyQuestionsAnswers(db) {
 }
 
 const main = async () => {
+  console.log("Seeding database...");
+
   const db = await dbConnection.connectToDb();
   await db.dropDatabase();
 
