@@ -713,7 +713,7 @@ petsRouter.
 
 petsRouter.
     get('/:id', trimRequest.all, async (req, res) => {
-
+        let isNotPetUploadedDetails=true;
         let id = xss(req.params.id);
         try {
             if (!commonValidators.isValidId(id)) {
@@ -725,10 +725,18 @@ petsRouter.
             if(req.session && req.session.firstName){
                 userFirstName=req.session.firstName;
                 navList=utils.getLoggedInUserPetDetailsNavList;
+                const userDetails = await usersData.getUserDetailsByEmail(req.session.email);
+                for(let pet of userDetails.uploadedPetList){
+                        if(pet._id==id){
+                            isNotPetUploadedDetails=false;
+                            break;
+                        }
+                }
+
             }else{
                 navList=utils.getNotLoggedInUserPetDetailsNavList;
             }
-            res.render('petsViews/petsDetails', { title: "Pets Finder", data: JSON.stringify(petList), navList: navList, firstName: userFirstName });
+            res.render('petsViews/petsDetails', { title: "Pets Finder", data: JSON.stringify(petList), navList: navList, firstName: userFirstName ,isNotPetUploadedDetails:isNotPetUploadedDetails});
         } catch (error) {
             if (`No pet with id=${id.trim()}` === error) {
                 res.status(404).json({
@@ -931,7 +939,9 @@ petsRouter
     .get('/upload/list',middlewares.checkAuthenticated, async (req, res) => {
         let userFirstName = req.session.firstName;
         let navList = utils.getLoggedInUserUploadedPetListNavList;
-        res.render('petsViews/uploadPetList', { title: "Uploaded Pet List", navList: navList, firstName: userFirstName });
+        const userDetails = await usersData.getUserDetailsByEmail(req.session.email);
+
+        res.render('petsViews/uploadPetList', { title: "Uploaded Pet List", navList: navList, firstName: userFirstName ,userDetails:JSON.stringify(userDetails)});
     });
 
 
