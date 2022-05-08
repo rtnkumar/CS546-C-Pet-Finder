@@ -104,3 +104,106 @@ table {
     margin-bottom: 10px;
     
 }
+
+.deleteButton {
+    background-color: crimson;
+    color: white;
+    border: none;
+    border-radius: 10px;
+    padding: 10px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    margin-left: auto;
+    margin-right: auto;
+    display: block;
+    cursor: pointer;
+    font-size: 0.8em;
+    font-weight: bold;
+    width: auto;
+    height: auto;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    border-radius: 5px;
+    -webkit-box-shadow: 0px 0px 0px 5px rgba(0,0,0,0.5);
+    -moz-box-shadow: 0px 0px 0px 5px rgba(0,0,0,0.5);
+    box-shadow: 0px 0px 0px 5px rgba(0,0,0,0.5);
+}
+
+.submitButton {
+    background-color: #00819f;
+    color: white;
+    border: none;
+    border-radius: 10px;
+    padding: 10px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    margin-left: auto;
+    margin-right: auto;
+    display: block;
+    width: 100px;
+    cursor: pointer;
+}
+
+.petListButton {
+    background-color: #00819f;
+    color: white;
+    border: none;
+    border-radius: 10px;
+    padding: 10px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    margin-left: auto;
+    margin-right: auto;
+    display: block;
+    width: 50%;
+    cursor: pointer;
+}
+
+.changeInfoButton {
+  background-color: #004a9f;
+  color: white;
+  border: none;
+  border-radius: 10px;
+  padding: 10px;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  margin-left: auto;
+  margin-right: auto;
+  display: block;
+  width: 40%;
+  cursor: pointer;
+}
+
+.footer {
+    background-color: #009de2;
+    height: 100px;
+    width: auto;
+    line-height: 2;
+    overflow-y: hidden;
+    padding: auto;
+    background-image: linear-gradient(to bottom, #38b6ff 0%, #00bfff 100%);
+    background-repeat: no-repeat;
+    background-size: cover;
+    color: white;
+    font-size: 1.5em;
+    font-weight: bold;
+    text-align: center;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    margin-left: auto;
+    margin-right: auto;
+    display: block;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    padding: 10px;
+    width: 90%;
+    text-align: center;
+    font-family: 'Roboto', sans-serif;
+    font-weight: bold;
+    font-size: 1.5em;
+    text-decoration: none;
+    text-shadow: 2px 2px black;
+}
