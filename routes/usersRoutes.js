@@ -911,7 +911,9 @@ usersRouter.route("/delete").delete(async (req, res) => {
   const emailId = req.session.email;
   try {
     const deleteUser = await usersData.remove(emailId);
+    req.session.destroy();
     res.json(deleteUser);
+    
   } catch (e) {
     if (e == `No user with email=${emailId}`) {
       return res.status(404).json({
@@ -1071,7 +1073,7 @@ usersRouter.
 
   return res.render("usersViews/deleteAccount",{ title: "DeleteAccount", navList: navList, firstName: userFirstName })
 
-    return res.render('usersViews/deleteAccount', {title: 'Delete Account'})
+   
   })
 
 module.exports = usersRouter;

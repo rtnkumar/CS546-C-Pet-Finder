@@ -5,9 +5,9 @@ emailError.style.display = "none";
 
 function init() {
   let isLogin = window.localStorage.getItem("isLogin");
-  if (!isLogin || isLogin === null) {
+  if (isLogin === null) {
     //alert("You are not logged in")
-    window.location.assign("http://localhost:3000/users/sign-up");
+    window.location.assign("http://localhost:3000/");
   } else {
     let userDetails = JSON.parse(window.localStorage.getItem("userDetails"));
 
@@ -47,16 +47,13 @@ async function deleteProfile(event) {
         for (key of keysToRemove) {
           window.localStorage.removeItem(key);
         }
+
+        alert("Account has been deleted successfully!");
+
+ 
       }
     });
 
-  alert("Account has been deleted successfully!");
-
-  await fetch("/users/logout", {
-    method: "GET",
-    headers: {
-      "Content-type": "application/json; charset=UTF-8",
-    },
-  });
+  
 
 }
