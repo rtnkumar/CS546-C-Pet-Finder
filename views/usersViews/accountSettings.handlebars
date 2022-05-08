@@ -32,7 +32,8 @@
             <div class="edit-email-error">
                         </div>
             <div class="edit-email1"> <label for="edit-email1" class="text-input__label">New Email Address<span class="form-required" aria-hidden="true" title="This field is required."></span><span class="hidden_clip">.</span></label>
-              <input class="form-control form-text password__field text-input__field required" type="text" id="edit-email1" name="password" size="60" maxlength="128" aria-required="true">
+              <input class="form-control form-text password__field text-input__field required" type="text" id="edit-email1" name="password" size="60" maxlength="128" aria-required="true" pattern="^[-!#$%&'*+\/0-9=?A-Z^_a-z`{|}~](\.?[-!#$%&'*+\/0-9=?A-Z^_a-z`{|}~])*@[a-zA-Z0-9](-*\.?[a-zA-Z0-9])*\.[a-zA-Z](-?[a-zA-Z0-9])+$"
+                                title="Invalid email format">
             </div>
           </fieldset>
           <button class="changeInfoButton inpt-btn btn btn-primary form-submit js-registerSubmit" type="submit" id="edit-submit" value="Register" onclick="updateEmail(event)">Change Email</button>
@@ -63,7 +64,9 @@
               <div class="divide-width divide-mrgn">
                 <div class="middle-bottom-inner-left">
                   <div class="form__field__wrapper form-item"> <label for="edit-password" class="input__label">New password <span class="form-required" aria-hidden="true" title="This field is required."></span><span class="hidden_clip">.</span></label>
-                    <input class="form-control form-text required text-input__field" type="password" id="edit-password"  size="60" maxlength="128" minlength="6" aria-required="true">
+
+                    <input class="form-control form-text required text-input__field" type="password" id="edit-password"  size="60" minlength="6" maxlength="128" aria-required="true">
+
                   </div>
                 </div>
               </div>
@@ -71,7 +74,9 @@
                         </div>
               <div class="middle-bottom-inner-left">
                 <div class="form__field__wrapper form-item"> <label for="edit-password1" class="input__label"> Confirm password <span class="form-required" aria-hidden="true" title="This field is required."></span><span class="hidden_clip">.</span></label>
-                  <input class="form-control form-text required text-input__field" type="password" id="edit-password1" size="60" maxlength="128" minlength="6" aria-required="true">
+
+                  <input class="form-control form-text required text-input__field" type="password" id="edit-password1" minlength="6" title="At least 6 characters are required" size="60" aria-required="true">
+
                 </div>
               </div>
               <div class="edit-password1-error">

@@ -1,0 +1,24 @@
+ 
+ <form id="feedback" action="users/feedback" onsubmit="giveFeedback(event)">
+
+
+<tr>
+                    <td class="text-end">
+                        <div>
+                            <label for="feedback"><b>Give Feedback</b></label>
+                        </div>
+                    </td>
+                    <td class="text-start">
+                        <div>
+                            <input type="text" placeholder="Provide feedback" name="feedback" id="feedback" required />
+                        </div>
+                        <div class="feedback-error">
+                        </div>
+                    </td>
+
+                </tr>
+
+ <button type="submit" onclick="giveFeedback(event)">Feedback</button>
+
+
+ </form>

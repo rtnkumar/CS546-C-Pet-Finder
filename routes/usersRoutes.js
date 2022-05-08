@@ -567,6 +567,7 @@ usersRouter.
       const updatedInfo = await usersData.updateUserEmailPassword(email, newEmail, newPassword, confirmPassword);
       if (updatedInfo && updatedInfo.isUpdated) {
         req.session.email = email;
+        req.session.destroy()
         res.json(updatedInfo);
       } else {
         return res.status(500).json({
@@ -911,7 +912,9 @@ usersRouter.route("/delete").delete(async (req, res) => {
   const emailId = req.session.email;
   try {
     const deleteUser = await usersData.remove(emailId);
+    req.session.destroy();
     res.json(deleteUser);
+    
   } catch (e) {
     if (e == `No user with email=${emailId}`) {
       return res.status(404).json({
@@ -1070,7 +1073,18 @@ usersRouter.get('/deleteAccount',middlewares.checkAuthenticated, async (req, res
   let userFirstName = req.session.firstName;
   let navList = utils.getLoggedInUserDeletedAccountNavList;
 
-  return res.render("usersViews/deleteAccount", { title: "DeleteAccount", navList: navList, firstName: userFirstName })
-})
+
+  return res.render("usersViews/deleteAccount",{ title: "DeleteAccount", navList: navList, firstName: userFirstName })
+
+   
+  })
+
+
+  usersRouter.get('/feedback', async(req, res)=>{
+    let userFirstName = req.session.firstName;
+    
+    return res.render("usersViews/feedback", { title: "Feedback", firstName: userFirstName})
+  })
+
 
 module.exports = usersRouter;
