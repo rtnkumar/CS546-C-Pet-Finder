@@ -126,8 +126,8 @@
                     '<div style="text-align:center;">  <button class="petListButton" name="favorite" value="#' + searchedDataList[count]._id + '" style="margin-top: -5px;">Add Favorite</button></div>' +
 
                     '<div><img src=' + imagePath+searchedDataList[count].picture + ' alt=' + searchedDataList[count].name +' width="250" height="200"></div>' +
-                    '<div style="text-align:center;">' + searchedDataList[count].name +
-                    '</div>' +
+                    '<div style="text-align:center;"><b>' + searchedDataList[count].name +
+                    '</b></div>' +
                     '<div style="text-align:center;">  <button class="petListButton" name="details" value="' + searchedDataList[count]._id + '" style="margin-bottom: 20px;">View Details</button></div>' +
                     '</div>');
             }
