@@ -76,6 +76,10 @@ table {
     margin-top: 10px;
 } */
 
+.welcome {
+    margin-right: 20px;
+}
+
 .error {
     color: red;
     font-size: 1.5em;
