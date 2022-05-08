@@ -92,3 +92,15 @@ table {
     margin-right: auto;
     display: block;
 }
+
+#ownerDetailsList {
+    background-color: #ffffff;
+    width: 30%;
+    display: block;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    padding: 10px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    
+}

@@ -112,7 +112,7 @@
         if (ownerDetailsList == '') {
             ownerDetailsList = "<li>N/A</li>"
         }
-        ownerDetailsList = '<ul>' + ownerDetailsList + '</ul>';
+        ownerDetailsList = '<ul id="ownerDetailsList">' + ownerDetailsList + '</ul>';
         ownerDetailsList = '<dd>' + ownerDetailsList + '</dd>';
         $('#show dl').append(ownerDetailsList);
 
