@@ -104,9 +104,9 @@ petsRouter
             let userFirstName=null;
             if(req.session && req.session.firstName){
                 userFirstName=req.session.firstName;
-                navList=utils.getLoggedInUserHomeNavList;
+                navList=utils.getLoggedInUserPetDetailsNavList;
             }else{
-                navList=utils.getNotLoggedInUserHomeNavList;
+                navList=utils.getNotLoggedInUserPetDetailsNavList;
             }
             res.render('petsViews/petsList',{title:"Pet Finder",error:false,data:JSON.stringify(pets),petTypeList:JSON.stringify(petTypeList),navList:navList,firstName:userFirstName});
         } catch (e) {
