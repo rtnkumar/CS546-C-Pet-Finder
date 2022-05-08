@@ -64,10 +64,10 @@ usersRouter
 usersRouter
   .post('/sign-up', async (request, res) => {
     try {
-      let form = new formidable.IncomingForm();
+      let form = new formidable.IncomingForm({maxFileSize:20 * 1024 * 1024});
       form.parse(request, async (err, fields, files) => {
         if (err) {
-          return res.status(400).json({
+          return res.status(500).json({
             error: true,
             message: "There was an error parsing the files",
           });
@@ -951,8 +951,8 @@ usersRouter.get("/userProfile", middlewares.checkAuthenticated, async (req, res)
 usersRouter.get("/favoriteList",middlewares.checkAuthenticated, async(req, res)=>{
   let userFirstName = req.session.firstName;
   let navList = utils.getLoggedInUserFavoritesNavList;
-
-  return res.render("usersViews/favoriteList",{ title: "Favorites", navList: navList, firstName: userFirstName })
+  const userDetails = await usersData.getUserDetailsByEmail(req.session.email);
+  return res.render("usersViews/favoriteList",{ title: "Favorites", navList: navList, firstName: userFirstName ,userDetails:JSON.stringify(userDetails)})
 
 })
 
@@ -979,8 +979,9 @@ usersRouter.get("/accountSettings",middlewares.checkAuthenticated, async(req, re
 usersRouter.get("/adoptedList",middlewares.checkAuthenticated, async(req, res)=>{
   let userFirstName = req.session.firstName;
   let navList = utils.getLoggedInUserAdoptedListNavList;
+  const userDetails = await usersData.getUserDetailsByEmail(req.session.email);
 
-  return res.render("usersViews/adoptedList",{ title: "Adopted List", navList: navList, firstName: userFirstName })
+  return res.render("usersViews/adoptedList",{ title: "Adopted List", navList: navList, firstName: userFirstName ,userDetails:JSON.stringify(userDetails)})
 
 })
 
@@ -1065,13 +1066,11 @@ usersRouter.
    * Route to redirect to deleting account page
    */
 
-  usersRouter.get('/deleteAccount', async(req, res)=>{
-    let userFirstName = req.session.firstName;
+usersRouter.get('/deleteAccount',middlewares.checkAuthenticated, async (req, res) => {
+  let userFirstName = req.session.firstName;
   let navList = utils.getLoggedInUserDeletedAccountNavList;
 
-  return res.render("usersViews/deleteAccount",{ title: "DeleteAccount", navList: navList, firstName: userFirstName })
-
-    return res.render('usersViews/deleteAccount', {title: 'Delete Account'})
-  })
+  return res.render("usersViews/deleteAccount", { title: "DeleteAccount", navList: navList, firstName: userFirstName })
+})
 
 module.exports = usersRouter;
