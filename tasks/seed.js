@@ -44,7 +44,7 @@ async function populateDummyUsers(db) {
   let user12 = makeUser("Sophia", "Rose", "Meyer", "therose@gmail.com", await utils.getHashedPassword("1_L0V3_P13"), "323-232-3232", "67 Amherst St.", "Oakland Gardens", "New York", "11364", "user12.jpg");
   let user13 = makeUser("Michael", "", "Smith", "anothersmith@gmail.com", await utils.getHashedPassword("definitelysafe"), "111-000-1010", "7222 Bayberry Street", "Miami Beach", "Florida", "33139", "user13.jpg");
   let user14 = makeUser("Methuselah", "Oldman", "Abradolf", "oldestmanalive@notreally.org", await utils.getHashedPassword("old_older_oldest_999999999"), "483-264-7894", "38 2nd St.", "Valley Stream", "New York", "11580", "user14.jpg");
-  let user15 = makeUser("Samantha", "", "Reichenthal", "artandlove@artistry.com", await utils.getHashedPassword("art_and_love"), "459 Mayfield Drive", "Danville", "Virginia", "24540", "user15.jpg");
+  let user15 = makeUser("Samantha", "", "Reichenthal", "artandlove@artistry.com", await utils.getHashedPassword("art_and_love"), "865-868-4433", "459 Mayfield Drive", "Danville", "Virginia", "24540", "user15.jpg");
   let user16 = makeUser("Roushan", "", "Kumar", "rkumar@stevens.edu", await utils.getHashedPassword("roushan_did_most_of_the_work"), "917-867-5309", "7533 Old Windsor St.", "Roslindale", "Massachusetts", "02131", "user16.jpg");
   let user17 = makeUser("Feneel", "", "Doshi", "fdoshi@stevens.edu", await utils.getHashedPassword("feneel_is_the_best"), "583-867-5309", "9704 Durham Street", "Reading", "Massachusetts", "01867", "user17.jpg");
   let user18 = makeUser("Dominick", "Patrick", "Varano", "dvarano@stevens.edu", await utils.getHashedPassword("dom_made_all_this_test_data"), "777-777-8888", "18 E. Prairie Drive", "Sacramento", "California", "95820", "user18.png");
@@ -459,6 +459,8 @@ async function populateDummyQuestionsAnswers(db) {
 }
 
 const main = async () => {
+  console.log("Seeding database...");
+
   const db = await dbConnection.connectToDb();
   await db.dropDatabase();
 
