@@ -38,7 +38,7 @@ adminRouter.get("/profile",middlewares.checkAdminAuthenticated, async(req, res) 
  * Siddarth Singh
  * get all pets
  */
-adminRouter.get("/petsList",async (req, res) => {
+adminRouter.get("/petsList",middlewares.checkAdminAuthenticated, async (req, res) => {
   let petsList=await adminData.getAllPets();
   let userAdminName = req.session.adminFirstName;
   let navList = utils.getLoggedInAdminPetsListNavList;
@@ -49,7 +49,7 @@ adminRouter.get("/petsList",async (req, res) => {
  * Siddarth Singh
  * get all users
  */
-adminRouter.get("/usersList",async (req, res) => {
+adminRouter.get("/usersList",middlewares.checkAdminAuthenticated, async (req, res) => {
   let usersList=await adminData.getAllUsers();
   let userAdminName = req.session.adminFirstName;
   let navList = utils.getLoggedInAdminUsersListNavList;

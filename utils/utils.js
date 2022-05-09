@@ -161,10 +161,11 @@ function getNotLoggedInUserSignUpNavList(){
 
 function getNotLoggedInAdminNavList(){
     return [ { url: "#", name: "Login" }];
+}
 function getNotLoggedInUserPetDetailsNavList() {
     return [{ url: "/", name: "Home" }, { url: "/users/login", name: "Login" }, { url: "/users/sign-up", name: "Sign Up" }];
 }
-}
+
 module.exports={
     getHashedPassword,
     getLoggedInUserNavList,
@@ -184,5 +185,6 @@ module.exports={
     getLoggedInAdminPetsListNavList,
     getNotLoggedInAdminNavList,
     getLoggedInUserPetDetailsNavList,
-    getLoggedInUserDeletedAccountNavList
+    getLoggedInUserDeletedAccountNavList,
+     getNotLoggedInUserPetDetailsNavList
 }
