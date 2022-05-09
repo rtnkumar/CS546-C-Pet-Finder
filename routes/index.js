@@ -1,5 +1,6 @@
 const petsRouter = require('./petsRoutes.js');
 const usersRouter = require('./usersRoutes.js');
+const adminRouter = require('./adminRoutes.js');
 const petTypesData = require('../data/petTypesData.js');
 const utils = require('../utils/utils');
 
@@ -7,6 +8,7 @@ const utils = require('../utils/utils');
 const constructorMethod = (app) => {
     app.use('/pets', petsRouter);
     app.use('/users', usersRouter);
+    app.use('/admin', adminRouter);
     app.use('/', async (req, res) => {
         let petTypeList = await petTypesData.getAllPetTypes();
         let navList=null;
