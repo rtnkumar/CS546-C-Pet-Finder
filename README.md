@@ -25,6 +25,8 @@ After that, you should run 'npm run seed' to seed the database with necessary in
   - They are able to upload their own pets for adoption.
   - They can keep a list of favorite pets they like on the website.
   - They can ask questions about pets listed on the website, or answer questions other users ask about their own.
+  - They have a list of pets they have adopted from other users
+- Authenticated users have full access over changing their account information at any time, including their emails and passwords, and even deleting their accounts
 
 
 ## GitHub Link
