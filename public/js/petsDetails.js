@@ -2,6 +2,7 @@
 
     $("#error").hide();
     let petDetails = data;
+    console.log(petDetails);
 
     function init() {
         let name = "N/A";
@@ -121,8 +122,19 @@
         if (petDetails && petDetails.qna) {
             for (let qna of petDetails.qna) {
                 $('#qna').append('<div>' + "<strong>Question:&nbsp&nbsp</strong>" + qna.question + '</div>');
-                $('#qna').append('<div>' + "<strong>Answer:&nbsp&nbsp</strong>" + qna.answer + '</div>');
-            }
+
+                if ($('#answerQuestions').length) {
+                    if (qna.answer == "") {
+                        $('#qna').append('<form id="' + qna.id + '">' +
+                        '<label for="#' + qna.id + '">Answer Question </label>' +
+                        '<input id="#' + qna.id + '" minLength="1">' +
+                        '<button type="submit" class="submitButton"> Submit</button>' +
+                        '</form>');
+                    } else {
+                        $('#qna').append('<div>' + "<strong>Answer:&nbsp&nbsp</strong>" + qna.answer + '</div>');
+                }} else {
+                    $('#qna').append('<div>' + "<strong>Answer:&nbsp&nbsp</strong>" + qna.answer + '</div>');
+            }}
         }
     }
     init();
@@ -186,6 +198,73 @@
                 $('#qna').append('<div>' + "<strong>Answer:&nbsp&nbsp</strong>" + '</div>');
             });
         }
+
+    });
+
+    $('#qna').on('click', '.submitButton', function (event) {
+        event.preventDefault();
+        let userDetails = JSON.parse(window.localStorage.getItem('userDetails'));
+        if (userDetails == null || userDetails.email==null) {
+            alert("Login is required");
+            window.location.assign('http://localhost:3000/users/login');
+        }
+
+        $.ajax({
+            type: "GET",
+            url: 'http://localhost:3000/users/auth/' + userDetails.email,
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            //if received a response from the server
+            success: function (response, textStatus, jqXHR) {
+            }
+            //If there was no resonse from the server
+            , error: function (jqXHR, textStatus, errorThrown) {
+                let response = jqXHR.responseJSON;
+                if (response.isLogin === false) {
+                    alert("Login is required");
+                    window.location.assign('http://localhost:3000/users/login');
+                } else {
+                    alert("Please try after sometime!");
+                }
+            }
+            //capture the request before it was sent to server
+            , beforeSend: function (jqXHR, settings) {
+            }
+            //this is called after the response or error functions are finished
+            //so that we can take some action
+            , complete: function (jqXHR, textStatus) {
+            }
+        })
+       
+        let questionId = $(this).parent().attr('id');
+        let answer = $('#' + questionId).find('input').val();
+        if (!answer || answer.trim() == '') {
+            $("#error").show();
+            $("#error").text("There is no answer");
+        } else {
+            $("#error").hide();
+            let requestConfig = {
+                method: 'PUT',
+                url: 'http://localhost:3000/pets/qna/' + questionId,
+                data: {
+                    answer: answer
+                }
+            };
+
+            $.ajax(requestConfig).then(function (responseMessage) {
+                $('#' + questionId).remove();
+                // Notify the user that their answer has been submitted
+                alert("Your answer has been submitted!");
+                // Refresh the page
+                location.reload();
+            }
+            , function (responseMessage) {
+                alert("Please try after sometime!");
+            }
+            );
+        }
+
+        
 
     });
 
