@@ -22,9 +22,9 @@ After that, you should run 'npm run seed' to seed the database with necessary in
 - Any user will be able to search for pets from the homepage. The user must select the type of pet they wish to look for, as well as a city, state, or zip.
 - Users that have performed a search will see a list of pets. From there, they can filter the search results down and then select one pet to view details about that pet.
 - Authenticated users have privileges non-authorized users do not have:
- - They are able to upload their own pets for adoption.
- - They can keep a list of favorite pets they like on the website.
- - They can ask questions about pets listed on the website, or answer questions other users ask about their own.
+  - They are able to upload their own pets for adoption.
+  - They can keep a list of favorite pets they like on the website.
+  - They can ask questions about pets listed on the website, or answer questions other users ask about their own.
 
 
 ## GitHub Link
