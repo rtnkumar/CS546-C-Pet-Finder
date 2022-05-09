@@ -482,6 +482,23 @@ const main = async () => {
   // Populate dummy questions and answers
   await populateDummyQuestionsAnswers(db);
 
+  await db.collection('adminUsers');
+  await db.collection('adminUsers').insertOne({
+    _id: new ObjectId(),
+    firstName: "John",
+    middleName: "Sean",
+    lastName: "Doe",
+    email: "jdoe@gmail.com",
+    password: await utils.getHashedPassword("123456"),
+    phoneNumber: "123-456-7890",
+    address: "123Main",
+    city: "Anytown",
+    state: "California",
+    zip: "12345",
+    createdAt: new Date(),
+    updatedAt: new Date()
+  });
+
 
   console.log('Done seeding database');
   return dbConnection.closeConnection();
