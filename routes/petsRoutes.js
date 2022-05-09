@@ -852,6 +852,47 @@ petsRouter.
         }
     })
 
+    .put('/qna/:id', trimRequest.all, async (req, res) => {
+        const answer = xss(req.body.answer);
+        const qnaId = xss(req.params.id);
+
+        console.log(answer);
+
+        // Validation
+        if (!commonValidators.isValidId(qnaId)) {
+            return res.status(400).json({ error: true, message: "invalid parameter", qnaId: "Invalid qnaId" });
+        }
+
+        let isValidAnswer = commonValidators.isValidString(answer, 'answer');
+
+        if (!isValidAnswer[0]) {
+            return res.status(400).json({
+                error: true,
+                message: "Invalid input",
+                answer: "Invalid answer",
+            });
+        }
+
+        try {
+            let result = await petsData.updateQNA(qnaId, answer);
+            res.json(result);
+        } catch (error) {
+            if (error == 'Invalid questionId') {
+                res.status(404).json({
+                    error: true,
+                    message: error
+                });
+            } else {
+                res.status(500).json({
+                    error: true,
+                    message: "Something went wrong, please try after sometime"
+                })
+            }
+        }
+    })
+
+
+
 /**
  * Feneel Doshi
  * Assigning pet to user API
