@@ -13,7 +13,7 @@ Pet Finder is a pet adoption application designed to allow users the ability to 
 Built using HTML, CSS, Bootstrap, Express, Node.js, and MongoDB.
 
 ## How to set up our application
-First, run 'npm ci' to install the required dependencies for the app.<br>
+First, navigate to home folder and run 'npm ci' to install the required dependencies for the app.<br>
 After that, you should run 'npm run seed' to seed the database with necessary information and test data.
 
 ## How to run and use the application
