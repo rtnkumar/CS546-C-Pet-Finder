@@ -21,7 +21,7 @@ let logger = (req, res, next) => {
   }else{
     msg="(Non-Authenticated User)";
   }
-  console.log("[" + new Date().toUTCString() + "]: " + req.method + " " + req.originalUrl+" "+msg+" "+JSON. stringify(req.body));
+  console.log("[" + new Date().toUTCString() + "]: " + req.method + " " + req.originalUrl+" "+msg);
   next();
 };
 
