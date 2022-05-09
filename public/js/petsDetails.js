@@ -2,7 +2,6 @@
 
     $("#error").hide();
     let petDetails = data;
-    console.log(petDetails);
 
     function init() {
         let name = "N/A";
