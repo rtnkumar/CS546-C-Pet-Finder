@@ -90,6 +90,27 @@ function getLoggedInUserUploadedPetListNavList(){
     { url: "/users/logout", name: "Logout" }];
 }
 
+function getLoggedInAdminProfileNavList(){
+    return [{ url: "#", name: "Profile" },
+    { url: "/admin/usersList", name: "Users List" },
+    { url: "/admin/PetsList", name: "Pets List" },
+    { url: "/admin/logout", name: "Logout" }];
+}
+
+
+function getLoggedInAdminUsersListNavList(){
+    return [{ url: "/admin/profile", name: "Profile" },
+    { url: "#", name: "Users List" },
+    { url: "/admin/PetsList", name: "Pets List" },
+    { url: "/admin/logout", name: "Logout" }];
+}
+function getLoggedInAdminPetsListNavList(){
+    return [{ url: "/admin/profile", name: "Profile" },
+    { url: "/admin/usersList", name: "Users List" },
+    { url: "#", name: "Pets List" },
+    { url: "/admin/logout", name: "Logout" }];
+}
+
 function getNotLoggedInUserNavList(){
     return [{ url: "/", name: "Home" }, { url: "/users/login", name: "Login" }, { url: "/users/sign-up", name: "Sign Up" }];
 }
@@ -106,6 +127,10 @@ function getNotLoggedInUserSignUpNavList(){
     return [{ url: "/", name: "Home" }, { url: "/users/login", name: "Login" }, { url: "#", name: "Sign Up" }];
 }
 
+function getNotLoggedInAdminNavList(){
+    return [ { url: "#", name: "Login" }];
+}
+
 module.exports={
     getHashedPassword,
     getLoggedInUserNavList,
@@ -119,5 +144,9 @@ module.exports={
     getLoggedInUserUploadPetNavList,
     getLoggedInUserFavoritesNavList,
     getLoggedInUserAdoptedListNavList,
-    getLoggedInUserUploadedPetListNavList
+    getLoggedInUserUploadedPetListNavList,
+    getLoggedInAdminProfileNavList,
+    getLoggedInAdminUsersListNavList,
+    getLoggedInAdminPetsListNavList,
+    getNotLoggedInAdminNavList
 }

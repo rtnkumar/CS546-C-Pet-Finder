@@ -46,17 +46,10 @@ async function login(event) {
                     error.style.color = "#FF0000";
 
                 }
-             } else {
-            //     let requestConfig = {
-            //         method: 'GET',
-            //         url: 'http://localhost:3000/users/user-details?email='+body.email
-            //     };
-            //     $.ajax(requestConfig).then(function (responseMessage) {
-            //         window.localStorage.setItem('userDetails', JSON.stringify(responseMessage));
-            //         window.localStorage.setItem('isLogin', true);
-            //         window.location.assign('http://localhost:3000');
-            //     });
+            } else {
                 alert('login successfully.');
+                 window.location.assign('http://localhost:3000/admin/profile');
+
             }
         })
         .catch((error) => {
