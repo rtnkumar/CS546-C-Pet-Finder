@@ -64,7 +64,7 @@ usersRouter
 usersRouter
   .post('/sign-up', async (request, res) => {
     try {
-      let form = new formidable.IncomingForm({maxFileSize:20 * 1024 * 1024});
+      let form = new formidable.IncomingForm();
       form.parse(request, async (err, fields, files) => {
         if (err) {
           return res.status(500).json({

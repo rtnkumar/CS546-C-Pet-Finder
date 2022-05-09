@@ -4,13 +4,13 @@
     <div class="login-button-container clearfix">
 
       <div class="col-xs-6 sign-in">
-        <button class="sign-in__button active">
+        <button class="sign-in__button active changeInfoButton">
           Change email address        
         </button>
       </div>
 
       <div class="col-xs-6 register">
-        <button class="register__button">
+        <button class="register__button changeInfoButton">
           Change password        
         </button>
       </div>
@@ -36,7 +36,7 @@
                                 title="Invalid email format">
             </div>
           </fieldset>
-          <button class="inpt-btn btn btn-primary form-submit js-registerSubmit" type="submit" id="edit-submit" value="Register" onclick="updateEmail(event)">Change Email</button>
+          <button class="changeInfoButton inpt-btn btn btn-primary form-submit js-registerSubmit" type="submit" id="edit-submit" value="Register" onclick="updateEmail(event)">Change Email</button>
         </div>
         <div class="edit-email1-error">
                         </div>
@@ -84,7 +84,7 @@
 
             </div>
 
-            <button class="inpt-btn btn btn-primary form-submit js-registerSubmit" type="submit" id="edit-submit--2" name="op" value="Register" onclick="updatePassword(event)">Change Password</button>
+            <button class="changeInfoButton inpt-btn btn btn-primary form-submit js-registerSubmit" type="submit" id="edit-submit--2" name="op" value="Register" onclick="updatePassword(event)">Change Password</button>
           </div>
         </form>
       </div>

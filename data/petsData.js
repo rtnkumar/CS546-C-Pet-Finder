@@ -378,6 +378,7 @@ async function getPetDetailsByPetId(id){
    let qna=[];
    for(let petQuestionAnswer of petsQuestionsAnswerList){
        qna.push({
+        id:petQuestionAnswer._id,
         question:petQuestionAnswer.question,
         answer:petQuestionAnswer.answer,
         createdAt:petQuestionAnswer.createdAt,
@@ -608,6 +609,38 @@ async function duplicatePetExists(name, petTypeDocument, breed, age, size, gende
 
 }
 
+async function updateQNA(questionId, answer){
+    // Validation
+    if(!commonValidators.isValidId(questionId)){
+        throw 'Invalid questionId';
+    }
+    let isValidAnswer = commonValidators.isValidString(answer, 'answer');
+    if (!isValidAnswer[0]) {
+        throw 'Invalid answer';
+    }
+
+    answer=answer.trim();
+    questionId=questionId.trim();
+    const petQuestionAnswersCollection = await petsQuestionsAnswers();
+
+    // Check if there exists question with questionId in the petQuestionAnswersCollection
+    let question=await petQuestionAnswersCollection.findOne({_id:ObjectId(questionId)});
+    if(question===null){
+        throw `No question with questionId=${questionId}`;
+    }
+
+    const updatedInfo = await petQuestionAnswersCollection.updateOne(
+        { _id: ObjectId(questionId) },
+        { $set: { answer: answer } }
+    );
+
+    if (updatedInfo.modifiedCount === 0) {
+        throw 'could not update question successfully';
+    }
+
+    return { questionUpdated: true };
+}
+
 module.exports = {
     homePageSearch,
     createPet,
@@ -616,5 +649,6 @@ module.exports = {
     addQNA,
     assignPet,
     duplicatePetExists,
-    getPetTypeDocumentByPetType
+    getPetTypeDocumentByPetType,
+    updateQNA
 }
