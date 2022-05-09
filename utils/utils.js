@@ -98,6 +98,26 @@ function getLoggedInUserUploadedPetListNavList(){
     { url: "/users/logout", name: "Logout" }];
 }
 
+function getLoggedInAdminProfileNavList(){
+    return [{ url: "#", name: "Profile" },
+    { url: "/admin/usersList", name: "Users List" },
+    { url: "/admin/PetsList", name: "Pets List" },
+    { url: "/admin/logout", name: "Logout" }];
+}
+
+
+function getLoggedInAdminUsersListNavList(){
+    return [{ url: "/admin/profile", name: "Profile" },
+    { url: "#", name: "Users List" },
+    { url: "/admin/PetsList", name: "Pets List" },
+    { url: "/admin/logout", name: "Logout" }];
+}
+function getLoggedInAdminPetsListNavList(){
+    return [{ url: "/admin/profile", name: "Profile" },
+    { url: "/admin/usersList", name: "Users List" },
+    { url: "#", name: "Pets List" },
+    { url: "/admin/logout", name: "Logout" }];
+}
 function getLoggedInUserDeletedAccountNavList(){
     return [{ url: "/", name: "Home" },
     { url: "/users/userProfile", name: "Update Profile" },
@@ -139,6 +159,9 @@ function getNotLoggedInUserSignUpNavList(){
     return [{ url: "/", name: "Home" }, { url: "/users/login", name: "Login" }, { url: "#", name: "Sign Up" }];
 }
 
+function getNotLoggedInAdminNavList(){
+    return [ { url: "#", name: "Login" }];
+}
 function getNotLoggedInUserPetDetailsNavList() {
     return [{ url: "/", name: "Home" }, { url: "/users/login", name: "Login" }, { url: "/users/sign-up", name: "Sign Up" }];
 }
@@ -157,7 +180,11 @@ module.exports={
     getLoggedInUserFavoritesNavList,
     getLoggedInUserAdoptedListNavList,
     getLoggedInUserUploadedPetListNavList,
-    getNotLoggedInUserPetDetailsNavList,
+    getLoggedInAdminProfileNavList,
+    getLoggedInAdminUsersListNavList,
+    getLoggedInAdminPetsListNavList,
+    getNotLoggedInAdminNavList,
     getLoggedInUserPetDetailsNavList,
-    getLoggedInUserDeletedAccountNavList
+    getLoggedInUserDeletedAccountNavList,
+     getNotLoggedInUserPetDetailsNavList
 }

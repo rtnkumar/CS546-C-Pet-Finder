@@ -1,0 +1,43 @@
+ <div class="table-responsive">
+    <table class="table table-bordered">
+      <thead>
+        <tr>
+          <th>#</th>  
+          <th>Name</th>
+          <th>Breed</th>
+          <th>Age</th>
+          <th>Size</th>
+          <th>Gender</th>
+          <th>Color</th>
+          <th>Address</th>
+          <th>Zip</th>
+          <th>City</th>
+          <th>State</th>
+          <th>Description</th>
+          <th>CreatedAt</th>
+          <th>UpdatedAt</th>
+        </tr>
+      </thead>
+      <tbody>
+        {{#each petsList}}
+                <tr>
+                  <td>{{this.index}}</td>
+                  <td>{{this.name}}</td>
+                  <td>{{this.breed}}</td>
+                  <td>{{this.age}}</td>
+                  <td>{{this.size}}</td>
+                  <td>{{this.gender}}</td>
+                  <td>{{this.color}}</td>
+                  <td>{{this.address}}</td>
+                  <td>{{this.zip}}</td>
+                  <td>{{this.city}}</td>
+                  <td>{{this.state}}</td>
+                  <td>{{this.description}}</td>
+                  <td>{{this.createdAt}}</td>
+                  <td>{{this.updatedAt}}</td>
+                </tr>
+                {{/each}}
+      </tbody>
+    </table>
+  </div>
+</div>

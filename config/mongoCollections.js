@@ -17,5 +17,8 @@ module.exports = {
   users: getCollectionFn('users'),
   pets: getCollectionFn('pets'),
   petTypes: getCollectionFn('petTypes'),
-  petsQuestionsAnswers: getCollectionFn('petsQuestionsAnswers')
+  petsQuestionsAnswers: getCollectionFn('petsQuestionsAnswers'),
+
+  //admin
+  adminUsers: getCollectionFn('adminUsers')
 };

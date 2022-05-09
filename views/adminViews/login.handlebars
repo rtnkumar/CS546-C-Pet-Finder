@@ -1,0 +1,54 @@
+<form id="login" method="post" action="admin/login" style="border:1px solid #ccc" onsubmit="login(event)">
+    <div class="container">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th class="text-center" colspan="2">Admin login</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="text-end">
+                        <div>
+                            <label for="email"><b>Email</b></label>
+                        </div>
+                    </td>
+                    <td class="text-start">
+                        <div>
+                            <input type="email" placeholder="Enter Email" name="email" id="email"
+                                pattern="^[-!#$%&'*+\/0-9=?A-Z^_a-z`{|}~](\.?[-!#$%&'*+\/0-9=?A-Z^_a-z`{|}~])*@[a-zA-Z0-9](-*\.?[a-zA-Z0-9])*\.[a-zA-Z](-?[a-zA-Z0-9])+$"
+                                title="Invalid email format" required />
+                        </div>
+                        <div class="email-error">
+                        </div>
+                    </td>
+
+                </tr>
+                <tr>
+                    <td class="text-end">
+                        <div>
+                            <label for="password"><b>Password</b></label>
+                        </div>
+                    </td>
+                    <td class="text-start">
+                        <div>
+                            <input type="password" placeholder="Enter Password" name="password" id="password"
+                                minlength="6" title="At least 6 characters are required" required />
+                        </div>
+                        <div class="password-error">
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2" class="text-center"> <button type="submit">Submit</button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</form>
+<div class="error">
+</div>
+
+
+<script src="/public/js/admin/login.js"></script>
