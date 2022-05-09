@@ -1,5 +1,5 @@
 (function ($) {
-    let userDetails = JSON.parse(window.localStorage.getItem('userDetails'));
+    window.localStorage.setItem('userDetails', JSON.stringify(userDetails));
     let searchedDataList = userDetails.uploadedPetList;
     let petsListData = searchedDataList;
     let count = 0;
@@ -54,7 +54,7 @@
                 currentShownDataCount++;
                 let selector = '#' + id;
                 $(selector).append('<div class="col-lg-3  text-black">' +
-                    '<div><img src=' + imagePath + searchedDataList[count].picture + ' width="250" height="200"></div>' +
+                    '<div><img src=' + imagePath + searchedDataList[count].picture + ' width="250" height="200" alt="' + searchedDataList[count].name + '"></div>' +
                     '<div style="text-align:center;">' + searchedDataList[count].name +
                     '</div>' +
                     '<div style="text-align:center;">  <button name="details" value=' + searchedDataList[count]._id + ' style="margin-bottom: 20px;">View Details</button></div>' +

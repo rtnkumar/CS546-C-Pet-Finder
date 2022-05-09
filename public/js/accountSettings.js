@@ -124,6 +124,13 @@ async function updateEmail(event){
             userDetails.email = result.email
 
             window.localStorage.setItem('userDetails', JSON.stringify(userDetails)); 
+
+            let keysToRemove = ["userDetails", "isLogin"];
+
+            for (key of keysToRemove) {
+              window.localStorage.removeItem(key);
+            }
+            
             alert("Email changed successfully!")
 
         }
@@ -188,7 +195,18 @@ async function updatePassword(event){
              
 
             window.localStorage.setItem('userDetails', JSON.stringify(userDetails)); 
+            
+            let keysToRemove = ["userDetails", "isLogin"];
+
+            for (key of keysToRemove) {
+              window.localStorage.removeItem(key);
+            }
+                        
             alert("Password updated successfully!")
+
+            window.location.assign('http://localhost:3000/login')
+
+
 
         }
     })

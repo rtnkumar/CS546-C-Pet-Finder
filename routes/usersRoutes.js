@@ -64,10 +64,10 @@ usersRouter
 usersRouter
   .post('/sign-up', async (request, res) => {
     try {
-      let form = new formidable.IncomingForm();
+      let form = new formidable.IncomingForm({maxFileSize:20 * 1024 * 1024});
       form.parse(request, async (err, fields, files) => {
         if (err) {
-          return res.status(400).json({
+          return res.status(500).json({
             error: true,
             message: "There was an error parsing the files",
           });
@@ -338,7 +338,7 @@ usersRouter
       });
 
       form.on('fileBegin', function (name, file) {
-        file.filepath = 'public/uploads/images/users/' + file.originalFilename;
+        file.filepath = '/public/uploads/images/users/' + file.originalFilename;
       });
 
     } catch (e) {
@@ -567,6 +567,7 @@ usersRouter.
       const updatedInfo = await usersData.updateUserEmailPassword(email, newEmail, newPassword, confirmPassword);
       if (updatedInfo && updatedInfo.isUpdated) {
         req.session.email = email;
+        req.session.destroy()
         res.json(updatedInfo);
       } else {
         return res.status(500).json({
@@ -884,7 +885,7 @@ usersRouter.post("/profile/update", async (request, res) => {
     });
 
     form.on('fileBegin', function (name, file) {
-      file.filepath = 'public/uploads/images/users/' + file.originalFilename;
+      file.filepath = '/public/uploads/images/users/' + file.originalFilename;
     });
 
   } catch (e) {
@@ -911,7 +912,9 @@ usersRouter.route("/delete").delete(async (req, res) => {
   const emailId = req.session.email;
   try {
     const deleteUser = await usersData.remove(emailId);
+    req.session.destroy();
     res.json(deleteUser);
+    
   } catch (e) {
     if (e == `No user with email=${emailId}`) {
       return res.status(404).json({
@@ -938,6 +941,7 @@ usersRouter.get("/userProfile", middlewares.checkAuthenticated, async (req, res)
   let navList = utils.getLoggedInUserUpdateProfileNavList;
 
   return res.render("usersViews/userProfile", { title: "User Profile", navList: navList, firstName: userFirstName })
+
 });
 
 
@@ -946,11 +950,13 @@ usersRouter.get("/userProfile", middlewares.checkAuthenticated, async (req, res)
  * Route to redirect to user's favorite pet list
  */
 
+
 usersRouter.get("/favoriteList",middlewares.checkAuthenticated, async(req, res)=>{
   let userFirstName = req.session.firstName;
   let navList = utils.getLoggedInUserFavoritesNavList;
+  const userDetails = await usersData.getUserDetailsByEmail(req.session.email);
+  return res.render("usersViews/favoriteList",{ title: "Favorites", navList: navList, firstName: userFirstName ,userDetails:JSON.stringify(userDetails)})
 
-  return res.render("usersViews/favoriteList",{ title: "Favorites", navList: navList, firstName: userFirstName })
 })
 
 /**
@@ -958,11 +964,13 @@ usersRouter.get("/favoriteList",middlewares.checkAuthenticated, async(req, res)=
  * Route to redirect to user's account settings
  */
 
+
 usersRouter.get("/accountSettings",middlewares.checkAuthenticated, async(req, res)=>{
   let userFirstName = req.session.firstName;
   let navList = utils.getLoggedInUserAccountSettingNavList;
 
   return res.render("usersViews/accountSettings",{ title: "Account Setting", navList: navList, firstName: userFirstName })
+
 })
 
 /**
@@ -970,11 +978,14 @@ usersRouter.get("/accountSettings",middlewares.checkAuthenticated, async(req, re
  * Route to redirect to user's adopted pet list
  */
 
+
 usersRouter.get("/adoptedList",middlewares.checkAuthenticated, async(req, res)=>{
   let userFirstName = req.session.firstName;
   let navList = utils.getLoggedInUserAdoptedListNavList;
+  const userDetails = await usersData.getUserDetailsByEmail(req.session.email);
 
-  return res.render("usersViews/adoptedList",{ title: "Adopted List", navList: navList, firstName: userFirstName })
+  return res.render("usersViews/adoptedList",{ title: "Adopted List", navList: navList, firstName: userFirstName ,userDetails:JSON.stringify(userDetails)})
+
 })
 
 
@@ -1052,5 +1063,28 @@ usersRouter.
     }
     
   });
+
+  /**
+   * Feneel Doshi
+   * Route to redirect to deleting account page
+   */
+
+usersRouter.get('/deleteAccount',middlewares.checkAuthenticated, async (req, res) => {
+  let userFirstName = req.session.firstName;
+  let navList = utils.getLoggedInUserDeletedAccountNavList;
+
+
+  return res.render("usersViews/deleteAccount",{ title: "DeleteAccount", navList: navList, firstName: userFirstName })
+
+   
+  })
+
+
+  usersRouter.get('/feedback', async(req, res)=>{
+    let userFirstName = req.session.firstName;
+    
+    return res.render("usersViews/feedback", { title: "Feedback", firstName: userFirstName})
+  })
+
 
 module.exports = usersRouter;

@@ -42,30 +42,20 @@ adminRouter.get("/petsList",async (req, res) => {
   let petsList=await adminData.getAllPets();
   let userAdminName = req.session.adminFirstName;
   let navList = utils.getLoggedInAdminPetsListNavList;
-  return res.render("adminViews/petsList",{petsList:petsList,navList:navList,firstName:userAdminName});
+  return res.render("adminViews/petsList",{title: "Pet List", petsList:petsList,navList:navList,firstName:userAdminName});
 });
 
 /**
  * Siddarth Singh
+ * get all users
  */
 adminRouter.get("/usersList",async (req, res) => {
   let usersList=await adminData.getAllUsers();
   let userAdminName = req.session.adminFirstName;
   let navList = utils.getLoggedInAdminUsersListNavList;
-  return res.render("adminViews/usersList",{usersList:usersList,navList:navList,firstName:userAdminName});
+  return res.render("adminViews/usersList",{title: "User List", usersList:usersList,navList:navList,firstName:userAdminName});
 });
 
-
-/**
- * Siddharth Singh
- */
-
-adminRouter.get("/accountSettings",middlewares.checkNotAdminAuthenticated, async(req, res)=>{
-  let adminFirstName = req.session.firstName;
-  let navList = utils.getLoggedInAdminAccountSettingNavList;
-
-  return res.render("adminViews/accountSettings",{ title: "Account Setting", navList: navList, firstName: adminFirstName })
-})
 
 /**
  * Siddarth Singh
@@ -94,7 +84,7 @@ adminRouter.get("/login",middlewares.checkNotAdminAuthenticated ,(req, res) => {
 
  adminRouter.
   post('/login', trimRequest.all, async (req, res) => {
-    // Schema validation
+ 
     const requestKeyList = Object.keys(req.body);
     const postBodyKeys = ["email", "password"];
 
@@ -117,7 +107,7 @@ adminRouter.get("/login",middlewares.checkNotAdminAuthenticated ,(req, res) => {
     const password = xss(req.body.password);
 
 
-    // Email validation
+  
     if (!email || email.trim() == "") {
       return res.status(400).json({
         error: true,

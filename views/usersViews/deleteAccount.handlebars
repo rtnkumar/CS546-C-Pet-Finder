@@ -1,0 +1,20 @@
+<form id="deleteProfile" method="get" action="/users/deleteAccount" style="border:1px solid #ccc" onsubmit="deleteProfile(event)" >
+    <div class="divide-width">
+                <div class="middle-bottom-inner-left">
+                  <div class="form__field__wrapper form-item"> <label for="edit-email2" class="text-input__label">Email Address <span class="form-required" aria-hidden="true" title="This field is required."></span><span class="hidden_clip">.</span></label>
+                    <input class="form-control form-text required text-input__field" type="text" id="edit-email2" size="60" maxlength="128" aria-required="true" disabled>
+                  </div>
+                </div>
+              </div>
+              <div class="edit-email-error">
+            </div>
+         <button class="inpt-btn btn btn-primary form-submit js-registerSubmit" type="submit" id="edit-submit--2" name="op" value="Register" onclick="deleteProfile(event)">Remove Account</button>
+          </div> 
+    </form>
+
+<div class="error"></div>
+
+
+<script src="https://code.jquery.com/jquery-2.2.4.min.js"
+    integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44=" crossorigin="anonymous"></script>
+<script src="/public/js/deleteAccount.js"></script>

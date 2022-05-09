@@ -30,7 +30,7 @@
                     <label for="city">City</label>
                     <input type="text" class="form-control" id="city" pattern="[a-zA-Z ]+$" name="city" placeholder="City">
                 </div>
-                    <small class="format-specifier">Format: Only space and alphabet are allowed.</small>
+                    <small class="format-specifier">City format: Only space and alphabet are allowed.</small>
                 <div class="city-error">
                 </div>
                 <div class="form-group">
@@ -92,7 +92,7 @@
                 </div>
                 <div class="form-group">
                     <label for="zip">Zip</label>
-                    <input type="text" class="form-control" id="zip" name="zip" placeholder="Zip" pattern="^[0-9]+$">
+                    <input type="text" class="form-control" id="zip" maxlength="5" name="zip" placeholder="Zip" pattern="^[0-9]+$">
                 </div>
                 <small class="format-specifier">Format: Only integer is allowed.</small>
                 <div class="zip-error">
